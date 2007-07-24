@@ -1,0 +1,25 @@
+connection( 
+	"Connection",
+	ConnectionType: SqlConnection,
+	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;"
+	)
+
+source UsersSource, Connection="Connection":
+	Command: "SELECT Id, Name, Email FROM Users_Source"
+	
+transform SplitName:
+	Row.FirstName = Row.Name.Split(char(' '))[0]
+	Row.LastName = Row.Name.Split(char(' '))[1]
+	
+transform RemoveRowsWithBadId:
+	RemoveRow() if not Row.Email.Contains('@')
+
+destination UsersDestination, Connection = "Connection":
+	Command: """INSERT INTO Users_Destination (UserId, [First Name], [Last Name], Email)
+				VALUES (@Id, @FirstName, @LastName, @Email)
+			 """
+
+pipeline CopyUsers:
+	UsersSource >> SplitName
+	SplitName >> RemoveRowsWithBadId
+	RemoveRowsWithBadId >> UsersDestination

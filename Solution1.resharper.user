@@ -1,0 +1,125 @@
+<Configuration>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:log4net.Core.LoggingEventData">
+      <Item value="Message" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Rhino.ETL.EtlConfigurationContext.ConfigurationConfigurationContext">
+      <Item value="DataSources" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.Block">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.TypeMemberCollection">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:TValue">
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:log4net.Core.ILogger">
+      <Item value="Log" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Rhino.ETL.EtlConfigurationContext">
+      <Item value="Name" priority="0" />
+      <Item value="DataSources" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.Property">
+      <Item value="Getter" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IDictionary&lt;string,Rhino.ETL.DataSource&gt;">
+      <Item value="ContainsKey" priority="0" />
+      <Item value="Add" priority="0" />
+      <Item value="Contains" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.ImportCollection">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.BooCompiler">
+      <Item value="Parameters" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.Method">
+      <Item value="Body" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.CompilerPipeline">
+      <Item value="Add" priority="0" />
+      <Item value="Insert" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.KeyValuePair&lt;string,Rhino.ETL.DataSource&gt;">
+      <Item value="Key" priority="0" />
+      <Item value="Value" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Rhino.ETL.EtlContext">
+      <Item value="Current" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="Format" priority="1" />
+      <Item value="IsNullOrEmpty" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.Import">
+      <Item value="Namespace" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.Module">
+      <Item value="Imports" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.AssemblyCollection">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Configuration.ConnectionStringSettings">
+      <Item value="ConnectionString" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@">
+      <Item value="Build" priority="0" />
+      <Item value="Name" priority="0" />
+      <Item value="BuildConfig" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Rhino.ETL.EtlContextBuilder.logger">
+      <Item value="Error" priority="1" />
+      <Item value="Fatal" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.Ast.ClassDefinition">
+      <Item value="Name" priority="0" />
+      <Item value="Members" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Boo.Lang.Compiler.CompilerParameters">
+      <Item value="References" priority="0" />
+      <Item value="Pipeline" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:log4net.ILog">
+      <Item value="Logger" priority="0" />
+      <Item value="Error" priority="0" />
+      <Item value="FatalFormat" priority="0" />
+      <Item value="Fatal" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <EditorManager>
+    <RecentFiles>
+      <File id="C4019C9D-36FE-4E4E-879D-2F9EC8437EB1/f:Compiler.cs" caret="328" scrollPosition="0|0" />
+      <File id="UNDEFINED_UNIQUE_NAME_Miscellaneous Files/f:datasources_only.retl" caret="194" scrollPosition="0|0" />
+      <File id="C4019C9D-36FE-4E4E-879D-2F9EC8437EB1/f:EtlConfigurationContext.cs" caret="1302" scrollPosition="0|33" />
+      <File id="C4019C9D-36FE-4E4E-879D-2F9EC8437EB1/f:EtlContextBuilder.cs" caret="1977" scrollPosition="1|60" />
+      <File id="C4019C9D-36FE-4E4E-879D-2F9EC8437EB1/d:CompilerServices/f:TransformModuleToContextClass.cs" caret="690" scrollPosition="8|11" />
+      <File id="3F71149F-9107-4CC3-8684-96FD22372CFF/f:datasources_only.retl" caret="286" scrollPosition="19|0" />
+      <File id="3F71149F-9107-4CC3-8684-96FD22372CFF/f:App.config" caret="166" scrollPosition="0|0" />
+      <File id="C4019C9D-36FE-4E4E-879D-2F9EC8437EB1/f:DataSource.cs" caret="284" scrollPosition="0|0" />
+      <File id="3F71149F-9107-4CC3-8684-96FD22372CFF/f:DataSourcesFixture.cs" caret="437" scrollPosition="0|0" />
+    </RecentFiles>
+  </EditorManager>
+  <FileStructureView>
+    <AutoScrollToSource>False</AutoScrollToSource>
+    <TrackCaretLocation>False</TrackCaretLocation>
+  </FileStructureView>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <ReFormatCode>
+    <ReorderMembers>False</ReorderMembers>
+    <OptimizeUsings>True</OptimizeUsings>
+    <RemoveRedundantThis>True</RemoveRedundantThis>
+    <ShortenReferences>True</ShortenReferences>
+  </ReFormatCode>
+  <SharedSolutionDisabledTemplatesManager>
+    <DisabledTemplates />
+  </SharedSolutionDisabledTemplatesManager>
+  <UserSolutionDisabledTemplatesManager>
+    <DisabledTemplates />
+  </UserSolutionDisabledTemplatesManager>
+</Configuration>

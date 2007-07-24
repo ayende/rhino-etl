@@ -1,0 +1,3 @@
+source:
+	Command:
+		"SELECT * FROM Customers"

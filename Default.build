@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project
+	xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildProjectDirectory)\..\Common.build.xml"/>
+
+	<PropertyGroup>
+		<ProjectName>Rhino.ETL</ProjectName>
+		<ShortName>rhino-etl</ShortName>
+		<SolutionFile>Rhino.ETL.sln</SolutionFile>
+		<FlattenZipFile>True</FlattenZipFile>
+		<SectionId>-1</SectionId>
+		<Version>0.6</Version>
+		<ClsCompliant>false</ClsCompliant>
+	</PropertyGroup>
+	<ItemGroup>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.ETL\Properties\AssemblyInfo.cs</File>
+		</AssemblyInfo>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Tests\Properties\AssemblyInfo.cs</File>
+		</AssemblyInfo>
+	</ItemGroup>
+
+	<ItemGroup>
+		<TestAssembly Include="$(MSBuildProjectDirectory)\Rhino.ETL.Tests\bin\$(Configuration)\Rhino.ETL.Tests.dll"/>
+	</ItemGroup>
+	
+</Project>

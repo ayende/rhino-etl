@@ -1,0 +1,35 @@
+connection( 
+	"NorthwindConnection",
+	ConnectionType: SqlConnection,
+	ConnectionString: "Data Source=localhost;Initial Catalog=Northwind; Integrated Security=SSPI;"
+	)
+
+source Northwind, Connection="NorthwindConnection":
+	Command: "SELECT * FROM Orders WHERE RequiredDate BETWEEN @LastUpdate AND @CurrentDate"
+	
+	Parameters:
+		@LastUpdate = date(1996, 01,01)
+		@CurrentDate = date(1998, 01,01) # ExecuteScalar("NorthwindConnection", "SELECT MAX(RequiredDate) FROM Orders")
+
+transform ToLowerCase:
+	for column in Parameters.Columns:
+		Row[column] = Row[column].ToLower() if Row[column] isa string
+
+destination Northwind, Connection = "NorthwindConnection":
+	Command: """
+INSERT INTO [Orders_Copy]
+(
+	[CustomerID], [EmployeeID], [OrderDate], [RequiredDate], [ShippedDate],[ShipVia],
+	[Freight],[ShipName],[ShipAddress],[ShipCity],[ShipRegion],[ShipPostalCode],
+	[ShipCountry]
+)
+VALUES
+(
+	@CustomerID,@EmployeeID,@OrderDate,@RequiredDate,@ShippedDate,@ShipVia,@Freight,
+	@ShipName,@ShipAddress,@ShipCity,@ShipRegion,@ShipPostalCode,@ShipCountry
+)
+"""
+
+pipeline CopyOrders:
+	Sources.Northwind >> ToLowerCase(Columns: ['ShipCity','ShipRegion'])
+	ToLowerCase >> Destinations.Northwind 
