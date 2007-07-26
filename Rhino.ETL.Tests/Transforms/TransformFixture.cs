@@ -82,10 +82,10 @@ namespace Rhino.ETL.Tests.Transforms
 			Row row = new Row();
 			row["Id"] = 1;
 			transform.Apply(row, new Hashtable());
-			Assert.IsFalse(transform.ShouldSkipRow);
+			Assert.IsFalse(Transform.CurrentTransformParameters.ShouldSkipRow);
 			row["Id"] = null;
 			transform.Apply(row, new Hashtable());
-			Assert.IsTrue(transform.ShouldSkipRow);
+			Assert.IsTrue(Transform.CurrentTransformParameters.ShouldSkipRow);
 		}
 
 		[Test]

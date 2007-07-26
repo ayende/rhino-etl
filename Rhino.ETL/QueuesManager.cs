@@ -16,11 +16,11 @@ namespace Rhino.ETL
         {
             public IOutput Output;
             public IDictionary Parameters;
-            public string QueueName;
+			public string OutputQueueName;
 
             public void Process(Row row)
             {
-                Output.Process(QueueName, row, Parameters);
+                Output.Process(OutputQueueName, row, Parameters);
             }
         }
 
@@ -35,13 +35,13 @@ namespace Rhino.ETL
 
         // Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
-        public void ForwardTo(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+        public void RegisterForwarding(string inQueue, IOutput output, string outQueue, IDictionary parameters)
 	    {
             if(queueToOutputs.ContainsKey(inQueue)==false)
                 queueToOutputs.Add(inQueue, new List<Destination>());
 	        Destination destination = new Destination();
 	        destination.Output = output;
-	        destination.QueueName = outQueue;
+	        destination.OutputQueueName = outQueue;
             destination.Parameters = parameters;
 	        queueToOutputs[inQueue].Add(destination);
             logger.DebugFormat("{0}.{1} registered for {1}.{2}", output.Name, outQueue, name, inQueue);
@@ -52,12 +52,12 @@ namespace Rhino.ETL
 	        List<Destination> destinations;
             if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
             {
-                logger.DebugFormat("No queue to forward to in queue {0}", queueName);
+                logger.DebugFormat("No listeners to forward to in queue {0}", queueName);
                 return;
             }
             //We send copies of the row to additional outputs, to prevent
             //a case where both write to the same row
-	        for (int i = 0; i < destinations.Count; i++)
+	        for (int i = 1; i < destinations.Count; i++)
 	        {
                 destinations[i].Process(row.Clone());	            
 	        }
@@ -66,6 +66,16 @@ namespace Rhino.ETL
 
         public void Complete(string queueName)
 	    {
+			List<Destination> destinations;
+            if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
+            {
+                logger.DebugFormat("No listeners to mark complete to in queue {0}", queueName);
+                return;
+            }
+        	foreach (Destination destination in destinations)
+        	{
+        		destination.Output.Complete(queueName);
+        	}
 	    }
 	}
 }

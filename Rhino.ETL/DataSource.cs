@@ -19,19 +19,12 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public void Start()
-		{
-			ExecutionPackage.Current
-				.RegisterForExecution(ProcessInput);
-		}
-
-
-	    public void ForwardTo(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+	 public void RegisterForwarding(string inQueue, IOutput output, string outQueue, IDictionary parameters)
 	    {
-            queueManager.ForwardTo(inQueue, output, outQueue, parameters);
+            queueManager.RegisterForwarding(inQueue, output, outQueue, parameters);
 	    }
-
-	    private void ProcessInput()
+		
+		public void Start()
 		{
 			using (IDbCommand command = dbConnection.CreateCommand())
 			{

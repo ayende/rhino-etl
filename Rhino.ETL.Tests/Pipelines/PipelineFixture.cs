@@ -44,8 +44,8 @@ namespace Rhino.ETL.Tests.Pipelines
 		[Test]
 		public void CanSpecifyInputQueueInDSL()
 		{
-			Assert.AreEqual("RegionlessRows", pipeline.Associations[2].OutputQueue);
-			Assert.AreEqual("ExplicitInput", pipeline.Associations[2].InputQueue);
+			Assert.AreEqual("RegionlessRows", pipeline.Associations[2].ToQueue);
+			Assert.AreEqual("ExplicitInput", pipeline.Associations[2].FromQueue);
 		}
 
 		[Test]

@@ -9,8 +9,8 @@ namespace Rhino.ETL
 	{
 		private string from;
 		private string to;
-		private string inputQueue;
-		private string outputQueue;
+		private string fromQueue;
+		private string toQueue;
 		private AssoicationType fromType;
 		private AssoicationType toType;
 		private IDictionary parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
@@ -46,16 +46,16 @@ namespace Rhino.ETL
 			set { to = value; }
 		}
 
-		public string InputQueue
+		public string FromQueue
 		{
-			get { return inputQueue; }
-			set { inputQueue = value; }
+			get { return fromQueue; }
+			set { fromQueue = value; }
 		}
 
-		public string OutputQueue
+		public string ToQueue
 		{
-			get { return outputQueue; }
-			set { outputQueue = value; }
+			get { return toQueue; }
+			set { toQueue = value; }
 		}
 
 		public void Validate(ICollection<string> messages)
@@ -140,8 +140,8 @@ namespace Rhino.ETL
 
 	    public void ConnectEnds()
 	    {
-	        FromInstance.ForwardTo(InputQueue ?? DefaultInputQueue,
-                ToInstance, OutputQueue ?? DefaultOutputQueue, Parameters);
+	        FromInstance.RegisterForwarding(FromQueue ?? DefaultOutputQueue,
+                ToInstance, ToQueue ?? DefaultInputQueue, Parameters);
 	    }
 
 	    private const string DefaultInputQueue = "Input";

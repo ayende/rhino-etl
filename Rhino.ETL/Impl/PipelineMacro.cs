@@ -45,7 +45,7 @@ namespace Rhino.ETL.Impl
 				SetAssociationProperties(block, left,
 				                         associationLocal.Name + ".FromType",
 				                         associationLocal.Name + ".From",
-				                         associationLocal.Name + ".OutputQueue");
+				                         associationLocal.Name + ".ToQueue");
 				ReferenceExpression right;
 				if (expr.Right is ReferenceExpression)
 				{
@@ -74,7 +74,7 @@ namespace Rhino.ETL.Impl
 				SetAssociationProperties(block, right,
 				                         associationLocal.Name + ".ToType",
 				                         associationLocal.Name + ".To",
-				                         associationLocal.Name + ".InputQueue");
+				                         associationLocal.Name + ".FromQueue");
 
 				block.Add(
 					new MethodInvocationExpression(AstUtil.CreateReferenceExpression(pipelineVar + ".AddAssociation"),

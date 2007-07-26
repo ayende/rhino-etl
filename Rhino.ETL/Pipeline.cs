@@ -7,10 +7,11 @@ namespace Rhino.ETL
 {
 	public class Pipeline : ContextfulObjectBase<Pipeline>
 	{
-		public IList<PipelineAssociation> associations = new List<PipelineAssociation>();
+		private IList<PipelineAssociation> associations = new List<PipelineAssociation>();
 		public delegate void PipelineCompleted(Pipeline completed);
 		public event PipelineCompleted Completed = delegate { };
 
+		private TimeSpan timeOut = TimeSpan.FromSeconds(30);
 		private string name;
 		private Semaphore destinationToComplete;
 
@@ -18,6 +19,13 @@ namespace Rhino.ETL
 		{
 			this.name = name;
 			EtlConfigurationContext.Current.AddPipeline(name, this);
+		}
+
+
+		public TimeSpan TimeOut
+		{
+			get { return timeOut; }
+			set { timeOut = value; }
 		}
 
 		public override string Name
@@ -100,7 +108,7 @@ namespace Rhino.ETL
 
 		public void Start()
 		{
-			if (AquireAllConnections() == false)
+			if (AcquireAllConnections() == false)
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
@@ -125,7 +133,7 @@ namespace Rhino.ETL
 		}
 
 
-		private bool AquireAllConnections()
+		private bool AcquireAllConnections()
 		{
 			List<IConnectionUser> aquiredConnection = new List<IConnectionUser>();
 
@@ -152,7 +160,10 @@ namespace Rhino.ETL
 
 		public void WaitOne()
 		{
-			destinationToComplete.WaitOne();
+			if(destinationToComplete.WaitOne(TimeOut, false)==false)
+			{
+				throw new TimeoutException("Waited for " + TimeOut + " for pipeline to completed, aborting");
+			}
 		}
 	}
 }
