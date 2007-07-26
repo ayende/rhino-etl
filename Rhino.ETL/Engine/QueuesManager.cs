@@ -12,21 +12,9 @@ namespace Rhino.ETL
 	/// </summary>
 	public class QueuesManager
 	{
-        private class Destination
-        {
-            public IOutput Output;
-            public IDictionary Parameters;
-			public string OutputQueueName;
-
-            public void Process(Row row)
-            {
-                Output.Process(OutputQueueName, row, Parameters);
-            }
-        }
-
-	    private string name;
+        private string name;
 		private ILog logger;
-        Dictionary<string, List<Destination>> queueToOutputs = new Dictionary<string, List<Destination>>();
+        Dictionary<string, List<Queue>> queueToOutputs = new Dictionary<string, List<Queue>>();
 	    public QueuesManager(string name, ILog logger)
 		{
 	        this.name = name;
@@ -35,21 +23,22 @@ namespace Rhino.ETL
 
         // Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
-        public void RegisterForwarding(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+        public void RegisterForwarding(PipeStage parameters)
 	    {
-            if(queueToOutputs.ContainsKey(inQueue)==false)
-                queueToOutputs.Add(inQueue, new List<Destination>());
-	        Destination destination = new Destination();
-	        destination.Output = output;
-	        destination.OutputQueueName = outQueue;
-            destination.Parameters = parameters;
-	        queueToOutputs[inQueue].Add(destination);
-            logger.DebugFormat("{0}.{1} registered for {1}.{2}", output.Name, outQueue, name, inQueue);
+            if(queueToOutputs.ContainsKey(parameters.Incoming)==false)
+                queueToOutputs.Add(parameters.Incoming, new List<Queue>());
+        	Queue queue = new Queue(
+				parameters.Incoming, 
+				parameters.BatchSize,
+				parameters.Output, 
+				parameters.Process);
+        	queueToOutputs[parameters.Incoming].Add(queue);
+            logger.DebugFormat("{0}.{1} registered for {1}.{2}", parameters.Output.Name, parameters.Outgoing, name, parameters.Incoming);
 	    }
 
-	    public void Forward(string queueName, Row row)
+		public void Forward(string queueName, Row row)
 	    {
-	        List<Destination> destinations;
+	        List<Queue> destinations;
             if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
             {
                 logger.DebugFormat("No listeners to forward to in queue {0}", queueName);
@@ -59,22 +48,22 @@ namespace Rhino.ETL
             //a case where both write to the same row
 	        for (int i = 1; i < destinations.Count; i++)
 	        {
-                destinations[i].Process(row.Clone());	            
+                destinations[i].Enqueue(row.Clone());	            
 	        }
-	        destinations[0].Process(row);
+	        destinations[0].Enqueue(row);
 	    }
 
         public void Complete(string queueName)
 	    {
-			List<Destination> destinations;
+			List<Queue> destinations;
             if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
             {
                 logger.DebugFormat("No listeners to mark complete to in queue {0}", queueName);
                 return;
             }
-        	foreach (Destination destination in destinations)
+        	foreach (Queue queue in destinations)
         	{
-        		destination.Output.Complete(queueName);
+        		queue.Complete();
         	}
 	    }
 	}

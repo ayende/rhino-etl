@@ -140,8 +140,12 @@ namespace Rhino.ETL
 
 	    public void ConnectEnds()
 	    {
-	        FromInstance.RegisterForwarding(FromQueue ?? DefaultOutputQueue,
-                ToInstance, ToQueue ?? DefaultInputQueue, Parameters);
+	    	FromInstance.RegisterForwarding(
+	    		new PipeLineStage(
+	    			FromQueue ?? DefaultOutputQueue,
+	    			ToInstance, 
+					ToQueue ?? DefaultInputQueue, 500, Parameters)
+					);
 	    }
 
 	    private const string DefaultInputQueue = "Input";

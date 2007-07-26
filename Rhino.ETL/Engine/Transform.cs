@@ -46,9 +46,9 @@ namespace Rhino.ETL
 			DoApply(row, new QuackingDictionary(parameters));
 		}
 
-		public void RegisterForwarding(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+		public void RegisterForwarding(PipeStage parameters)
 		{
-			queuesManager.RegisterForwarding(inQueue, output, outQueue, parameters);
+			queuesManager.RegisterForwarding(parameters);
 		}
 
 		public void Process(string queueName, Row row, IDictionary parameters)

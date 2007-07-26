@@ -8,7 +8,10 @@ namespace Rhino.ETL
 	{
 		private EtlConfigurationContext configurationContext;
 		private List<Command> onPipelineCompletedCommands = new List<Command>();
-		public event EventHandler PipelineCompleted = delegate { };
+
+		public event EventHandler PipelineCompleted = delegate
+		{
+		};
 
 		public List<Command> OnPipelineCompletedCommands
 		{
@@ -89,9 +92,16 @@ namespace Rhino.ETL
 			//ideally this would be run via a thread pool, but
 			//we still have to overcome the issue of syncing the complete
 			//signal with remaining data, so it is single threaded per pipeline, for now
-			using(EnterContext())
-			using(configurationContext.EnterContext())
-				action();
+			ThreadPool.QueueUserWorkItem(delegate
+			{
+				using (EnterContext())
+				using (configurationContext.EnterContext())
+				{
+					{
+						action();
+					}
+				}
+			});
 		}
 	}
 }

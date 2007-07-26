@@ -51,13 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssoicationType.cs" />
-    <Compile Include="BaseDataElement.cs" />
-    <Compile Include="Command.cs" />
+    <Compile Include="Engine\AssoicationType.cs" />
+    <Compile Include="Engine\BaseDataElement.cs" />
+    <Compile Include="Engine\Command.cs" />
     <Compile Include="Commands\ExecuteScalar.cs" />
-    <Compile Include="ContextfulObjectBase.cs" />
-    <Compile Include="DataDestination.cs" />
-    <Compile Include="DataSource.cs" />
+    <Compile Include="Engine\ContextfulObjectBase.cs" />
+    <Compile Include="Destinations\DataDestination.cs" />
+    <Compile Include="Engine\PipeStage.cs" />
+    <Compile Include="Sources\DataSource.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
     <Compile Include="Exceptions\ExpectedInterfaceNotfoundException.cs" />
     <Compile Include="Exceptions\NoContextDefined.cs" />
@@ -65,11 +66,11 @@
     <Compile Include="Exceptions\ScriptEvalException.cs" />
     <Compile Include="Exceptions\TooManyConcurrentConnectionsRequiredException.cs" />
     <Compile Include="Exceptions\ValidationExceptionException.cs" />
-    <Compile Include="ExecutionPackage.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="ICommandWithResult.cs" />
-    <Compile Include="IInput.cs" />
-    <Compile Include="IInputOutput.cs" />
+    <Compile Include="Engine\ExecutionPackage.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="Interfaces\ICommandWithResult.cs" />
+    <Compile Include="Interfaces\IInput.cs" />
+    <Compile Include="Interfaces\IInputOutput.cs" />
     <Compile Include="Impl\AbstractNamedMacro.cs" />
     <Compile Include="Impl\BaseDataElementMacro.cs" />
     <Compile Include="Impl\CodeHelper.cs" />
@@ -82,21 +83,19 @@
     <Compile Include="Impl\SourceMacro.cs" />
     <Compile Include="Impl\TransformMacro.cs" />
     <Compile Include="Impl\TransformModuleToContextClass.cs" />
-    <Compile Include="Connection.cs" />
-    <Compile Include="EtlConfigurationContext.cs" />
-    <Compile Include="EtlContextBuilder.cs" />
+    <Compile Include="Engine\Connection.cs" />
+    <Compile Include="Engine\EtlConfigurationContext.cs" />
+    <Compile Include="Engine\EtlContextBuilder.cs" />
     <Compile Include="Impl\TransfromGeneratorExpressionToBlocks.cs" />
-    <Compile Include="IOutput.cs" />
-    <Compile Include="IConnectionUser.cs" />
-    <Compile Include="Pipeline.cs" />
-    <Compile Include="PipelineAssociation.cs" />
+    <Compile Include="Interfaces\IOutput.cs" />
+    <Compile Include="Interfaces\IConnectionUser.cs" />
+    <Compile Include="Engine\Pipeline.cs" />
+    <Compile Include="Engine\PipelineAssociation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueuesManager.cs" />
-    <Compile Include="Row.cs" />
-    <Compile Include="Transform.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\" />
+    <Compile Include="Engine\QueuesManager.cs" />
+    <Compile Include="Engine\Row.cs" />
+    <Compile Include="Engine\Queue.cs" />
+    <Compile Include="Engine\Transform.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

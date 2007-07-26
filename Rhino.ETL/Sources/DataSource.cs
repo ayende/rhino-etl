@@ -10,7 +10,7 @@ namespace Rhino.ETL
 	public class DataSource : BaseDataElement<DataSource>, IInput
 	{
 		private QueuesManager queueManager;
-		const string OutputQueueName = "Output";
+		private const string OutputQueueName = "Output";
 
 		public DataSource(string name)
 			: base(name)
@@ -19,11 +19,11 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-	 public void RegisterForwarding(string inQueue, IOutput output, string outQueue, IDictionary parameters)
-	    {
-            queueManager.RegisterForwarding(inQueue, output, outQueue, parameters);
-	    }
-		
+		public void RegisterForwarding(PipeStage parameters)
+		{
+			queueManager.RegisterForwarding(parameters);
+		}
+
 		public void Start()
 		{
 			using (IDbCommand command = dbConnection.CreateCommand())
@@ -37,7 +37,7 @@ namespace Rhino.ETL
 					List<string> columns = new List<string>();
 					foreach (DataRow schemaRow in schema.Rows)
 					{
-						columns.Add((string)schemaRow["ColumnName"]);
+						columns.Add((string) schemaRow["ColumnName"]);
 					}
 					while (reader.Read())
 					{
