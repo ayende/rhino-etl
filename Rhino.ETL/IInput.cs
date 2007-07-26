@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 
 namespace Rhino.ETL
 {
 	public interface IInput
 	{
-		void RegisterAction(string queueName, Action<Row> action, Command onComplete);
+        string Name { get; }
+	    void ForwardTo(string inQueue, IOutput instance, string outQueue, IDictionary parameters);
 	}
 }

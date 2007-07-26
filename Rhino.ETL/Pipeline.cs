@@ -104,7 +104,7 @@ namespace Rhino.ETL
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
-				RegisterContinuations(association);
+			    association.ConnectEnds();
 			}
 			foreach (DataDestination value in EtlConfigurationContext.Current.Destinations.Values)
 			{
@@ -124,18 +124,6 @@ namespace Rhino.ETL
 				Completed(this);
 		}
 
-		private static void RegisterContinuations(PipelineAssociation association)
-		{
-			association.FromInstance.RegisterAction(association.InputQueue, 
-                delegate(Row row)
-                {
-                	association.ToInstance.PushInto(association.OutputQueue, row, association.Parameters);
-                }, 
-                delegate
-                {
-                	association.ToInstance.Complete(association.OutputQueue);
-                });
-		}
 
 		private bool AquireAllConnections()
 		{

@@ -26,12 +26,12 @@ namespace Rhino.ETL
 			set { batchSize = value; }
 		}
 
-		public void PushInto(string queueName, Row row, IDictionary ignored)
+		public void Process(string queueName, Row row, IDictionary ignored)
 		{
 			lock (rows)
 			{
 				if (hasCompleted)
-					throw new InvalidOperationException("Cannot add rows to a destination after it has been marked complete");
+					throw new InvalidOperationException("Cannot process rows to a destination after it has been marked complete");
 				rows.Add(row);
 				if (rows.Count >= BatchSize)
 				{

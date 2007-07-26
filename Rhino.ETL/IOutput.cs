@@ -4,7 +4,8 @@ namespace Rhino.ETL
 {
 	public interface IOutput
 	{
-		void PushInto(string queue, Row row, IDictionary parameters);
+        string Name { get; }
+	    void Process(string queueName, Row row, IDictionary parameters);
 		void Complete(string queueName);
 	}
 }

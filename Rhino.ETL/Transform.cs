@@ -19,8 +19,8 @@ namespace Rhino.ETL
 
         protected Transform(string name)
         {
-			this.queuesManager = new QueuesManager(Logger);
             this.name = name;
+            this.queuesManager = new QueuesManager(name, Logger);
             EtlConfigurationContext.Current.AddTransform(name, this);
         }
 
@@ -40,21 +40,20 @@ namespace Rhino.ETL
 			DoApply(row, new QuackingDictionary(parameters));
         }
 
+        public void ForwardTo(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+        {
+            queuesManager.ForwardTo(inQueue, output, outQueue, parameters);
+        }
 
-		public void RegisterAction(string queueName, Action<Row> action, Command onComplete)
-		{
-			queuesManager.RegisterAction(queueName, action, onComplete);
-		}
+	    public void Process(string queueName, Row row, IDictionary parameters)
+	    {
+            Apply(row, parameters);
+            if (ShouldSkipRow)
+                return;
+            queuesManager.Forward(queueName, row);
+	    }
 
-		public void PushInto(string queueName, Row row, IDictionary parameters)
-		{
-			Apply(row, parameters);
-			if(ShouldSkipRow)
-				return;
-			queuesManager.PushInto(queueName, row);
-		}
-
-		public void Complete(string queueName)
+	    public void Complete(string queueName)
 		{
 			queuesManager.Complete(queueName);
 		}

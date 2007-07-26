@@ -15,13 +15,8 @@ namespace Rhino.ETL
 		public DataSource(string name)
 			: base(name)
 		{
-			queueManager = new QueuesManager(Logger);
+			queueManager = new QueuesManager(Name, Logger);
 			EtlConfigurationContext.Current.AddSource(name, this);
-		}
-
-		public void RegisterAction(string queueName, Action<Row> action, Command onComplete)
-		{
-			queueManager.RegisterAction(queueName, action, onComplete);
 		}
 
 		public void Start()
@@ -30,7 +25,13 @@ namespace Rhino.ETL
 				.RegisterForExecution(ProcessInput);
 		}
 
-		private void ProcessInput()
+
+	    public void ForwardTo(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+	    {
+            queueManager.ForwardTo(inQueue, output, outQueue, parameters);
+	    }
+
+	    private void ProcessInput()
 		{
 			using (IDbCommand command = dbConnection.CreateCommand())
 			{
@@ -55,7 +56,7 @@ namespace Rhino.ETL
 								value = null;
 							row[columns[i]] = value;
 						}
-						queueManager.PushInto(OutputQueueName, row);
+						queueManager.Forward(OutputQueueName, row);
 					}
 				}
 			}

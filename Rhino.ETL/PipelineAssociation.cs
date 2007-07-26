@@ -137,5 +137,14 @@ namespace Rhino.ETL
 			}
 			return obj;
 		}
+
+	    public void ConnectEnds()
+	    {
+	        FromInstance.ForwardTo(InputQueue ?? DefaultInputQueue,
+                ToInstance, OutputQueue ?? DefaultOutputQueue, Parameters);
+	    }
+
+	    private const string DefaultInputQueue = "Input";
+        private const string DefaultOutputQueue = "Output";
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using log4net;
+using System.Collections;
 
 namespace Rhino.ETL
 {
@@ -11,69 +12,60 @@ namespace Rhino.ETL
 	/// </summary>
 	public class QueuesManager
 	{
-		private const string DefaultColumnName = "Output";
-		private Dictionary<string, List<Action<Row>>> actionsOnQueue = new Dictionary<string, List<Action<Row>>>();
-		private Dictionary<string, List<Command>> completeOnQueue = new Dictionary<string, List<Command>>();
+        private class Destination
+        {
+            public IOutput Output;
+            public IDictionary Parameters;
+            public string QueueName;
 
+            public void Process(Row row)
+            {
+                Output.Process(QueueName, row, Parameters);
+            }
+        }
+
+	    private string name;
 		private ILog logger;
-
-		public QueuesManager(ILog logger)
+        Dictionary<string, List<Destination>> queueToOutputs = new Dictionary<string, List<Destination>>();
+	    public QueuesManager(string name, ILog logger)
 		{
-			this.logger = logger;
+	        this.name = name;
+		    this.logger = logger;
 		}
 
-		public void RegisterAction(string queueName, Action<Row> action, Command onComplete)
-		{
-			queueName = queueName ?? DefaultColumnName;
-			if (actionsOnQueue.ContainsKey(queueName) == false)
-			{
-				actionsOnQueue[queueName] = new List<Action<Row>>();
-				completeOnQueue[queueName] = new List<Command>();
-			}
-			actionsOnQueue[queueName].Add(action);
-			completeOnQueue[queueName].Add(onComplete);
-		}
+        // Note: We assume registration is done before we start to actually run
+        // so we don't bother with thread safety here.
+        public void ForwardTo(string inQueue, IOutput output, string outQueue, IDictionary parameters)
+	    {
+            if(queueToOutputs.ContainsKey(inQueue)==false)
+                queueToOutputs.Add(inQueue, new List<Destination>());
+	        Destination destination = new Destination();
+	        destination.Output = output;
+	        destination.QueueName = outQueue;
+            destination.Parameters = parameters;
+	        queueToOutputs[inQueue].Add(destination);
+            logger.DebugFormat("{0}.{1} registered for {1}.{2}", output.Name, outQueue, name, inQueue);
+	    }
 
-		public void PushInto(string queueName, Row row)
-		{
-			queueName = queueName ?? DefaultColumnName;
-			if (actionsOnQueue.ContainsKey(queueName) == false)
-			{
-				logger.InfoFormat("Got row for queue {0} that has no registered actions", queueName);
-				return;
-			}
-			List<Action<Row>> actions = actionsOnQueue[queueName];
-			//send copies to all actions except the first, which gets the original row
-			//doing it this way to support safe multi threading
-			for (int i = 1; i < actions.Count; i++)
-			{
-				Action<Row> action = actions[i];
-				Row cloned = row.Clone();
-				ExecutionPackage.Current.RegisterForExecution(delegate
-				{
-					action(cloned);
-				});
-			}
-			Action<Row> firstAction = actions[0];
-			ExecutionPackage.Current.RegisterForExecution(delegate
-			{
-				firstAction(row);
-			});
-		}
+	    public void Forward(string queueName, Row row)
+	    {
+	        List<Destination> destinations;
+            if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
+            {
+                logger.DebugFormat("No queue to forward to in queue {0}", queueName);
+                return;
+            }
+            //We send copies of the row to additional outputs, to prevent
+            //a case where both write to the same row
+	        for (int i = 0; i < destinations.Count; i++)
+	        {
+                destinations[i].Process(row.Clone());	            
+	        }
+	        destinations[0].Process(row);
+	    }
 
-		public void Complete(string queueName)
-		{
-			queueName = queueName ?? "Output";
-			if (completeOnQueue.ContainsKey(queueName) == false)
-			{
-				logger.InfoFormat("Queue {0} completed, but had no registered actions", queueName);
-				return;
-			}
-			List<Command> list = completeOnQueue[queueName];
-			foreach (Command command in list)
-			{
-				ExecutionPackage.Current.RegisterForExecution(command);
-			}
-		}
+        public void Complete(string queueName)
+	    {
+	    }
 	}
 }
