@@ -1,7 +1,7 @@
 Connection( 
 	"Northwind",
 	ConnectionType: SqlConnection,
-	ConnectionString: "Data Source=localhost;Initial Catalog=Northwind; Integrated Security=SSPI;",
+	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;",
 	ConcurrentConnections: 5
 	)
 	

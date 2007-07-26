@@ -64,7 +64,7 @@ namespace Rhino.ETL.Tests
 		[Test]
 		public void Connections_ConnectionString_ConfiguredFromDSL()
 		{
-			Assert.AreEqual("Data Source=localhost;Initial Catalog=Northwind; Integrated Security=SSPI;",
+			Assert.AreEqual("Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;",
 				configurationContext.Connections["Northwind"].ConnectionString);
 		}
 
@@ -136,7 +136,7 @@ namespace Rhino.ETL.Tests
 		public void GettingDbConnectionWillReturnOpenConnection()
 		{
 			Connection con = new Connection("test");
-			con.ConnectionStringName = "Northwind";
+            con.ConnectionStringName = "TestDatabase";
 			con.ConnectionType = typeof (SqlConnection);
 			IDbConnection connection = con.TryAcquire();
 			Assert.AreEqual(ConnectionState.Open, connection.State);
@@ -147,7 +147,7 @@ namespace Rhino.ETL.Tests
 		public void ReleaseConnectionWillCloseTheDbConnection()
 		{
 			Connection con = new Connection("test");
-			con.ConnectionStringName = "Northwind";
+            con.ConnectionStringName = "TestDatabase";
 			con.ConnectionType = typeof(SqlConnection); 
 			IDbConnection connection = con.TryAcquire();
 			con.Release(connection);
@@ -158,7 +158,7 @@ namespace Rhino.ETL.Tests
 		public void CannotAcquireMoreThanConcurrentConnectionsLimit()
 		{
 			Connection con = new Connection("test");
-			con.ConnectionStringName = "Northwind";
+            con.ConnectionStringName = "TestDatabase";
 			con.ConcurrentConnections = 1;
 			con.ConnectionType = typeof(SqlConnection);
 			IDbConnection connection = con.TryAcquire();
