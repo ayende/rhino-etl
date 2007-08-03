@@ -13,6 +13,7 @@ namespace Rhino.ETL
 		private IDictionary<string, Connection> connections;
 		private IDictionary<string, DataSource> sources;
 		private IDictionary<string, DataDestination> destinations;
+		private IDictionary<string, Join> joins;
 		private IDictionary<string, Transform> transforms;
 		private IDictionary<string, Pipeline> pipelines;
 		private List<string> validationMessages = new List<string>();
@@ -24,6 +25,7 @@ namespace Rhino.ETL
 			transforms = new Dictionary<string, Transform>(StringComparer.InvariantCultureIgnoreCase);
 			destinations = new Dictionary<string, DataDestination>(StringComparer.InvariantCultureIgnoreCase);
 			pipelines = new Dictionary<string, Pipeline>(StringComparer.InvariantCultureIgnoreCase);
+			joins = new Dictionary<string, Join>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		public IDictionary<string, Pipeline> Pipelines
@@ -34,6 +36,11 @@ namespace Rhino.ETL
 		public IDictionary<string, Transform> Transforms
 		{
 			get { return transforms; }
+		}
+
+		public IDictionary<string, Join> Joins
+		{
+			get { return joins; }
 		}
 
 		public IDictionary<string, Connection> Connections
@@ -115,6 +122,13 @@ namespace Rhino.ETL
 			if (pipelines.ContainsKey(name))
 				throw new DuplicateKeyException("The current context already contains a pipeline named [" + name + "]");
 			pipelines.Add(name, pipeline);
+		}
+
+		public void AddJoin(string name, Join join)
+		{
+			if (joins.ContainsKey(name))
+				throw new DuplicateKeyException("The current context already contains a join named [" + name + "]");
+			joins.Add(name, join);
 		}
 
 		public ExecutionPackage BuildPackage()

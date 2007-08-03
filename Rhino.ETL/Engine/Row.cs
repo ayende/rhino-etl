@@ -17,6 +17,12 @@ namespace Rhino.ETL
     	{
     	}
 
+		
+		public void Copy(Row row)
+		{
+			items = new Hashtable(row.items, StringComparer.InvariantCultureIgnoreCase);
+		}
+
     	public IEnumerable<string> Columns
         {
             get

@@ -4,6 +4,11 @@ using System.Threading;
 
 namespace Rhino.ETL
 {
+	/// <summary>
+	/// This simple class will batch actions on queues, and then execute them.
+	/// It is safe for multi threading, and while it takes the brute force approach
+	/// for threading, it is easy to see that it is correct
+	/// </summary>
 	public class Queue
 	{
 		private List<Row> rows = new List<Row>();
@@ -50,6 +55,7 @@ namespace Rhino.ETL
 			currentlyProcessing += 1;
 			ExecutionPackage.Current.RegisterForExecution(delegate
 			{
+				// inside here we are OUTSIDE the lock!
 				try
 				{
 					onBatch(copy);

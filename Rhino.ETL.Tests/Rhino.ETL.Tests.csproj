@@ -60,6 +60,8 @@
     <Compile Include="ContextfulObjectFixture.cs" />
     <Compile Include="Destinations\DestinationsFixture.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
+    <Compile Include="Joins\Joins.cs" />
+    <Compile Include="Joins\TestExecutionPackage.cs" />
     <Compile Include="Syntax\SyntaxFixture.cs" />
     <Compile Include="Errors\ErrorsFixture.cs" />
     <Compile Include="Pipelines\PipelineFixture.cs" />
@@ -111,6 +113,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Integration\basic.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Joins\join_two_tables.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Pipelines\Pipeline.retl">

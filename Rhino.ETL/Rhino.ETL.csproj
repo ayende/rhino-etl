@@ -57,7 +57,14 @@
     <Compile Include="Commands\ExecuteScalar.cs" />
     <Compile Include="Engine\ContextfulObjectBase.cs" />
     <Compile Include="Destinations\DataDestination.cs" />
-    <Compile Include="Engine\PipeStage.cs" />
+    <Compile Include="Engine\Join.cs" />
+    <Compile Include="Engine\JoinType.cs" />
+    <Compile Include="Engine\PipeLineStage.cs" />
+    <Compile Include="Engine\TestOutput.cs" />
+    <Compile Include="Engine\TestPipeLineStage.cs" />
+    <Compile Include="Engine\TransformationBase.cs" />
+    <Compile Include="Engine\TransformParameters.cs" />
+    <Compile Include="Impl\JoinMacro.cs" />
     <Compile Include="Sources\DataSource.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
     <Compile Include="Exceptions\ExpectedInterfaceNotfoundException.cs" />

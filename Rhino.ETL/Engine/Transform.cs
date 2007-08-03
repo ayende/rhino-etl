@@ -4,21 +4,9 @@ using Rhino.ETL.Impl;
 
 namespace Rhino.ETL
 {
-	public abstract class Transform : ContextfulObjectBase<Transform>, IInputOutput
+	public abstract class Transform : TransformationBase<Transform>, IInputOutput
 	{
-		private const string DefaultOutputQueue = "Output";
-
-		public class TransformParameters
-		{
-			public bool ShouldSkipRow;
-			public string OutputQueueName;
-		}
-
-		[ThreadStatic]
-		public static TransformParameters CurrentTransformParameters;
-
-		private string name;
-		QueuesManager queuesManager;
+			QueuesManager queuesManager;
 
 
 		protected Transform(string name)
@@ -28,15 +16,6 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddTransform(name, this);
 		}
 
-		public override string Name
-		{
-			get { return name; }
-		}
-
-		public void RemoveRow()
-		{
-			CurrentTransformParameters.ShouldSkipRow = true;
-		}
 
 		public void Apply(Row row, IDictionary parameters)
 		{
@@ -46,7 +25,7 @@ namespace Rhino.ETL
 			DoApply(row, new QuackingDictionary(parameters));
 		}
 
-		public void RegisterForwarding(PipeStage parameters)
+		public void RegisterForwarding(PipeLineStage parameters)
 		{
 			queuesManager.RegisterForwarding(parameters);
 		}

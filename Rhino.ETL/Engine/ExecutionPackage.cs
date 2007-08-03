@@ -23,6 +23,11 @@ namespace Rhino.ETL
 			get { return configurationContext; }
 		}
 
+		protected ExecutionPackage()
+		{
+
+		}
+
 		public ExecutionPackage(EtlConfigurationContext configurationContext)
 		{
 			this.configurationContext = configurationContext;
@@ -87,7 +92,7 @@ namespace Rhino.ETL
 			}
 		}
 
-		public void RegisterForExecution(Command action)
+		public virtual void RegisterForExecution(Command action)
 		{
 			//ideally this would be run via a thread pool, but
 			//we still have to overcome the issue of syncing the complete

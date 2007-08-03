@@ -1,0 +1,27 @@
+connection( 
+	"Connection",
+	ConnectionType: SqlConnection,
+	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;"
+	)
+
+source UsersSource, Connection="Connection":
+	Command: "SELECT Id, Name, Email FROM Users_Source"
+	
+source User2Org, Connection="Connection":
+	Command: "SELECT [UserId], [organization id] FROM Users2Org"
+	
+join JoinUsersAndOrganization:
+	if Left.OrgId == Right["organization id"] and Left.Id == Right.UserId:
+		Row.Copy(Left)
+		Row.Organization = Right["Organization Id"]
+		
+
+destination UsersDestination, Connection = "Connection":
+	Command: """INSERT INTO Users_Destination (UserId, [First Name], [Last Name], Email, Orgnaization)
+				VALUES (@Id, @FirstName, @LastName, @Email, @Orgnaization)
+			 """
+
+pipeline CopyUsers:
+	UsersSource >> JoinUsersAndOrganization.Left
+	User2Org >> JoinUsersAndOrganization.Right
+	JoinUsersAndOrganization >> UsersDestination

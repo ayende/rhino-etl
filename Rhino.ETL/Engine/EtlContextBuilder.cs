@@ -80,7 +80,7 @@ namespace Rhino.ETL
 			{
 				throw new CompilerError(string.Format("Compilation error! {0}", run.Errors.ToString(true)));
 			}
-			Type type = run.GeneratedAssembly.GetType(rootName);
+				Type type = run.GeneratedAssembly.GetType(rootName);
 			return Activator.CreateInstance(type) as EtlConfigurationContext;
 		}
 	}

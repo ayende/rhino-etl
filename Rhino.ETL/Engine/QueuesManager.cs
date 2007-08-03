@@ -14,7 +14,10 @@ namespace Rhino.ETL
 	{
         private string name;
 		private ILog logger;
-        Dictionary<string, List<Queue>> queueToOutputs = new Dictionary<string, List<Queue>>();
+        Dictionary<string, List<Queue>> queueToOutputs = new Dictionary<string, List<Queue>>(StringComparer.InvariantCultureIgnoreCase);
+		Dictionary<string, List<Row>> savedQueues = new Dictionary<string, List<Row>>(StringComparer.InvariantCultureIgnoreCase);
+		Dictionary<string, bool> completedQueues = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
+
 	    public QueuesManager(string name, ILog logger)
 		{
 	        this.name = name;
@@ -23,7 +26,7 @@ namespace Rhino.ETL
 
         // Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
-        public void RegisterForwarding(PipeStage parameters)
+        public void RegisterForwarding(PipeLineStage parameters)
 	    {
             if(queueToOutputs.ContainsKey(parameters.Incoming)==false)
                 queueToOutputs.Add(parameters.Incoming, new List<Queue>());
@@ -66,5 +69,48 @@ namespace Rhino.ETL
         		queue.Complete();
         	}
 	    }
+
+		public void Add(string queueName, Row row)
+		{
+			List<Row> queue = GetQueue(queueName);
+			lock(queue)
+			{
+				queue.Add(row);
+			}
+		}
+
+		public List<Row> GetQueue(string queueName)
+		{
+			List<Row> queue;
+			if(savedQueues.TryGetValue(queueName, out queue)==false)
+			{
+				lock(this)
+				{
+					if(savedQueues.TryGetValue(queueName, out queue)==false)
+					{
+						savedQueues[queueName] = queue = new List<Row>();
+					}
+				}
+			}
+			return queue;
+		}
+
+		public void Clear(string queueName)
+		{
+			savedQueues.Remove(queueName);
+		}
+
+		public void SetCompleted(string queueName)
+		{
+			completedQueues[queueName] = true;
+		}
+
+		public bool IsCompleted(string queueName)
+		{
+			bool result;
+			if (completedQueues.TryGetValue(queueName, out result))
+				return result;
+			return false;
+		}
 	}
 }

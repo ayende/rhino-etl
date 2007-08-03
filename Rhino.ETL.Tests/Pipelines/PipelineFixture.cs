@@ -57,7 +57,7 @@ namespace Rhino.ETL.Tests.Pipelines
 		}
 
 		[Test]
-		public void IfCannotAquireAllConnection_WillExecuteWhenNextPipelineCompletes()
+		public void IfCannotAquirebAllConnection_WillExecuteWhenNextPipelineCompletes()
 		{
 			configurationContext = BuildContext(@"Syntax\full_package.retl");
 			ExecutionPackage package = configurationContext.BuildPackage();

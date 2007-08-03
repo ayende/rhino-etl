@@ -19,7 +19,7 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public void RegisterForwarding(PipeStage parameters)
+		public void RegisterForwarding(PipeLineStage parameters)
 		{
 			queueManager.RegisterForwarding(parameters);
 		}

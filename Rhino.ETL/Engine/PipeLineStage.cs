@@ -1,10 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Rhino.ETL
 {
-	public class PipeStage
+	public class PipeLineStage
 	{
 		private readonly string incoming;
 		private readonly IOutput output;
@@ -12,7 +11,7 @@ namespace Rhino.ETL
 		private readonly IDictionary parameters;
 		private int batchSize;
 
-		public PipeStage(string incoming, IOutput output, 
+		public PipeLineStage(string incoming, IOutput output, 
 			string outgoing, int batchSize, IDictionary parameters)
 		{
 			this.incoming = incoming;
