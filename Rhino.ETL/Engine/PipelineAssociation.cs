@@ -1,18 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
 {
+	[DebuggerDisplay("Assoication: {From}.{FromQueue} >> {To}.{ToQueue}")]
 	public class PipelineAssociation
 	{
 		private string from;
 		private string to;
 		private string fromQueue;
 		private string toQueue;
-		private AssoicationType fromType;
-		private AssoicationType toType;
+		private AssociationType fromType;
+		private AssociationType toType;
 		private IDictionary parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 		private IInput fromInstance;
 		private IOutput toInstance;
@@ -22,13 +24,13 @@ namespace Rhino.ETL
 			get { return parameters; }
 		}
 
-		public AssoicationType FromType
+		public AssociationType FromType
 		{
 			get { return fromType; }
 			set { fromType = value; }
 		}
 
-		public AssoicationType ToType
+		public AssociationType ToType
 		{
 			get { return toType; }
 			set { toType = value; }
@@ -64,18 +66,21 @@ namespace Rhino.ETL
 			ValidateName(messages, To, ToType);
 		}
 
-		private void ValidateName(ICollection<string> messages, string name, AssoicationType assoicationType)
+		private void ValidateName(ICollection<string> messages, string name, AssociationType associationType)
 		{
 			int associationIndex = Pipeline.Current.Associations.IndexOf(this);
 			int count = 0;
 			if (EtlConfigurationContext.Current.Sources.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Sources))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Sources))
 				count += 1;
 			if (EtlConfigurationContext.Current.Destinations.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Destinations))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Destinations))
 				count += 1;
 			if (EtlConfigurationContext.Current.Transforms.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Transforms))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Transforms))
+				count += 1;
+			if (EtlConfigurationContext.Current.Joins.ContainsKey(name) &&
+				(associationType == AssociationType.Any || associationType == AssociationType.Joins))
 				count += 1;
 
 			if (count == 0)
@@ -88,7 +93,7 @@ namespace Rhino.ETL
 			{
 				messages.Add(
 					string.Format(
-						"Ambigious match for '{0}' on association #{1} in pipeline [{2}] - you need to qualify it with Sources.{0}, Destinations.{0} or Transforms.{0}",
+						"Ambigious match for '{0}' on association #{1} in pipeline [{2}] - you need to qualify it with Sources.{0}, Destinations.{0} or Transforms.{0} or Joins.{0}",
 						name, associationIndex, Pipeline.Current.Name));
 			}
 		}
@@ -111,24 +116,29 @@ namespace Rhino.ETL
 			set { fromInstance = value; }
 		}
 
-		public T FindFromContext<T>(string name, AssoicationType assoicationType)
+		public T FindFromContext<T>(string name, AssociationType associationType)
 			where T : class
 		{
 			T obj = null;
 			if (EtlConfigurationContext.Current.Sources.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Sources))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Sources))
 			{
 				obj = EtlConfigurationContext.Current.Sources[name] as T;
 			}
 			if (EtlConfigurationContext.Current.Destinations.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Destinations))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Destinations))
 			{
 				obj = EtlConfigurationContext.Current.Destinations[name] as T;
 			}
 			if (EtlConfigurationContext.Current.Transforms.ContainsKey(name) &&
-			    (assoicationType == AssoicationType.Any || assoicationType == AssoicationType.Transforms))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Transforms))
 			{
 				obj = EtlConfigurationContext.Current.Transforms[name] as T;
+			}
+			if (EtlConfigurationContext.Current.Joins.ContainsKey(name) &&
+				(associationType == AssociationType.Any || associationType == AssociationType.Joins))
+			{
+				obj = EtlConfigurationContext.Current.Joins[name] as T;
 			}
 			if (obj == null)
 			{
@@ -138,17 +148,17 @@ namespace Rhino.ETL
 			return obj;
 		}
 
-	    public void ConnectEnds()
+	    public void ConnectEnds(Pipeline pipeline)
 	    {
 	    	FromInstance.RegisterForwarding(
 	    		new PipeLineStage(
-	    			FromQueue ?? DefaultOutputQueue,
-	    			ToInstance, 
-					ToQueue ?? DefaultInputQueue, 500, Parameters)
+					pipeline,
+					FromQueue ?? DefaultQueue,
+	    			ToInstance,
+					ToQueue ?? DefaultQueue, 500, Parameters)
 					);
 	    }
 
-	    private const string DefaultInputQueue = "Input";
-        private const string DefaultOutputQueue = "Output";
+        private const string DefaultQueue = "Output";
 	}
 }

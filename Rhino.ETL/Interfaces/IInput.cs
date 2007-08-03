@@ -6,6 +6,6 @@ namespace Rhino.ETL
 	public interface IInput
 	{
         string Name { get; }
-	    void RegisterForwarding(PipeLineStage parameters);
+		void RegisterForwarding(PipeLineStage pipeLineStage);
 	}
 }

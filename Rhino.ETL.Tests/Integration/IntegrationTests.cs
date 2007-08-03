@@ -1,30 +1,10 @@
-using System;
-using System.Configuration;
-using System.IO;
 using MbUnit.Framework;
-using System.Data.SqlClient;
-using System.Data;
 
 namespace Rhino.ETL.Tests.Integration
 {
 	[TestFixture]
-	public class IntegrationTests : BaseTest
+	public class IntegrationTests : IntegrationTestBase
 	{
-
-		[SetUp]
-		public void TestInitialize()
-		{
-			ExecuteCommand(delegate(IDbCommand com)
-			{
-				com.CommandText = File.ReadAllText(
-					Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-					@"Integration\Database.sql")
-					);
-				com.ExecuteNonQuery();
-			});
-
-		}
-
 		[Test]
 		public void WillCopyRowsFromOneTableToAnother()
 		{
@@ -39,37 +19,16 @@ namespace Rhino.ETL.Tests.Integration
 			AssertRowCount(8);
 		}
 
-		public void AssertRowNotZero()
-		{
-			ExecuteCommand(delegate(IDbCommand com)
-			{
-				com.CommandText = "SELECT COUNT(*) FROM Users_Destination";
-				int count = Convert.ToInt32(com.ExecuteScalar());
-				Assert.AreNotEqual(0, count);
-			});
-		}
 
-		public void AssertRowCount(int expectedCount)
+		[Test]
+		public void CopyUsersWithJoin()
 		{
-			ExecuteCommand(delegate(IDbCommand com)
-			{
-				com.CommandText = "SELECT COUNT(*) FROM Users_Destination";
-				int count = Convert.ToInt32(com.ExecuteScalar());
-				Assert.AreEqual(expectedCount, count);
-			});
-		}
+			EtlConfigurationContext configurationContext = BuildContext(@"Joins\join_two_tables.retl"); 
+			ExecutionPackage package = configurationContext.BuildPackage();
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
+			package.Execute(pipeline);
 
-		private static void ExecuteCommand(Action<IDbCommand> action)
-		{
-			string connectionString = ConfigurationManager.ConnectionStrings["TestDatabase"].ConnectionString;
-			using (SqlConnection con = new SqlConnection(connectionString))
-			{
-				con.Open();
-				using (IDbCommand com = con.CreateCommand())
-				{
-					action(com);
-				}
-			}
+			AssertRowCount(4);
 		}
 
 		private static void ExecutePackage(string name)

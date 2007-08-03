@@ -61,7 +61,7 @@ namespace Rhino.ETL.Tests
 			Assert.IsFalse(configurationContext.Validate());
 			bool containsAmbigousMatchErrorMessage = configurationContext.ValidationMessages
 				.Contains(
-				"Ambigious match for 'SouthSandDestination' on association #1 in pipeline [CopyFromNorthwindToSouthSand] - you need to qualify it with Sources.SouthSandDestination, Destinations.SouthSandDestination or Transforms.SouthSandDestination");
+				"Ambigious match for 'SouthSandDestination' on association #1 in pipeline [CopyFromNorthwindToSouthSand] - you need to qualify it with Sources.SouthSandDestination, Destinations.SouthSandDestination or Transforms.SouthSandDestination or Joins.SouthSandDestination");
 			Assert.IsTrue(containsAmbigousMatchErrorMessage);
 		}
 
@@ -80,7 +80,7 @@ namespace Rhino.ETL.Tests
 			Assert.IsFalse(configurationContext.Validate());
 			bool containsAmbigousMatchErrorMessage = configurationContext.ValidationMessages
 				.Contains(
-				"Ambigious match for 'NorthwindSource' on association #1 in pipeline [CopyFromNorthwindToSouthSand] - you need to qualify it with Sources.SouthSandDestination, Destinations.SouthSandDestination or Transforms.SouthSandDestination");
+				"Ambigious match for 'NorthwindSource' on association #1 in pipeline [CopyFromNorthwindToSouthSand] - you need to qualify it with Sources.SouthSandDestination, Destinations.SouthSandDestination or Transforms.SouthSandDestination or Joins.SouthSandDestination");
 			Assert.IsFalse(containsAmbigousMatchErrorMessage);
 		}
 

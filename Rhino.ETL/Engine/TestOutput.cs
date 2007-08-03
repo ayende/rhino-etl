@@ -33,9 +33,9 @@ namespace Rhino.ETL
 			actions[queueName] = action;
 		}
 
-		public static TestPipeLineStage GetPipelineStage()
+		public static TestPipeLineStage GetPipelineStage(Pipeline pipeline)
 		{
-			return new TestPipeLineStage("Output", new TestOutput(), "Output", 1, new Hashtable());
+			return new TestPipeLineStage(pipeline, "Output", new TestOutput(), "Output", 1, new Hashtable());
 		}
 	}
 }

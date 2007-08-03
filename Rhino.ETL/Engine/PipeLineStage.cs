@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -5,15 +6,17 @@ namespace Rhino.ETL
 {
 	public class PipeLineStage
 	{
+		private readonly Pipeline pipeline;
 		private readonly string incoming;
 		private readonly IOutput output;
 		private readonly string outgoing;
 		private readonly IDictionary parameters;
 		private int batchSize;
 
-		public PipeLineStage(string incoming, IOutput output, 
-			string outgoing, int batchSize, IDictionary parameters)
+		public PipeLineStage(Pipeline pipeline, string incoming, IOutput output,
+		                     string outgoing, int batchSize, IDictionary parameters)
 		{
+			this.pipeline = pipeline;
 			this.incoming = incoming;
 			this.output = output;
 			this.outgoing = outgoing;
@@ -49,9 +52,21 @@ namespace Rhino.ETL
 
 		public void Process(ICollection<Row> rows)
 		{
-			foreach (Row row in rows)
+			using (pipeline.EnterContext())
 			{
-				Output.Process(Outgoing, row, Parameters);
+				foreach (Row row in rows)
+				{
+					Output.Process(Outgoing, row, Parameters);
+				}
+			}
+		}
+
+		public void Complete(string name)
+		{
+			using (pipeline.EnterContext())
+			{
+				if (Incoming.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+					Output.Complete(Outgoing);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 namespace Rhino.ETL
 {
@@ -22,5 +23,9 @@ namespace Rhino.ETL
 			CurrentTransformParameters.ShouldSkipRow = true;
 		}
 
+		public Pipeline Context
+		{
+			get { return Pipeline.Current; }
+		}
 	}
 }

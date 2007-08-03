@@ -51,7 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\AssoicationType.cs" />
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\CountdownLatch.cs">
+      <Link>Engine\CountdownLatch.cs</Link>
+    </Compile>
+    <Compile Include="Engine\AssociationType.cs" />
     <Compile Include="Engine\BaseDataElement.cs" />
     <Compile Include="Engine\Command.cs" />
     <Compile Include="Commands\ExecuteScalar.cs" />
@@ -59,6 +62,7 @@
     <Compile Include="Destinations\DataDestination.cs" />
     <Compile Include="Engine\Join.cs" />
     <Compile Include="Engine\JoinType.cs" />
+    <Compile Include="Engine\ObjectArrayKeys.cs" />
     <Compile Include="Engine\PipeLineStage.cs" />
     <Compile Include="Engine\TestOutput.cs" />
     <Compile Include="Engine\TestPipeLineStage.cs" />

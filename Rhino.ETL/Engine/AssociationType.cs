@@ -1,10 +1,11 @@
 namespace Rhino.ETL
 {
-	public enum AssoicationType
+	public enum AssociationType
 	{
 		Any,
 		Sources,
 		Transforms,
-		Destinations
+		Destinations,
+		Joins
 	}
 }

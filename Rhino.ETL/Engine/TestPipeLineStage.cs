@@ -5,7 +5,7 @@ namespace Rhino.ETL
 {
 	public class TestPipeLineStage : PipeLineStage
 	{
-		public TestPipeLineStage(string incoming, IOutput output, string outgoing, int batchSize, IDictionary parameters) : base(incoming, output, outgoing, batchSize, parameters)
+		public TestPipeLineStage(Pipeline pipeline, string incoming, IOutput output, string outgoing, int batchSize, IDictionary parameters) : base(pipeline, incoming, output, outgoing, batchSize, parameters)
 		{
 		}
 

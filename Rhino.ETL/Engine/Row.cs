@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using Rhino.ETL.Impl;
 using System.Collections.Generic;
 
 namespace Rhino.ETL
 {
-    public class Row : QuackingDictionary
+	[DebuggerDisplay("Count = {items.Count}")]
+	[DebuggerTypeProxy(typeof(Rhino.ETL.Impl.QuackingDictionary.QuackingDictionaryDebugView))]
+	public class Row : QuackingDictionary
     {
 		public Row()
 			: base(new Hashtable(StringComparer.InvariantCultureIgnoreCase))
@@ -40,6 +43,17 @@ namespace Rhino.ETL
 		{
 			Row row = new Row(items);
 			return row;
+		}
+
+		public ObjectArrayKeys CreateKey(IEnumerable columns)
+		{
+			ArrayList list = new ArrayList();
+			columns = columns ?? Columns;
+			foreach (string column in columns)
+			{
+				list.Add(items[column]);
+			}
+			return new ObjectArrayKeys(list.ToArray());
 		}
     }
 }

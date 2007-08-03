@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using MbUnit.Framework;
+using Rhino.ETL.Tests.Integration;
 
 namespace Rhino.ETL.Tests.Joins
 {
@@ -12,7 +15,7 @@ namespace Rhino.ETL.Tests.Joins
 		public void TestInitialize()
 		{
 			configurationContext = BuildContext(@"Joins\join_two_tables.retl");
-			ExecutionPackage.Current = new TestExecutionPackage();
+			new TestExecutionPackage().EnterContext();
 		}
 
 		[TearDown]
@@ -20,7 +23,6 @@ namespace Rhino.ETL.Tests.Joins
 		{
 			ExecutionPackage.Current = null;
 		}
-
 
 		[Test]
 		public void CanSepcifyJoinInDSL()
@@ -34,7 +36,9 @@ namespace Rhino.ETL.Tests.Joins
 		{
 			int rowCount = 0;
 			Join join = configurationContext.Joins["JoinUsersAndOrganization"];
-			TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage();
+			TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
+				configurationContext.Pipelines["CopyUsers"]
+				);
 			pipeLineStage.OnProcess("Output", delegate(Row row)
 			{
 				rowCount++;
@@ -57,64 +61,75 @@ namespace Rhino.ETL.Tests.Joins
 
 			join.Process("Left", left, null);
 			join.Process("Right", right, null);
+			right = right.Clone();
+			right["organization id"] = 3;
+			join.Process("Right", right, null);
 			join.Complete("Left");
 			join.Complete("Right");
 
 			Assert.AreEqual(1, rowCount);
 		}
 
+
 		[Test]
-		[Ignore("not implemented")]
-		public void NonEquialityJoin()
+		public void UsingDistinct()
 		{
+			int rowCount = 0;
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
+			using (pipeline.EnterContext())
+			{
+				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
+					pipeline
+					);
+				pipeLineStage.OnProcess("Output", delegate { rowCount++; });
+
+
+				Transform transform = configurationContext.Transforms["Distinct"];
+				transform.RegisterForwarding(pipeLineStage);
+				Row row = new Row();
+				row["Id"] = 1;
+				row["OrgId"] = 2;
+				row["City"] = "New York";
+
+				for (int i = 0; i < 15; i++)
+				{
+					transform.Process("Output", row, new Hashtable());
+				}
+				transform.Complete("Output");
+			}
+			Assert.AreEqual(1, rowCount);
 		}
 
 		[Test]
-		[Ignore("not implemented")]
-		public void JoinUsingOr()
+		public void UsingDistinct_WithParameters_JustOnId()
 		{
-		}
+			int rowCount = 0;
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
+			using (pipeline.EnterContext())
+			{
+				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
+					pipeline
+					);
+				pipeLineStage.OnProcess("Output", delegate { rowCount++; });
 
-		[Test]
-		[Ignore("not implemented")]
-		public void JoinLeftToLeft()
-		{
-		}
 
-		[Test]
-		[Ignore("not implemented")]
-		public void JoinRightToRight()
-		{
-		}
-
-		[Test]
-		[Ignore("not implemented")]
-		public void LeftJoin()
-		{
-		}
-
-		[Test]
-		[Ignore("not implemented")]
-		public void RightJoin()
-		{
-		}
-
-		[Test]
-		[Ignore("not implemented")]
-		public void FullJoin()
-		{
-		}
-
-		[Test]
-		[Ignore("not implemented")]
-		public void OnClauseThrows()
-		{
-		}
-
-		[Test]
-		[Ignore("not implemented")]
-		public void TransformationClauseThrows()
-		{
+				Transform transform = configurationContext.Transforms["Distinct"];
+				transform.RegisterForwarding(pipeLineStage);
+				Hashtable hashtable = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+				hashtable["Columns"] = new string[] {"Id"};
+				Row row = new Row();
+				row["Id"] = 1;
+				row["OrgId"] = 2;
+				row["City"] = "New York";
+				transform.Process("Output", row, hashtable);
+				row["Id"] = 1;
+				row["OrgId"] = 2;
+				row["City"] = "Tel Aviv";
+				transform.Process("Output", row, hashtable);
+				
+				transform.Complete("Output");
+			}
+			Assert.AreEqual(1, rowCount);
 		}
 	}
 }

@@ -37,9 +37,9 @@ namespace Rhino.ETL
 			get { return name; }
 		}
 
-		public void RegisterForwarding(PipeLineStage parameters)
+		public void RegisterForwarding(PipeLineStage pipeLineStage)
 		{
-			queuesManager.RegisterForwarding(parameters);
+			queuesManager.RegisterForwarding(pipeLineStage);
 		}
 
 		public void Process(string queueName, Row row, IDictionary parameters)
@@ -84,6 +84,7 @@ namespace Rhino.ETL
 
 					queuesManager.Clear(LeftQueueName);
 					queuesManager.Clear(RightQueueName);
+					queuesManager.CompleteAll();
 				}
 			}
 		}

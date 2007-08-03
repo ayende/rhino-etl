@@ -26,8 +26,8 @@ namespace Rhino.ETL.Tests.Pipelines
 		[Test]
 		public void CanSpecifyAssociationTypeInDSL()
 		{
-			Assert.AreEqual(AssoicationType.Sources, pipeline.Associations[0].FromType);
-			Assert.AreEqual(AssoicationType.Transforms, pipeline.Associations[2].ToType);
+			Assert.AreEqual(AssociationType.Sources, pipeline.Associations[0].FromType);
+			Assert.AreEqual(AssociationType.Transforms, pipeline.Associations[2].ToType);
 		}
 
 		[Test]
@@ -44,8 +44,8 @@ namespace Rhino.ETL.Tests.Pipelines
 		[Test]
 		public void CanSpecifyInputQueueInDSL()
 		{
-			Assert.AreEqual("RegionlessRows", pipeline.Associations[2].ToQueue);
-			Assert.AreEqual("ExplicitInput", pipeline.Associations[2].FromQueue);
+			Assert.AreEqual("RegionlessRows", pipeline.Associations[2].FromQueue);
+			Assert.AreEqual("ExplicitInput", pipeline.Associations[2].ToQueue);
 		}
 
 		[Test]

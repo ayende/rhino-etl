@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Rhino.ETL
 {
@@ -15,19 +14,16 @@ namespace Rhino.ETL
 		private bool completed = false;
 		private readonly string name;
 		private readonly int batchSize;
-		private readonly IOutput output;
-		private readonly Action<ICollection<Row>> onBatch;
+		private readonly PipeLineStage pipeLineStage;
 		private int currentlyProcessing = 0;
 
 		public Queue(
 			string name, int batchSize,
-			IOutput output,
-			Action<ICollection<Row>> onBatch)
+			PipeLineStage pipeLineStage)
 		{
 			this.name = name;
 			this.batchSize = batchSize;
-			this.output = output;
-			this.onBatch = onBatch;
+			this.pipeLineStage = pipeLineStage;
 		}
 
 		public void Enqueue(Row row)
@@ -51,14 +47,14 @@ namespace Rhino.ETL
 		private void ExecuteBatch()
 		{
 			List<Row> copy = rows;
-			this.rows = new List<Row>();
+			rows = new List<Row>();
 			currentlyProcessing += 1;
 			ExecutionPackage.Current.RegisterForExecution(delegate
 			{
 				// inside here we are OUTSIDE the lock!
 				try
 				{
-					onBatch(copy);
+					pipeLineStage.Process(copy);
 				}
 				finally
 				{
@@ -74,7 +70,7 @@ namespace Rhino.ETL
 				currentlyProcessing -= 1;
 				if (currentlyProcessing == 0 && completed)
 				{
-					output.Complete(name);
+					pipeLineStage.Complete(name);
 				}
 			}
 		}
@@ -83,12 +79,12 @@ namespace Rhino.ETL
 		{
 			lock (this)
 			{
-				completed = true;
 				ExecuteBatch();
 				if (currentlyProcessing == 0)
 				{
-					output.Complete(name);
+					pipeLineStage.Complete(name);
 				}
+				completed = true;
 			}
 		}
 	}

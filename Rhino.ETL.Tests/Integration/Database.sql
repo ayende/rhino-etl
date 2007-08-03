@@ -13,7 +13,7 @@ CREATE TABLE Users_Source
 
 CREATE TABLE Users2Org
 (
-	[UserId] nvarchar(25)
+	[UserId] nvarchar(25),
 	[organization id] int
 )
 

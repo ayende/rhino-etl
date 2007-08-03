@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using Boo.Lang;
 using Rhino.ETL.Exceptions;
+using System.Collections.Generic;
 
 namespace Rhino.ETL.Impl
 {
@@ -44,5 +46,61 @@ namespace Rhino.ETL.Impl
 			throw new InvalidOperationException(
 				"You cannot invoke methods on a row, it is merely a data structure, after all.");
 		}
+
+		internal class QuackingDictionaryDebugView
+		{
+			private IDictionary items;
+
+			public QuackingDictionaryDebugView(QuackingDictionary dictionary)
+			{
+				this.items = dictionary.items;
+			}
+
+			[DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+			public KeyValuePairs[] Items
+			{
+				get
+				{
+					List<KeyValuePairs> pairs = new List<KeyValuePairs>();
+					foreach (DictionaryEntry item in items)
+					{
+						pairs.Add(new KeyValuePairs(item.Key, item.Value));
+					}
+					return pairs.ToArray();
+				}
+			}
+
+			[DebuggerDisplay("{value}", Name = "[{key}]", Type = "")]
+			internal class KeyValuePairs
+			{
+				[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+				private object key;
+				[DebuggerBrowsable(DebuggerBrowsableState.Never)]
+				private object value;
+
+
+				public KeyValuePairs(object key, object value)
+				{
+					this.key = key;
+					this.value = value;
+				}
+
+				public object Key
+				{
+					get { return key; }
+				}
+
+				public object Value
+				{
+					get { return value; }
+				}
+			}
+
+ 
+
+		}
+
+ 
+
 	}
 }

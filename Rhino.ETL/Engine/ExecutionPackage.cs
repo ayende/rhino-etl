@@ -9,9 +9,7 @@ namespace Rhino.ETL
 		private EtlConfigurationContext configurationContext;
 		private List<Command> onPipelineCompletedCommands = new List<Command>();
 
-		public event EventHandler PipelineCompleted = delegate
-		{
-		};
+		public event EventHandler PipelineCompleted = delegate { };
 
 		public List<Command> OnPipelineCompletedCommands
 		{
@@ -25,7 +23,6 @@ namespace Rhino.ETL
 
 		protected ExecutionPackage()
 		{
-
 		}
 
 		public ExecutionPackage(EtlConfigurationContext configurationContext)
@@ -46,18 +43,45 @@ namespace Rhino.ETL
 				{
 					foreach (Pipeline pipeline in configurationContext.Pipelines.Values)
 					{
-						Logger.InfoFormat("Starting pipeline {0}", pipeline.Name);
-						pipeline.Completed += Pipeline_Completed;
-						pipeline.Prepare();
-						Pipeline copy = pipeline;
-						ThreadPool.QueueUserWorkItem(delegate
-						{
-							RegisterForExecution(copy.Start);
-						});
+						ExecuteSinglePipeline(pipeline);
 					}
 				}
 			}
 			WaitForAllPipelines();
+			ClearAllContexts();
+		}
+
+		private void ClearAllContexts()
+		{
+			ExecutionPackage.Current = null;
+			EtlConfigurationContext.Current = null;
+			Transform.Current = null;
+			Join.Current = null;
+			Pipeline.Current = null;
+			DataSource.Current = null;
+			DataDestination.Current = null;
+		}
+
+		public void Execute(Pipeline pipeline)
+		{
+			using (EnterContext())
+			{
+				using (configurationContext.EnterContext())
+				{
+					ExecuteSinglePipeline(pipeline);
+				}
+			}
+			pipeline.WaitOne();
+		}
+
+
+		private void ExecuteSinglePipeline(Pipeline pipeline)
+		{
+			Logger.InfoFormat("Starting pipeline {0}", pipeline.Name);
+			pipeline.Completed += Pipeline_Completed;
+			pipeline.Prepare();
+			Pipeline copy = pipeline;
+			RegisterForExecution(copy.Start);
 		}
 
 		private void WaitForAllPipelines()
@@ -94,19 +118,16 @@ namespace Rhino.ETL
 
 		public virtual void RegisterForExecution(Command action)
 		{
-			//ideally this would be run via a thread pool, but
-			//we still have to overcome the issue of syncing the complete
-			//signal with remaining data, so it is single threaded per pipeline, for now
 			ThreadPool.QueueUserWorkItem(delegate
 			{
 				using (EnterContext())
 				using (configurationContext.EnterContext())
 				{
-					{
-						action();
-					}
+					action();
 				}
 			});
+
+			
 		}
 	}
 }

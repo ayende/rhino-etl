@@ -15,13 +15,13 @@ namespace Rhino.ETL
 		public DataSource(string name)
 			: base(name)
 		{
-			queueManager = new QueuesManager(Name, Logger);
+			queueManager = new QueuesManager(name, Logger);
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public void RegisterForwarding(PipeLineStage parameters)
+		public void RegisterForwarding(PipeLineStage pipeLineStage)
 		{
-			queueManager.RegisterForwarding(parameters);
+			queueManager.RegisterForwarding(pipeLineStage);
 		}
 
 		public void Start()

@@ -59,6 +59,7 @@
     <Compile Include="Connections\ConnectionFixture.cs" />
     <Compile Include="ContextfulObjectFixture.cs" />
     <Compile Include="Destinations\DestinationsFixture.cs" />
+    <Compile Include="Integration\IntegrationTestBase.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Joins\Joins.cs" />
     <Compile Include="Joins\TestExecutionPackage.cs" />

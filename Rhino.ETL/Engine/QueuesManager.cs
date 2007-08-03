@@ -26,17 +26,16 @@ namespace Rhino.ETL
 
         // Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
-        public void RegisterForwarding(PipeLineStage parameters)
+		public void RegisterForwarding(PipeLineStage pipeLineStage)
 	    {
-            if(queueToOutputs.ContainsKey(parameters.Incoming)==false)
-                queueToOutputs.Add(parameters.Incoming, new List<Queue>());
+            if(queueToOutputs.ContainsKey(pipeLineStage.Incoming)==false)
+                queueToOutputs.Add(pipeLineStage.Incoming, new List<Queue>());
         	Queue queue = new Queue(
-				parameters.Incoming, 
-				parameters.BatchSize,
-				parameters.Output, 
-				parameters.Process);
-        	queueToOutputs[parameters.Incoming].Add(queue);
-            logger.DebugFormat("{0}.{1} registered for {1}.{2}", parameters.Output.Name, parameters.Outgoing, name, parameters.Incoming);
+				pipeLineStage.Incoming, 
+				pipeLineStage.BatchSize,
+				pipeLineStage);
+        	queueToOutputs[pipeLineStage.Incoming].Add(queue);
+            logger.DebugFormat("{0}.{1} registered for {1}.{2}", pipeLineStage.Output.Name, pipeLineStage.Outgoing, name, pipeLineStage.Incoming);
 	    }
 
 		public void Forward(string queueName, Row row)
@@ -111,6 +110,17 @@ namespace Rhino.ETL
 			if (completedQueues.TryGetValue(queueName, out result))
 				return result;
 			return false;
+		}
+
+		public void CompleteAll()
+		{
+			foreach (List<Queue> queues in queueToOutputs.Values)
+			{
+				foreach (Queue queue in queues)
+				{
+					queue.Complete();
+				}
+			}
 		}
 	}
 }

@@ -1,17 +1,23 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using log4net;
 using Rhino.ETL.Exceptions;
+using Rhino.ETL.Impl;
 
 namespace Rhino.ETL
 {
-	public abstract class ContextfulObjectBase<T> 
+	[DebuggerDisplay("{GetType().Name}: {Name}")]
+	public abstract class ContextfulObjectBase<T>
 		where T : ContextfulObjectBase<T>
 	{
-		[ThreadStatic] private static T current;
-		[ThreadStatic] private static int nestedCount;
+		[ThreadStatic]
+		protected static T current;
+		[ThreadStatic]
+		protected static int nestedCount;
 
-		private IDictionary items = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+		private QuackingDictionary items = new QuackingDictionary(
+			new Hashtable(StringComparer.InvariantCultureIgnoreCase));
 		private ILog logger;
 
 		public abstract string Name
@@ -24,7 +30,7 @@ namespace Rhino.ETL
 			logger = LogManager.GetLogger(GetType());
 		}
 
-		public IDictionary Items
+		public QuackingDictionary Items
 		{
 			get { return items; }
 		}
@@ -45,7 +51,7 @@ namespace Rhino.ETL
 			}
 			set
 			{
-				if (value == current)
+				if (value != null && value == current)
 				{
 					nestedCount += 1;
 					return;
@@ -58,7 +64,7 @@ namespace Rhino.ETL
 				nestedCount -= 1;
 				if (nestedCount > 0)
 					return;
-				nestedCount = 0;
+				nestedCount = 1;
 				current = value;
 			}
 		}
@@ -69,7 +75,7 @@ namespace Rhino.ETL
 			return new ExitContext();
 		}
 
-		private class ExitContext :IDisposable
+		private class ExitContext : IDisposable
 		{
 			public void Dispose()
 			{

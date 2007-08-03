@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rhino.Commons;
 using Rhino.ETL.Exceptions;
 using System.Threading;
 
@@ -11,9 +12,9 @@ namespace Rhino.ETL
 		public delegate void PipelineCompleted(Pipeline completed);
 		public event PipelineCompleted Completed = delegate { };
 
-		private TimeSpan timeOut = TimeSpan.FromSeconds(30);
+		private TimeSpan timeOut = TimeSpan.FromSeconds(5000);
 		private string name;
-		private Semaphore destinationToComplete;
+		private CountdownLatch destinationToComplete;
 
 		public Pipeline(string name)
 		{
@@ -103,7 +104,7 @@ namespace Rhino.ETL
 		public void Prepare()
 		{
 			int destinationCount = EtlConfigurationContext.Current.Destinations.Count;
-			destinationToComplete = new Semaphore(0, destinationCount);
+			destinationToComplete = new CountdownLatch(destinationCount);
 		}
 
 		public void Start()
@@ -112,7 +113,7 @@ namespace Rhino.ETL
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
-			    association.ConnectEnds();
+			    association.ConnectEnds(this);
 			}
 			foreach (DataDestination value in EtlConfigurationContext.Current.Destinations.Values)
 			{
@@ -127,7 +128,7 @@ namespace Rhino.ETL
 
 		private void DestinationCompleted(DataDestination destination)
 		{
-			int count = destinationToComplete.Release();
+			int count = destinationToComplete.Set();
 			if (count == 0)
 				Completed(this);
 		}
@@ -160,7 +161,7 @@ namespace Rhino.ETL
 
 		public void WaitOne()
 		{
-			if(destinationToComplete.WaitOne(TimeOut, false)==false)
+			if(destinationToComplete.WaitOne(TimeOut)==false)
 			{
 				throw new TimeoutException("Waited for " + TimeOut + " for pipeline to completed, aborting");
 			}

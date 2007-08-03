@@ -7,7 +7,7 @@ namespace Rhino.ETL.Impl
 {
 	public class PipelineMacro : AbstractNamedMacro
 	{
-		private static string[] associationTypeNames = Enum.GetNames(typeof (AssoicationType));
+		private static string[] associationTypeNames = Enum.GetNames(typeof (AssociationType));
 
 		public override Statement Expand(MacroStatement macro)
 		{
@@ -45,7 +45,7 @@ namespace Rhino.ETL.Impl
 				SetAssociationProperties(block, left,
 				                         associationLocal.Name + ".FromType",
 				                         associationLocal.Name + ".From",
-				                         associationLocal.Name + ".ToQueue");
+				                         associationLocal.Name + ".FromQueue");
 				ReferenceExpression right;
 				if (expr.Right is ReferenceExpression)
 				{
@@ -74,7 +74,7 @@ namespace Rhino.ETL.Impl
 				SetAssociationProperties(block, right,
 				                         associationLocal.Name + ".ToType",
 				                         associationLocal.Name + ".To",
-				                         associationLocal.Name + ".FromQueue");
+				                         associationLocal.Name + ".ToQueue");
 
 				block.Add(
 					new MethodInvocationExpression(AstUtil.CreateReferenceExpression(pipelineVar + ".AddAssociation"),
@@ -101,7 +101,7 @@ namespace Rhino.ETL.Impl
 						                     AstUtil.CreateReferenceExpression(associationType),
 						                     AstUtil.CreateReferenceExpression(
 						                     	string.Format("{0}.{1}",
-						                     	              typeof (AssoicationType).FullName,
+						                     	              typeof (AssociationType).FullName,
 						                     	              name))
 							)
 						);

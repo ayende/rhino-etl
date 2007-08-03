@@ -14,14 +14,30 @@ join JoinUsersAndOrganization:
 	if Left.OrgId == Right["organization id"] and Left.Id == Right.UserId:
 		Row.Copy(Left)
 		Row.Organization = Right["Organization Id"]
-		
+
+join JoinWithTypeCasting_AndTransformation:
+	if Left.Id.ToString() == Right.UserId:
+		Row.Id = Left.Id
+		Row.Email = Left.Email
+		Row.FirstName = Left.Name.Split(char(' '))[0]
+		Row.LastName = Left.Name.Split(char(' '))[1]
+		Row.Organization = Right["Organization Id"]
+
+transform Distinct:
+	Context.Items["Rows"] = {} if Context.Items["Rows"] is null
+	key = Row.CreateKey(Parameters.Columns)
+	if Context.Items["Rows"].ContainsKey(key):
+		RemoveRow()
+		return
+	Context.Items["Rows"].Add(key, Row)
 
 destination UsersDestination, Connection = "Connection":
 	Command: """INSERT INTO Users_Destination (UserId, [First Name], [Last Name], Email, Orgnaization)
-				VALUES (@Id, @FirstName, @LastName, @Email, @Orgnaization)
+				VALUES (@Id, @FirstName, @LastName, @Email, @Organization)
 			 """
-
+	
 pipeline CopyUsers:
-	UsersSource >> JoinUsersAndOrganization.Left
-	User2Org >> JoinUsersAndOrganization.Right
-	JoinUsersAndOrganization >> UsersDestination
+	UsersSource >> JoinWithTypeCasting_AndTransformation.Left
+	User2Org >> JoinWithTypeCasting_AndTransformation.Right
+	JoinWithTypeCasting_AndTransformation >> Distinct(Columns: ['Id'])
+	Distinct >> UsersDestination
