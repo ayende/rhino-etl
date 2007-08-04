@@ -186,6 +186,7 @@ namespace Rhino.ETL.Impl
 			                               new ReferenceExpression(local.Name),
 			                               create
 			          	));
+			MacroArgumentsToCreateNamedArguments(create, macro); 
 			return local.Name;
 		}
 	}

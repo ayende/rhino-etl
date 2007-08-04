@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Transactions;
 using Boo.Lang.Compiler;
 using Boo.Lang.Compiler.IO;
 using Boo.Lang.Compiler.Pipelines;
@@ -16,7 +17,6 @@ namespace Rhino.ETL
 
 		private static readonly string[] defaultImports = {
 		                                                  	"System",
-		                                                  	"System.Data",
 		                                                  	"System.Configuration",
 		                                                  	"System.Data.SqlClient",
 		                                                  	"System.Data.OracleClient",
@@ -24,7 +24,9 @@ namespace Rhino.ETL
 		                                                  	"System.Data.OleDb",
 		                                                  	"Rhino.ETL",
 		                                                  	"Rhino.ETL.Impl",
-		                                                  	"Rhino.ETL.Commands"
+		                                                  	"Rhino.ETL.Commands",
+		                                                  	"System.Transactions",
+		                                                  	"Rhino.ETL.Engine"
 		                                                  };
 
 		public static EtlConfigurationContext FromFile(string filename)
@@ -73,6 +75,8 @@ namespace Rhino.ETL
 				compiler.Parameters.Input.Add(compilerInput);
 			}
 			compiler.Parameters.References.Add(Assembly.GetExecutingAssembly());
+			compiler.Parameters.References.Add(typeof(System.Data.DbType).Assembly);
+			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
 			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports));
 			compiler.Parameters.Pipeline.Insert(10, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
@@ -80,7 +84,7 @@ namespace Rhino.ETL
 			{
 				throw new CompilerError(string.Format("Compilation error! {0}", run.Errors.ToString(true)));
 			}
-				Type type = run.GeneratedAssembly.GetType(rootName);
+			Type type = run.GeneratedAssembly.GetType(rootName);
 			return Activator.CreateInstance(type) as EtlConfigurationContext;
 		}
 	}

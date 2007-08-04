@@ -30,9 +30,24 @@ pipeline CopyUsers:
 	SplitName >> RemoveRowsWithBadId
 	RemoveRowsWithBadId >> UsersDestination
 
-pipeline MoveCustomers:
+pipeline WillThrow:
 	UsersSource >> ThrowAtThirdRow
 
 target default:
-	cookie = Execute("MoveCustomers")
+	cookie = Execute("WillThrow")
 	Execute("CopyUsers").After(cookie)
+	
+target withTransaction:
+	transaction:
+		cookie = Execute("CopyUsers")
+		Execute("WillThrow").After(cookie)
+		
+target withOutTransaction:
+	cookie = Execute("CopyUsers")
+	Execute("WillThrow").After(cookie)
+	
+	
+target transactionWithIsolationLevel:
+	transaction(IsolationLevel.Serializable):
+		cookie = Execute("CopyUsers")
+		Execute("WillThrow").After(cookie)

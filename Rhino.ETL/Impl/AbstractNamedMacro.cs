@@ -38,6 +38,26 @@ namespace Rhino.ETL.Impl
             }
         }
 
+		protected bool MacroArgumentsToCreateNamedArguments(MethodInvocationExpression create, MacroStatement macro)
+		{
+			foreach (Expression argument in macro.Arguments)
+			{
+				if (argument == macro.Arguments[0])
+					continue;
+				BinaryExpression expression = argument as BinaryExpression;
+				if (expression == null)
+				{
+					Errors.Add(new CompilerError(macro.LexicalInfo,
+												 GetType().Name + @" parameters much be in the format of Connection = 'ConnectionName'", null));
+					return false;
+				}
+				create.NamedArguments.Add(
+					new ExpressionPair(expression.Left, expression.Right)
+					);
+			}
+			return true;
+		}
+
         protected static Module GetModule(MacroStatement macro)
         {
             Node node = macro.ParentNode;

@@ -4,6 +4,6 @@ namespace Rhino.ETL
 	{
 		Success,
 		Failure,
-		CriticalBug
+		InvalidPackage
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Transactions;
 using Boo.Lang;
 using Boo.Lang.Compiler.MetaProgramming;
 using Rhino.Commons;
@@ -57,6 +58,32 @@ namespace Rhino.ETL.Engine
 		private void AddCommand(ICommand command)
 		{
 			container.Add(command);
+		}
+
+		[Meta]
+		public void transaction(ICallable callable)
+		{
+			Transaction(callable);
+		}
+
+		[Meta]
+		public void Transaction(ICallable callable)
+		{
+			ExecuteInParallelTransactionCommand command = new ExecuteInParallelTransactionCommand(this);
+			RunUnderDifferentCommandContainerContext(command, command, callable);
+		}
+
+		[Meta]
+		public void transaction(IsolationLevel isolationLevel,ICallable callable)
+		{
+			Transaction(isolationLevel,callable);
+		}
+
+		[Meta]
+		public void Transaction(IsolationLevel isolationLevel, ICallable callable)
+		{
+			ExecuteInParallelTransactionCommand command = new ExecuteInParallelTransactionCommand(this,isolationLevel);
+			RunUnderDifferentCommandContainerContext(command, command, callable);
 		}
 
 		[Meta]

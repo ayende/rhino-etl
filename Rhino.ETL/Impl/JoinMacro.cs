@@ -66,6 +66,7 @@ namespace Rhino.ETL.Impl
 					)
 				);
 
+			MacroArgumentsToCreateNamedArguments(create, macro);
 			return new ExpressionStatement(create);
 		}
 	}

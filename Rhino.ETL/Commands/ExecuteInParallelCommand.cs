@@ -20,7 +20,7 @@ namespace Rhino.ETL.Commands
 			get { return commands; }
 		}
 
-		public void ForceEndOfCompletionWithoutFurtherWait()
+		public virtual void ForceEndOfCompletionWithoutFurtherWait()
 		{
 			int remaining;
 			do
@@ -34,7 +34,7 @@ namespace Rhino.ETL.Commands
 			commands.Add(command);
 		}
 
-		public void WaitForCompletion(TimeSpan timeOut)
+		public virtual void WaitForCompletion(TimeSpan timeOut)
 		{
 			if (latch == null)
 				throw new InvalidOperationException("Called WaitForCompletion before calling Execute");
@@ -52,8 +52,13 @@ namespace Rhino.ETL.Commands
 					if (remaining == 0)
 						RaiseCompleted();
 				};
-				ExecutionPackage.Current.RegisterForExecution(target, command.Execute);
+				RegisterForExecution(command);
 			}
+		}
+
+		protected virtual void RegisterForExecution(ICommand command)
+		{
+			ExecutionPackage.Current.RegisterForExecution(target, command.Execute);
 		}
 	}
 }

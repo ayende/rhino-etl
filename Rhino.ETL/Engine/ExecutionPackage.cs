@@ -65,7 +65,7 @@ namespace Rhino.ETL
 			catch (Exception e)
 			{
 				Logger.Fatal("Error executing target '" + targetName + "'", e);
-				ExecutionResult result = new ExecutionResult(ExecutionStatus.CriticalBug);
+				ExecutionResult result = new ExecutionResult(ExecutionStatus.InvalidPackage);
 				result.Exceptions.Add(e);
 				return result;
 			}

@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -75,6 +76,7 @@
     </Compile>
     <Compile Include="Commands\AbstractCommand.cs" />
     <Compile Include="Commands\ExecuteInParallelCommand.cs" />
+    <Compile Include="Commands\ExecuteInParallelTransactionCommand.cs" />
     <Compile Include="Commands\ExecuteInSequenceCommand.cs" />
     <Compile Include="Commands\ExecutePipeline.cs" />
     <Compile Include="Engine\AssociationType.cs" />

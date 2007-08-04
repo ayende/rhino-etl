@@ -43,7 +43,8 @@ namespace Rhino.ETL.Impl
             MethodInvocationExpression create = new MethodInvocationExpression(
                 AstUtil.CreateReferenceExpression(definition.FullName));
 
-            return new ExpressionStatement(create);
+			MacroArgumentsToCreateNamedArguments(create, macro);
+			return new ExpressionStatement(create);
         }
     }
 }

@@ -15,21 +15,8 @@ namespace Rhino.ETL.Impl
 			MethodInvocationExpression create = new MethodInvocationExpression(
 				AstUtil.CreateReferenceExpression(typeof(TElement).FullName)
 				);
-			foreach (Expression argument in macro.Arguments)
-			{
-				if (argument == macro.Arguments[0])
-					continue;
-				BinaryExpression expression = argument as BinaryExpression;
-				if(expression ==null)
-				{
-					Errors.Add(new CompilerError(macro.LexicalInfo,
-					                             GetType().Name + @" parameters much be in the format of Connection = 'ConnectionName'",null));
-					return null;
-				}
-				create.NamedArguments.Add(
-					new ExpressionPair(expression.Left, expression.Right)
-					);
-			}
+			if(MacroArgumentsToCreateNamedArguments(create, macro)==false)
+				return null;
 			create.Arguments.Add(GetNameExpression(macro));
 			AddNamedArgument(create, macro, "Command", CommandMacro.Key);
 			AddNamedArgument(create, macro, "CommandGenerator", CommandGeneratorMacro.Key);
