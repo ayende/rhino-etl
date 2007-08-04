@@ -41,3 +41,25 @@ pipeline CopyUsers:
 	User2Org >> JoinWithTypeCasting_AndTransformation.Right
 	JoinWithTypeCasting_AndTransformation >> Distinct(Columns: ['Id'])
 	Distinct >> UsersDestination
+	
+transform CountRows:
+	Context.Items.RowCount = 0 unless Context.Items.RowCount
+	Context.Items.RowCount+=1
+	RemoveRow()
+	OnComplete:
+		SendRow( Row(RowCount: Context.Items.RowCount) )
+		
+transform CalcSumOfSalaryAndId:
+	unless Context.Items.IdSum:
+		Context.Items.IdSum = 0 
+		Context.Items.SalarySum = 0
+		
+	Context.Items.IdSum+=Row.Id
+	Context.Items.SalarySum+=Row.Salary
+	RemoveRow()
+	
+	OnComplete:
+		SendRow( Row(
+			IdSum: Context.Items.IdSum, 
+			SalarySum: Context.Items.SalarySum
+			) )

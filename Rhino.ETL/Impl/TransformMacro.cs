@@ -22,6 +22,16 @@ namespace Rhino.ETL.Impl
             apply.Body = macro.Block;
             definition.Members.Add(apply);
 
+    		Block onCompleteBlock = (Block)macro[OnCompleteMacro.Key];
+    		if(onCompleteBlock!=null)
+    		{
+    			Method onComplete = new Method("OnComplete");
+				onComplete.Parameters.Add(new ParameterDeclaration("QueueName",
+					CodeBuilder.CreateTypeReference(typeof(string))));
+    			onComplete.Body = onCompleteBlock;
+				definition.Members.Add(onComplete);
+    		}
+
             GetModule(macro).Members.Add(definition);
 
             Constructor ctor = new Constructor();

@@ -126,10 +126,76 @@ namespace Rhino.ETL.Tests.Joins
 				row["OrgId"] = 2;
 				row["City"] = "Tel Aviv";
 				transform.Process("Output", row, hashtable);
-				
+
 				transform.Complete("Output");
 			}
 			Assert.AreEqual(1, rowCount);
+		}
+
+
+		[Test]
+		public void RowCount()
+		{
+			int rowCount = 0;
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
+			using (pipeline.EnterContext())
+			{
+				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
+					pipeline
+					);
+				pipeLineStage.OnProcess("Output", delegate(Row processedRow)
+				{
+					object rowCountObj = processedRow["RowCount"];
+					rowCount = (int)rowCountObj;
+				});
+
+				Transform transform = configurationContext.Transforms["CountRows"];
+				transform.RegisterForwarding(pipeLineStage);
+				Row row = new Row();
+
+				for (int i = 0; i < 14; i++)
+				{
+					transform.Process("Output", row, null);
+				}
+
+				transform.Complete("Output");
+			}
+
+			Assert.AreEqual(14, rowCount );
+		}
+
+		[Test]
+		public void SumUsingTransform()
+		{
+			int idSum = 0;
+			int salarySum = 0;
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
+			using (pipeline.EnterContext())
+			{
+				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
+					pipeline
+					);
+				pipeLineStage.OnProcess("Output", delegate(Row processedRow)
+				{
+					idSum += (int)processedRow["IdSum"];
+					salarySum += (int)processedRow["SalarySum"];
+				});
+
+				Transform transform = configurationContext.Transforms["CalcSumOfSalaryAndId"];
+				transform.RegisterForwarding(pipeLineStage);
+				Row row = new Row();
+				row["id"] = 2;
+				row["salary"] = 10;
+				for (int i = 0; i < 14; i++)
+				{
+					transform.Process("Output", row, null);
+				}
+
+				transform.Complete("Output");
+			}
+
+			Assert.AreEqual(28, idSum);
+			Assert.AreEqual(140, salarySum);
 		}
 	}
 }

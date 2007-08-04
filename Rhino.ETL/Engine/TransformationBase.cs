@@ -8,6 +8,7 @@ namespace Rhino.ETL
 	{
 		protected const string DefaultOutputQueue = "Output";
 		protected string name;
+		protected QueuesManager queuesManager;
 
 		[ThreadStatic]
 		public static TransformParameters CurrentTransformParameters;
@@ -23,9 +24,42 @@ namespace Rhino.ETL
 			CurrentTransformParameters.ShouldSkipRow = true;
 		}
 
+		public void SendRow(Row row)
+		{
+			SendRow(CurrentTransformParameters.OutputQueueName, row);
+		}
+
+		public void SendRow(string queueName, Row row)
+		{
+			TransformParameters old = CurrentTransformParameters;
+			PrepareCurrentTransformParameters(row);
+			CurrentTransformParameters.OutputQueueName = queueName;
+			ForwardRow();
+			CurrentTransformParameters = old;
+		}
+
 		public Pipeline Context
 		{
 			get { return Pipeline.Current; }
 		}
+
+		protected static void PrepareCurrentTransformParameters(Row row)
+		{
+			CurrentTransformParameters = new TransformParameters();
+			CurrentTransformParameters.OutputQueueName = DefaultOutputQueue;
+			CurrentTransformParameters.ShouldSkipRow = false;
+			CurrentTransformParameters.Row = row;
+		}
+
+		protected void ForwardRow()
+		{
+			if (CurrentTransformParameters.ShouldSkipRow)
+				return;
+			if (CurrentTransformParameters.Row == null)
+				return;
+			queuesManager.Forward(CurrentTransformParameters.OutputQueueName,
+								  CurrentTransformParameters.Row);
+		}
+
 	}
 }

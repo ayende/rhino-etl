@@ -6,9 +6,6 @@ namespace Rhino.ETL
 {
 	public abstract class Transform : TransformationBase<Transform>, IInputOutput
 	{
-			QueuesManager queuesManager;
-
-
 		protected Transform(string name)
 		{
 			this.name = name;
@@ -19,9 +16,7 @@ namespace Rhino.ETL
 
 		public void Apply(Row row, IDictionary parameters)
 		{
-			CurrentTransformParameters = new TransformParameters();
-			CurrentTransformParameters.OutputQueueName = DefaultOutputQueue;
-			CurrentTransformParameters.ShouldSkipRow = false;
+			PrepareCurrentTransformParameters(row);
 			DoApply(row, new QuackingDictionary(parameters));
 		}
 
@@ -33,14 +28,18 @@ namespace Rhino.ETL
 		public void Process(string queueName, Row row, IDictionary parameters)
 		{
 			Apply(row, parameters);
-			if (CurrentTransformParameters.ShouldSkipRow)
-				return;
-			queuesManager.Forward(CurrentTransformParameters.OutputQueueName, row);
+			ForwardRow();
 		}
 
 		public void Complete(string queueName)
 		{
+			OnComplete(queueName);
 			queuesManager.Complete(queueName);
+		}
+
+		protected virtual void OnComplete(string QueueName)
+		{
+			
 		}
 
 		protected abstract void DoApply(Row Row, QuackingDictionary Parameters);

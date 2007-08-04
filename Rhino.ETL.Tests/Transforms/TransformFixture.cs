@@ -95,7 +95,7 @@ namespace Rhino.ETL.Tests.Transforms
 			Row row = new Row();
 			row["Date"] = new DateTime(2007, 03, 04).ToString("MMM dd, yyyy");
 			transform.Apply(row, new Hashtable());
-			Assert.AreEqual("2007-03-04", row["Date"] );
+			Assert.AreEqual("2007-03-04", row["Date"]);
 		}
 
 		[Test]

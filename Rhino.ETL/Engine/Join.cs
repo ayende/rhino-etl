@@ -10,7 +10,6 @@ namespace Rhino.ETL
 	{
 		private const string LeftQueueName = "Left";
 		private const string RightQueueName = "Right";
-		private QueuesManager queuesManager;
 		private ICallable condition;
 
 
@@ -104,14 +103,9 @@ namespace Rhino.ETL
 
 		private void Apply(Row leftValue, Row rightRow)
 		{
-			CurrentTransformParameters = new TransformParameters();
-			CurrentTransformParameters.OutputQueueName = DefaultOutputQueue;
-			CurrentTransformParameters.ShouldSkipRow = false;
-			Row result = new Row();
-			DoApply(result, leftValue, rightRow);
-			if (CurrentTransformParameters.ShouldSkipRow)
-				return;
-			queuesManager.Forward(CurrentTransformParameters.OutputQueueName, result);
+			PrepareCurrentTransformParameters(new Row());
+			DoApply(CurrentTransformParameters.Row, leftValue, rightRow);
+			ForwardRow();
 		}
 
 		protected abstract void DoApply(Row Row, Row Left, Row Right);
