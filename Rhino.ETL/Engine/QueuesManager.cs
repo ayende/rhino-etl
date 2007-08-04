@@ -17,14 +17,15 @@ namespace Rhino.ETL
         Dictionary<string, List<Queue>> queueToOutputs = new Dictionary<string, List<Queue>>(StringComparer.InvariantCultureIgnoreCase);
 		Dictionary<string, List<Row>> savedQueues = new Dictionary<string, List<Row>>(StringComparer.InvariantCultureIgnoreCase);
 		Dictionary<string, bool> completedQueues = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
+		private List<string> outputQueuesNames = new List<string>();
 
-	    public QueuesManager(string name, ILog logger)
+		public QueuesManager(string name, ILog logger)
 		{
 	        this.name = name;
 		    this.logger = logger;
 		}
 
-        // Note: We assume registration is done before we start to actually run
+		// Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
 		public void RegisterForwarding(PipeLineStage pipeLineStage)
 	    {
@@ -46,7 +47,8 @@ namespace Rhino.ETL
                 logger.DebugFormat("No listeners to forward to in queue {0}", queueName);
                 return;
             }
-            //We send copies of the row to additional outputs, to prevent
+			EnsureListedInOutputQueues(queueName);
+			//We send copies of the row to additional outputs, to prevent
             //a case where both write to the same row
 	        for (int i = 1; i < destinations.Count; i++)
 	        {
@@ -55,7 +57,19 @@ namespace Rhino.ETL
 	        destinations[0].Enqueue(row);
 	    }
 
-        public void Complete(string queueName)
+		private void EnsureListedInOutputQueues(string queueName)
+		{
+			if(outputQueuesNames.Contains(queueName)==false)
+			{
+				lock(outputQueuesNames)
+				{
+					if(outputQueuesNames.Contains(queueName)==false)
+						outputQueuesNames.Add(queueName);
+				}
+			}
+		}
+
+		public void Complete(string queueName)
 	    {
 			List<Queue> destinations;
             if (queueToOutputs.TryGetValue(queueName, out destinations) == false)
@@ -71,6 +85,7 @@ namespace Rhino.ETL
 
 		public void Add(string queueName, Row row)
 		{
+			EnsureListedInOutputQueues(queueName);
 			List<Row> queue = GetQueue(queueName);
 			lock(queue)
 			{
@@ -120,6 +135,14 @@ namespace Rhino.ETL
 				{
 					queue.Complete();
 				}
+			}
+		}
+
+		public void ForEachOutputQueue(Action<string> action)
+		{
+			foreach (string columnName in outputQueuesNames)
+			{
+				action(columnName);
 			}
 		}
 	}

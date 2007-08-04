@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Boo.Lang;
 using Boo.Lang.Compiler.MetaProgramming;
 using Rhino.ETL.Commands;
@@ -12,6 +13,7 @@ namespace Rhino.ETL.Engine
 		private string name;
 		private TimeSpan timeOut = TimeSpan.FromSeconds(5000);
 		private ICommandContainer container;
+
 
 		public Target(string name)
 		{
@@ -36,13 +38,14 @@ namespace Rhino.ETL.Engine
 			get { return container.Commands; }
 		}
 
-		public void Execute(string pipelineName)
+		public ICommand Execute(string pipelineName)
 		{
 			Pipeline pipeline;
 			if (EtlConfigurationContext.Current.Pipelines.TryGetValue(pipelineName, out pipeline) == false)
 				throw new InvalidPipelineException("Could not find pipeline '" + pipelineName + "'");
 			ExecutePipeline ep = new ExecutePipeline(pipeline);
 			AddCommand(ep);
+			return ep;
 		}
 
 		private void AddCommand(ICommand command)

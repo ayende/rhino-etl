@@ -6,6 +6,8 @@ namespace Rhino.ETL
 {
 	public abstract class Transform : TransformationBase<Transform>, IInputOutput
 	{
+		public event OutputCompleted Completed = delegate { };
+
 		protected Transform(string name)
 		{
 			this.name = name;
@@ -25,6 +27,7 @@ namespace Rhino.ETL
 			queuesManager.RegisterForwarding(pipeLineStage);
 		}
 
+
 		public void Process(string queueName, Row row, IDictionary parameters)
 		{
 			Apply(row, parameters);
@@ -34,7 +37,11 @@ namespace Rhino.ETL
 		public void Complete(string queueName)
 		{
 			OnComplete(queueName);
-			queuesManager.Complete(queueName);
+			queuesManager.CompleteAll();
+			queuesManager.ForEachOutputQueue(delegate(string outputQueueName)
+			{
+				Completed(this, outputQueueName);
+			});
 		}
 
 		protected virtual void OnComplete(string QueueName)

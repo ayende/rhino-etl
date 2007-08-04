@@ -4,12 +4,10 @@ using Rhino.Commons;
 
 namespace Rhino.ETL.Commands
 {
-	public class ExecuteInParallelCommand :  ICommand, ICommandContainer
+	public class ExecuteInParallelCommand : AbstractCommand, ICommandContainer
 	{
-		public event Action<ICommand> Completed = delegate { };
 		protected List<ICommand> commands = new List<ICommand>();
 		protected CountdownLatch latch;
-
 
 		public IList<ICommand> Commands
 		{
@@ -28,7 +26,7 @@ namespace Rhino.ETL.Commands
 			latch.WaitOne(timeOut);
 		}
 
-		public void Execute()
+		protected override void DoExecute()
 		{
 			latch = new CountdownLatch(commands.Count);
 			foreach (ICommand command in commands)
@@ -37,7 +35,7 @@ namespace Rhino.ETL.Commands
 				{
 					int remaining = latch.Set();
 					if (remaining == 0)
-						Completed(this);
+						RaiseCompleted();
 				};
 				ExecutionPackage.Current.RegisterForExecution(command.Execute);
 			}

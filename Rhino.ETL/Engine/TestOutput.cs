@@ -6,12 +6,14 @@ namespace Rhino.ETL
 {
 	public class TestOutput : IOutput
 	{
-		private Dictionary<string, bool> completed = new Dictionary<string, bool>();
-		private Dictionary<string,Action<Row>> actions = new Dictionary<string, Action<Row>>();
+		private Dictionary<string, bool> completedActions = new Dictionary<string, bool>();
+		private Dictionary<string, Action<Row>> actions = new Dictionary<string, Action<Row>>();
 		public string Name
 		{
 			get { return "test output"; }
 		}
+
+		public event OutputCompleted Completed = delegate { };
 
 		public void Process(string queueName, Row row, IDictionary parameters)
 		{
@@ -20,12 +22,13 @@ namespace Rhino.ETL
 
 		public void Complete(string queueName)
 		{
-			completed[queueName] = true;
+			completedActions[queueName] = true;
+			Completed(this, queueName);
 		}
 
 		public bool IsComplete(string queueName)
 		{
-			return completed[queueName];
+			return completedActions[queueName];
 		}
 
 		public void OnProcess(string queueName, Action<Row> action)

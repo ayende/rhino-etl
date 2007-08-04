@@ -54,6 +54,7 @@
     <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\CountdownLatch.cs">
       <Link>Engine\CountdownLatch.cs</Link>
     </Compile>
+    <Compile Include="Commands\AbstractCommand.cs" />
     <Compile Include="Commands\ExecuteInParallelCommand.cs" />
     <Compile Include="Commands\ExecuteInSequenceCommand.cs" />
     <Compile Include="Commands\ExecutePipeline.cs" />

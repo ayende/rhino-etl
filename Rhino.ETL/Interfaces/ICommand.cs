@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading;
 
 namespace Rhino.ETL
 {
@@ -8,5 +7,7 @@ namespace Rhino.ETL
 	{
 		event Action<ICommand> Completed;
 		void Execute();
+		WaitHandle GetWaitHandle();
+		void After(ICommand command);
 	}
 }

@@ -11,9 +11,7 @@ namespace Rhino.ETL
 		private List<Row> rows = new List<Row>();
 		private bool hasCompleted = false;
 
-		public delegate void DestinationCompleted(DataDestination destination);
-
-		public event DestinationCompleted Completed = delegate { };
+		public event OutputCompleted Completed = delegate { };
 
 		public DataDestination(string name) : base(name)
 		{
@@ -47,7 +45,7 @@ namespace Rhino.ETL
 				hasCompleted = true;
 			}
 			ProcessOutput();//flush any additional output
-			Completed(this);
+			Completed(this, queueName);
 		}
 
 		public void ProcessOutput()

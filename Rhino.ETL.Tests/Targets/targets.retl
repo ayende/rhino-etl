@@ -3,7 +3,10 @@ pipeline CopyOrders:
 	
 pipeline MoveCustomers:
 	pass
-	
+
+pipeline AfterCopyOrders:
+	pass
+
 target default:
 	parallel:
 		Execute("CopyOrders")
@@ -11,3 +14,8 @@ target default:
 	sequence:
 		Execute("CopyOrders")
 		Execute("MoveCustomers")
+		
+target withDependencies:
+	copyOrders = Execute("CopyOrders")
+	Execute("MoveCustomers")
+	Execute("AfterCopyOrders").After(copyOrders)

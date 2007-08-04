@@ -11,7 +11,7 @@ namespace Rhino.ETL
 		private const string LeftQueueName = "Left";
 		private const string RightQueueName = "Right";
 		private ICallable condition;
-
+		public event OutputCompleted Completed = delegate { };
 
 		protected Join(string name)
 		{
@@ -35,6 +35,7 @@ namespace Rhino.ETL
 		{
 			get { return name; }
 		}
+
 
 		public void RegisterForwarding(PipeLineStage pipeLineStage)
 		{
@@ -84,6 +85,10 @@ namespace Rhino.ETL
 					queuesManager.Clear(LeftQueueName);
 					queuesManager.Clear(RightQueueName);
 					queuesManager.CompleteAll();
+					queuesManager.ForEachOutputQueue(delegate(string outputQueueName)
+					{
+						Completed(this, outputQueueName);
+					});
 				}
 			}
 		}

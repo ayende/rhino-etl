@@ -19,6 +19,8 @@ namespace Rhino.ETL
 		private IInput fromInstance;
 		private IOutput toInstance;
 
+		public event Action<PipelineAssociation> Completed = delegate { };
+
 		public IDictionary Parameters
 		{
 			get { return parameters; }
@@ -150,13 +152,19 @@ namespace Rhino.ETL
 
 	    public void ConnectEnds(Pipeline pipeline)
 	    {
+	    	string destinationQueue = ToQueue ?? DefaultQueue;
 	    	FromInstance.RegisterForwarding(
 	    		new PipeLineStage(
 					pipeline,
 					FromQueue ?? DefaultQueue,
 	    			ToInstance,
-					ToQueue ?? DefaultQueue, 500, Parameters)
+					destinationQueue, 500, Parameters)
 					);
+	    	ToInstance.Completed += delegate(IOutput output, string queueName)
+	    	{
+				if (destinationQueue.Equals(queueName,StringComparison.InvariantCultureIgnoreCase))
+	    			Completed(this);
+	    	};
 	    }
 
         private const string DefaultQueue = "Output";

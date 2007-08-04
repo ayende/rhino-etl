@@ -95,30 +95,34 @@ namespace Rhino.ETL
 
 		public void Prepare()
 		{
-			int destinationCount = EtlConfigurationContext.Current.Destinations.Count;
+			int destinationCount = associations.Count;
 			destinationToComplete = new CountdownLatch(destinationCount);
 		}
 
 		public void Start()
 		{
+			if (associations.Count==0)
+			{
+				Completed(this);
+				return;
+			}
 			if (AcquireAllConnections() == false)
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
 			    association.ConnectEnds(this);
 			}
-			foreach (DataDestination value in EtlConfigurationContext.Current.Destinations.Values)
+			foreach (PipelineAssociation association in associations)
 			{
-				value.Completed += DestinationCompleted;
+				association.Completed+=AssociationCompleted;
 			}
-
 			foreach (DataSource value in EtlConfigurationContext.Current.Sources.Values)
 			{
 				ExecutionPackage.Current.RegisterForExecution(value.Start);
 			}
 		}
 
-		private void DestinationCompleted(DataDestination destination)
+		private void AssociationCompleted(PipelineAssociation association)
 		{
 			int count = destinationToComplete.Set();
 			if (count == 0)

@@ -2,13 +2,11 @@ using System;
 
 namespace Rhino.ETL.Commands
 {
-	public class ExecuteScalar : ICommandWithResult
+	public class ExecuteScalar : AbstractCommand, ICommandWithResult
 	{
 		private readonly string connectionName;
 		private string command;
 		private object result;
-
-		public event Action<ICommand> Completed = delegate { };
 
 		public ExecuteScalar(string connectionName, string command)
 		{
@@ -33,10 +31,10 @@ namespace Rhino.ETL.Commands
 		}
 
 
-		public void Execute()
+		protected override void DoExecute()
 		{
 			result = 1;
-			Completed(this);
+			RaiseCompleted();
 		}
 	}
 }
