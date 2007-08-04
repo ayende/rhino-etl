@@ -6,6 +6,7 @@ namespace Rhino.ETL
 {
 	public interface ICommand
 	{
+		event Action<ICommand> Completed;
 		void Execute();
 	}
 }

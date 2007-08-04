@@ -63,3 +63,6 @@ transform CalcSumOfSalaryAndId:
 			IdSum: Context.Items.IdSum, 
 			SalarySum: Context.Items.SalarySum
 			) )
+			
+target default:
+	Execute("CopyUsers");

@@ -25,8 +25,7 @@ namespace Rhino.ETL.Tests.Integration
 		{
 			EtlConfigurationContext configurationContext = BuildContext(@"Joins\join_two_tables.retl"); 
 			ExecutionPackage package = configurationContext.BuildPackage();
-			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
-			package.Execute(pipeline);
+			package.Execute("default");
 
 			AssertRowCount(4);
 		}
@@ -35,7 +34,7 @@ namespace Rhino.ETL.Tests.Integration
 		{
 			EtlConfigurationContext configurationContext = BuildContext(@"Integration\" + name + ".retl");
 			ExecutionPackage package = configurationContext.BuildPackage();
-			package.Execute();
+			package.Execute("default");
 		}
 	}
 }

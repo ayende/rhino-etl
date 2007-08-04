@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Rhino.ETL.Engine;
+using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
 {
@@ -35,63 +37,21 @@ namespace Rhino.ETL
 			get { return "Execution Package"; }
 		}
 
-		public void Execute()
+		public void Execute(string targetName)
 		{
 			using (EnterContext())
 			{
 				using (configurationContext.EnterContext())
 				{
-					foreach (Pipeline pipeline in configurationContext.Pipelines.Values)
-					{
-						ExecuteSinglePipeline(pipeline);
-					}
+					Target target;
+					if (configurationContext.Targets.TryGetValue(targetName, out target) == false)
+						throw new InvalidTargetException("Could not find target '" + targetName + "'");
+					target.Prepare();
+					target.Run();
+					target.WaitForCompletion();
 				}
 			}
-			WaitForAllPipelines();
-			ClearAllContexts();
 		}
-
-		private void ClearAllContexts()
-		{
-			ExecutionPackage.Current = null;
-			EtlConfigurationContext.Current = null;
-			Transform.Current = null;
-			Join.Current = null;
-			Pipeline.Current = null;
-			DataSource.Current = null;
-			DataDestination.Current = null;
-		}
-
-		public void Execute(Pipeline pipeline)
-		{
-			using (EnterContext())
-			{
-				using (configurationContext.EnterContext())
-				{
-					ExecuteSinglePipeline(pipeline);
-				}
-			}
-			pipeline.WaitOne();
-		}
-
-
-		private void ExecuteSinglePipeline(Pipeline pipeline)
-		{
-			Logger.InfoFormat("Starting pipeline {0}", pipeline.Name);
-			pipeline.Completed += Pipeline_Completed;
-			pipeline.Prepare();
-			Pipeline copy = pipeline;
-			RegisterForExecution(copy.Start);
-		}
-
-		private void WaitForAllPipelines()
-		{
-			foreach (Pipeline pipeline in configurationContext.Pipelines.Values)
-			{
-				pipeline.WaitOne();
-			}
-		}
-
 
 		public void Pipeline_Completed(Pipeline completed)
 		{

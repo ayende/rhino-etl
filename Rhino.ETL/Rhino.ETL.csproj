@@ -54,6 +54,9 @@
     <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\CountdownLatch.cs">
       <Link>Engine\CountdownLatch.cs</Link>
     </Compile>
+    <Compile Include="Commands\ExecuteInParallelCommand.cs" />
+    <Compile Include="Commands\ExecuteInSequenceCommand.cs" />
+    <Compile Include="Commands\ExecutePipeline.cs" />
     <Compile Include="Engine\AssociationType.cs" />
     <Compile Include="Engine\BaseDataElement.cs" />
     <Compile Include="Engine\Command.cs" />
@@ -63,12 +66,17 @@
     <Compile Include="Engine\Join.cs" />
     <Compile Include="Engine\ObjectArrayKeys.cs" />
     <Compile Include="Engine\PipeLineStage.cs" />
+    <Compile Include="Engine\Target.cs" />
     <Compile Include="Engine\TestOutput.cs" />
     <Compile Include="Engine\TestPipeLineStage.cs" />
     <Compile Include="Engine\TransformationBase.cs" />
     <Compile Include="Engine\TransformParameters.cs" />
+    <Compile Include="Exceptions\InvalidPipelineException.cs" />
+    <Compile Include="Exceptions\InvalidTargetException.cs" />
     <Compile Include="Impl\JoinMacro.cs" />
     <Compile Include="Impl\OnCompleteMacro.cs" />
+    <Compile Include="Impl\TargetMacro.cs" />
+    <Compile Include="Interfaces\ICommandContainer.cs" />
     <Compile Include="Sources\DataSource.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
     <Compile Include="Exceptions\ExpectedInterfaceNotfoundException.cs" />

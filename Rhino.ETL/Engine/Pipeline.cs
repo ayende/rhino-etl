@@ -12,7 +12,6 @@ namespace Rhino.ETL
 		public delegate void PipelineCompleted(Pipeline completed);
 		public event PipelineCompleted Completed = delegate { };
 
-		private TimeSpan timeOut = TimeSpan.FromSeconds(5000);
 		private string name;
 		private CountdownLatch destinationToComplete;
 
@@ -20,13 +19,6 @@ namespace Rhino.ETL
 		{
 			this.name = name;
 			EtlConfigurationContext.Current.AddPipeline(name, this);
-		}
-
-
-		public TimeSpan TimeOut
-		{
-			get { return timeOut; }
-			set { timeOut = value; }
 		}
 
 		public override string Name
@@ -157,14 +149,6 @@ namespace Rhino.ETL
 				}
 			}
 			return true;
-		}
-
-		public void WaitOne()
-		{
-			if(destinationToComplete.WaitOne(TimeOut)==false)
-			{
-				throw new TimeoutException("Waited for " + TimeOut + " for pipeline to completed, aborting");
-			}
 		}
 	}
 }

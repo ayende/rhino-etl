@@ -68,6 +68,7 @@
     <Compile Include="Pipelines\PipelineFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sources\SourcesFixture.cs" />
+    <Compile Include="Targets\TargetFixture.cs" />
     <Compile Include="Transforms\TransformFixture.cs" />
     <Compile Include="ValidationsFixture.cs" />
   </ItemGroup>
@@ -123,6 +124,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Syntax\full_package.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Targets\targets.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Transforms\transforms_only.retl">

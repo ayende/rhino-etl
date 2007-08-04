@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using log4net.Core;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
@@ -16,6 +17,7 @@ namespace Rhino.ETL
 		private IDictionary<string, Join> joins;
 		private IDictionary<string, Transform> transforms;
 		private IDictionary<string, Pipeline> pipelines;
+		private IDictionary<string, Target> targets;
 		private List<string> validationMessages = new List<string>();
 
 		public EtlConfigurationContext()
@@ -26,6 +28,7 @@ namespace Rhino.ETL
 			destinations = new Dictionary<string, DataDestination>(StringComparer.InvariantCultureIgnoreCase);
 			pipelines = new Dictionary<string, Pipeline>(StringComparer.InvariantCultureIgnoreCase);
 			joins = new Dictionary<string, Join>(StringComparer.InvariantCultureIgnoreCase);
+			targets = new Dictionary<string, Target>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		public IDictionary<string, Pipeline> Pipelines
@@ -56,6 +59,11 @@ namespace Rhino.ETL
 		public IDictionary<string, DataDestination> Destinations
 		{
 			get { return destinations; }
+		}
+
+		public IDictionary<string, Target> Targets
+		{
+			get { return targets; }
 		}
 
 		public void AddConnection(string name, Connection connection)
@@ -129,6 +137,14 @@ namespace Rhino.ETL
 			if (joins.ContainsKey(name))
 				throw new DuplicateKeyException("The current context already contains a join named [" + name + "]");
 			joins.Add(name, join);
+		}
+
+		public void AddTarget(string name, Target target)
+		{
+			if (targets.ContainsKey(name))
+				throw new DuplicateKeyException("The current context already contains a target named [" + name + "]");
+			targets.Add(name, target);
+		
 		}
 
 		public ExecutionPackage BuildPackage()

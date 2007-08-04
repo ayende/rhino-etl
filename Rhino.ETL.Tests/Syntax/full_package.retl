@@ -9,7 +9,7 @@ source Northwind, Connection="NorthwindConnection":
 	
 	Parameters:
 		@LastUpdate = date(1996, 01,01)
-		@CurrentDate = date(1998, 01,01) # ExecuteScalar("NorthwindConnection", "SELECT MAX(RequiredDate) FROM Orders")
+		@CurrentDate = date(1998, 01,01)
 
 transform ToLowerCase:
 	for column in Parameters.Columns:

@@ -8,6 +8,8 @@ namespace Rhino.ETL.Commands
 		private string command;
 		private object result;
 
+		public event Action<ICommand> Completed = delegate { };
+
 		public ExecuteScalar(string connectionName, string command)
 		{
 			this.connectionName = connectionName;
@@ -30,9 +32,11 @@ namespace Rhino.ETL.Commands
 			get { return result; }
 		}
 
+
 		public void Execute()
 		{
 			result = 1;
+			Completed(this);
 		}
 	}
 }

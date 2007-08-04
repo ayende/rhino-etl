@@ -23,3 +23,6 @@ pipeline CopyUsers:
 	UsersSource >> SplitName
 	SplitName >> RemoveRowsWithBadId
 	RemoveRowsWithBadId >> UsersDestination
+	
+target default:
+	Execute("CopyUsers")
