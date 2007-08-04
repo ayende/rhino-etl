@@ -10,5 +10,6 @@ namespace Rhino.ETL
 		void Execute();
 
 		IList<ICommand> Commands { get; }
+		void ForceEndOfCompletionWithoutFurtherWait();
 	}
 }

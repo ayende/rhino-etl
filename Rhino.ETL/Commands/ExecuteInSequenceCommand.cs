@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Rhino.ETL.Engine;
 
 namespace Rhino.ETL.Commands
 {
@@ -9,9 +10,18 @@ namespace Rhino.ETL.Commands
 		private bool started = false;
 		List<ICommand> commands = new List<ICommand>();
 
+		public ExecuteInSequenceCommand(Target target) : base(target)
+		{
+		}
+
 		public IList<ICommand> Commands
 		{
 			get { return commands; }
+		}
+
+		public void ForceEndOfCompletionWithoutFurtherWait()
+		{
+			//nothing to do here, we never actually wait
 		}
 
 		public void Add(ICommand command)

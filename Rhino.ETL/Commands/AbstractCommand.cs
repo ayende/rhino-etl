@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Rhino.ETL.Engine;
 
 namespace Rhino.ETL.Commands
 {
 	public abstract class AbstractCommand : ICommand
 	{
+		protected readonly Target target;
 		public bool HasCompleted = false;
 		private List<ICommand> commandsThatMustBeCompletedBeforeThisCommandCanRun = new List<ICommand>();
 		public event Action<ICommand> Completed;
-		public AbstractCommand()
+		public AbstractCommand(Target target)
 		{
+			this.target = target;
 			Completed += delegate { HasCompleted = true; };
 		}
 

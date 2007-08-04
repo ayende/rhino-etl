@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Impl;
 
 namespace Rhino.ETL
@@ -22,9 +23,9 @@ namespace Rhino.ETL
 			DoApply(row, new QuackingDictionary(parameters));
 		}
 
-		public void RegisterForwarding(PipeLineStage pipeLineStage)
+		public void RegisterForwarding(Target target, PipeLineStage pipeLineStage)
 		{
-			queuesManager.RegisterForwarding(pipeLineStage);
+			queuesManager.RegisterForwarding(target, pipeLineStage);
 		}
 
 

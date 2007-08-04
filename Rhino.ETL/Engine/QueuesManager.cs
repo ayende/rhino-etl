@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using log4net;
+using Rhino.ETL.Engine;
 
 namespace Rhino.ETL
 {
@@ -26,14 +27,14 @@ namespace Rhino.ETL
 
 		// Note: We assume registration is done before we start to actually run
         // so we don't bother with thread safety here.
-		public void RegisterForwarding(PipeLineStage pipeLineStage)
+		public void RegisterForwarding(Target target,PipeLineStage pipeLineStage)
 	    {
             if(queueToOutputs.ContainsKey(pipeLineStage.IncomingKey)==false)
 				queueToOutputs.Add(pipeLineStage.IncomingKey, new List<Queue>());
         	Queue queue = new Queue(
 				pipeLineStage.Incoming, 
 				pipeLineStage.BatchSize,
-				pipeLineStage);
+				pipeLineStage, target);
 			queueToOutputs[pipeLineStage.IncomingKey].Add(queue);
             logger.DebugFormat("{0}.{1} registered for {1}.{2}", pipeLineStage.Output.Name, pipeLineStage.Outgoing, name, pipeLineStage.Incoming);
 	    }

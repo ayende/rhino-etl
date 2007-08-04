@@ -68,7 +68,7 @@ namespace Rhino.ETL.Tests.Pipelines
 				connection.ConcurrentConnections = 2;
 				IDbConnection dbCon = connection.TryAcquire();
 				dbCon.Dispose();
-				copyOrders.Start();
+				copyOrders.Start(null);
 				Assert.AreEqual(1, package.OnPipelineCompletedCommands.Count );
 			}
 		}

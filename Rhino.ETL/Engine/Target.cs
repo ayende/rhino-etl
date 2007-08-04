@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Boo.Lang;
 using Boo.Lang.Compiler.MetaProgramming;
+using Rhino.Commons;
 using Rhino.ETL.Commands;
 using Rhino.ETL.Exceptions;
 
@@ -13,13 +14,13 @@ namespace Rhino.ETL.Engine
 		private string name;
 		private TimeSpan timeOut = TimeSpan.FromSeconds(5000);
 		private ICommandContainer container;
-
+		private List<Exception> exceptions = new List<Exception>();
 
 		public Target(string name)
 		{
 			this.name = name;
 			EtlConfigurationContext.Current.AddTarget(name, this);
-			container = new ExecuteInParallelCommand();
+			container = new ExecuteInParallelCommand(this);
 		}
 
 		public override string Name
@@ -38,12 +39,17 @@ namespace Rhino.ETL.Engine
 			get { return container.Commands; }
 		}
 
+		public bool IsFaulted
+		{
+			get { return exceptions.Count != 0; }
+		}
+
 		public ICommand Execute(string pipelineName)
 		{
 			Pipeline pipeline;
 			if (EtlConfigurationContext.Current.Pipelines.TryGetValue(pipelineName, out pipeline) == false)
 				throw new InvalidPipelineException("Could not find pipeline '" + pipelineName + "'");
-			ExecutePipeline ep = new ExecutePipeline(pipeline);
+			ExecutePipeline ep = new ExecutePipeline(this, pipeline);
 			AddCommand(ep);
 			return ep;
 		}
@@ -62,8 +68,8 @@ namespace Rhino.ETL.Engine
 		[Meta]
 		public void Parallel(ICallable callable)
 		{
-			ExecuteInParallelCommand command = new ExecuteInParallelCommand();
-			RunUnderDifferentCommandContainerContext(command,command, callable);
+			ExecuteInParallelCommand command = new ExecuteInParallelCommand(this);
+			RunUnderDifferentCommandContainerContext(command, command, callable);
 		}
 
 		[Meta]
@@ -75,13 +81,13 @@ namespace Rhino.ETL.Engine
 		[Meta]
 		public void Sequence(ICallable callable)
 		{
-			ExecuteInSequenceCommand command = new ExecuteInSequenceCommand();
-			RunUnderDifferentCommandContainerContext(command,command, callable);
+			ExecuteInSequenceCommand command = new ExecuteInSequenceCommand(this);
+			RunUnderDifferentCommandContainerContext(command, command, callable);
 		}
 
 		private void RunUnderDifferentCommandContainerContext(
 			ICommand command,
-			ICommandContainer newContainer, 
+			ICommandContainer newContainer,
 			ICallable callable)
 		{
 			ICommandContainer old = container;
@@ -101,6 +107,18 @@ namespace Rhino.ETL.Engine
 		public void WaitForCompletion()
 		{
 			container.WaitForCompletion(TimeOut);
+		}
+
+		public void AddFault(Exception e)
+		{
+			exceptions.Add(e);
+			container.ForceEndOfCompletionWithoutFurtherWait();
+		}
+
+		public ExecutionResult GetExecutionResult()
+		{
+			return new ExecutionResult(exceptions, 
+				IsFaulted ? ExecutionStatus.Failure : ExecutionStatus.Success);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Rhino.ETL.Engine;
 
 namespace Rhino.ETL
 {
@@ -16,14 +17,17 @@ namespace Rhino.ETL
 		private readonly int batchSize;
 		private readonly PipeLineStage pipeLineStage;
 		private int currentlyProcessing = 0;
+		private Target target;
 
 		public Queue(
 			string name, int batchSize,
-			PipeLineStage pipeLineStage)
+			PipeLineStage pipeLineStage,
+			Target target)
 		{
 			this.name = name;
 			this.batchSize = batchSize;
 			this.pipeLineStage = pipeLineStage;
+			this.target = target;
 		}
 
 		public void Enqueue(Row row)
@@ -49,7 +53,7 @@ namespace Rhino.ETL
 			List<Row> copy = rows;
 			rows = new List<Row>();
 			currentlyProcessing += 1;
-			ExecutionPackage.Current.RegisterForExecution(delegate
+			ExecutionPackage.Current.RegisterForExecution(target, delegate
 			{
 				// inside here we are OUTSIDE the lock!
 				try

@@ -48,11 +48,30 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\DelegateDefinations.cs">
+      <Link>FromRhinoCommons\DelegateDefinations.cs</Link>
+    </Compile>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\LocalDataImpl\ILocalData.cs">
+      <Link>FromRhinoCommons\ILocalData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\LocalDataImpl\LocalData.cs">
+      <Link>FromRhinoCommons\LocalData.cs</Link>
+    </Compile>
     <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\CountdownLatch.cs">
-      <Link>Engine\CountdownLatch.cs</Link>
+      <Link>FromRhinoCommons\CountdownLatch.cs</Link>
+    </Compile>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\ThreadPool\RhinoThreadPool.cs">
+      <Link>FromRhinoCommons\RhinoThreadPool.cs</Link>
+    </Compile>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\ThreadPool\WorkItem.cs">
+      <Link>FromRhinoCommons\WorkItem.cs</Link>
+    </Compile>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\Threading\ThreadPool\WorkItemStatus.cs">
+      <Link>FromRhinoCommons\WorkItemStatus.cs</Link>
     </Compile>
     <Compile Include="Commands\AbstractCommand.cs" />
     <Compile Include="Commands\ExecuteInParallelCommand.cs" />
@@ -61,9 +80,10 @@
     <Compile Include="Engine\AssociationType.cs" />
     <Compile Include="Engine\BaseDataElement.cs" />
     <Compile Include="Engine\Command.cs" />
-    <Compile Include="Commands\ExecuteScalar.cs" />
     <Compile Include="Engine\ContextfulObjectBase.cs" />
     <Compile Include="Destinations\DataDestination.cs" />
+    <Compile Include="Engine\ExecutionResult.cs" />
+    <Compile Include="Engine\ExecutionStatus.cs" />
     <Compile Include="Engine\Join.cs" />
     <Compile Include="Engine\ObjectArrayKeys.cs" />
     <Compile Include="Engine\PipeLineStage.cs" />

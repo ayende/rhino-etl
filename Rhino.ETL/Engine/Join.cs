@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Boo.Lang;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
@@ -37,9 +38,9 @@ namespace Rhino.ETL
 		}
 
 
-		public void RegisterForwarding(PipeLineStage pipeLineStage)
+		public void RegisterForwarding(Target target, PipeLineStage pipeLineStage)
 		{
-			queuesManager.RegisterForwarding(pipeLineStage);
+			queuesManager.RegisterForwarding(target, pipeLineStage);
 		}
 
 		public void Process(QueueKey key, Row row, IDictionary parameters)

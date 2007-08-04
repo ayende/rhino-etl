@@ -52,14 +52,6 @@ namespace Rhino.ETL.Tests.Sources
     	}
 
     	[Test]
-    	public void Source_Parameters_WillGetCommand()
-    	{
-			DataSource northwind = configurationContext.Sources["Northwind"];
-    		ICommandWithResult currentTime = northwind.GetParameterValue("CurrentTime") as ICommandWithResult;
-			Assert.IsNotNull(currentTime);
-    	}
-
-    	[Test]
     	public void Sources_ComplexParameters_CanUseNormalControlStructures()
     	{
     		DataSource northwind = configurationContext.Sources["Northwind"];

@@ -33,21 +33,18 @@ namespace Rhino.ETL
 				rows.Add(row);
 				if (rows.Count >= BatchSize)
 				{
-					ExecutionPackage.Current.RegisterForExecution(delegate
-					{
-						ProcessOutput(key.Pipeline);
-					});
+					ProcessOutput(key.Pipeline);
 				}
 			}
 		}
 
 		public void Complete(QueueKey key)
 		{
-			lock(rows)
+			lock (rows)
 			{
 				hasCompleted = true;
 			}
-			ProcessOutput(key.Pipeline);//flush any additional output
+			ProcessOutput(key.Pipeline); //flush any additional output
 			Completed(this, key);
 		}
 

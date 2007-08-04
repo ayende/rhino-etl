@@ -10,7 +10,7 @@ Source Northwind, Connection="NorthwindConnection":
 	Parameters:
 		@LastUpdate = date.Today.AddDays(-1)
 		@ChangingParameter = date.Now.Ticks
-		@CurrentTime = ExecuteScalar("NorthwindConnection", "SELECT sysdate from dual")
+		@CurrentTime = date.Now.AddDays(7)
 		@ExplicitCallable = def:
 			if DataSource.Current.Items["callable_executed"] is null:
 				DataSource.Current.Items["callable_executed"] = true

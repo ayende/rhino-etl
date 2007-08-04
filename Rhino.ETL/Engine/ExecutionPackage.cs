@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Rhino.Commons;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
@@ -37,19 +38,36 @@ namespace Rhino.ETL
 			get { return "Execution Package"; }
 		}
 
-		public void Execute(string targetName)
+		public ExecutionResult Execute(string targetName)
 		{
-			using (EnterContext())
+			try
 			{
-				using (configurationContext.EnterContext())
+				using (EnterContext())
 				{
-					Target target;
-					if (configurationContext.Targets.TryGetValue(targetName, out target) == false)
-						throw new InvalidTargetException("Could not find target '" + targetName + "'");
-					target.Prepare();
-					target.Run();
-					target.WaitForCompletion();
+					using (configurationContext.EnterContext())
+					{
+						Target target;
+						if (configurationContext.Targets.TryGetValue(targetName, out target) == false)
+						{
+							ExecutionResult result = new ExecutionResult(ExecutionStatus.Failure);
+							InvalidTargetException exception = 
+								new InvalidTargetException("Could not find target '" + targetName + "'");
+							result.Exceptions.Add(exception);
+							return result;
+						}
+						target.Prepare();
+						target.Run();
+						target.WaitForCompletion();
+						return target.GetExecutionResult();
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				Logger.Fatal("Error executing target '" + targetName + "'", e);
+				ExecutionResult result = new ExecutionResult(ExecutionStatus.CriticalBug);
+				result.Exceptions.Add(e);
+				return result;
 			}
 		}
 
@@ -76,18 +94,39 @@ namespace Rhino.ETL
 			}
 		}
 
-		public virtual void RegisterForExecution(Command action)
+		public virtual void RegisterForExecution(Target target, Command action)
 		{
-			ThreadPool.QueueUserWorkItem(delegate
+			if (target.IsFaulted)
 			{
-				using (EnterContext())
-				using (configurationContext.EnterContext())
+				Logger.WarnFormat("Ignoring request to execute {0} because target {1} has faulted",
+				                  DelegateToString(action),
+				                  target.Name
+					);
+				return;
+			}
+			RhinoThreadPool.QueueUserWorkItem(delegate
+			{
+				try
 				{
-					action();
+					using (EnterContext())
+					using (configurationContext.EnterContext())
+					{
+						action();
+					}
+				}
+				catch (Exception e)
+				{
+					Logger.Error("Error occured when executing " + DelegateToString(action) + " on target " + target.Name, e);
+					target.AddFault(e);
+					//note that this will also abort the currently executing thread!
+					RhinoThreadPool.CancelAll(true);
 				}
 			});
+		}
 
-			
+		private static string DelegateToString(Command action)
+		{
+			return action.Method.DeclaringType + "." + action.Method;
 		}
 	}
 }

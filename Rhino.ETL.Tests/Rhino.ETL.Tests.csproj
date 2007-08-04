@@ -108,6 +108,9 @@
     <None Include="Destinations\destinations_only.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Errors\target_with_throwing_component.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Errors\transform_no_name.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
@@ -150,10 +151,11 @@ namespace Rhino.ETL
 			return obj;
 		}
 
-	    public void ConnectEnds(Pipeline pipeline)
+	    public void ConnectEnds(Target target,Pipeline pipeline)
 	    {
 	    	string destinationQueue = ToQueue ?? DefaultQueue;
 	    	FromInstance.RegisterForwarding(
+				target,
 	    		new PipeLineStage(
 					pipeline,
 					FromQueue ?? DefaultQueue,

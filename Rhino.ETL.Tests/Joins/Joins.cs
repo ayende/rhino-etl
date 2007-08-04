@@ -50,7 +50,7 @@ namespace Rhino.ETL.Tests.Joins
 				Assert.IsNull(row["UserId"]);
 			});
 
-			join.RegisterForwarding(pipeLineStage);
+			join.RegisterForwarding(null, pipeLineStage);
 
 			Row left = new Row();
 			left["Id"] = 1;
@@ -88,7 +88,7 @@ namespace Rhino.ETL.Tests.Joins
 
 
 				Transform transform = configurationContext.Transforms["Distinct"];
-				transform.RegisterForwarding(pipeLineStage);
+				transform.RegisterForwarding(null, pipeLineStage);
 				Row row = new Row();
 				row["Id"] = 1;
 				row["OrgId"] = 2;
@@ -119,7 +119,7 @@ namespace Rhino.ETL.Tests.Joins
 				QueueKey key = new QueueKey("Output", pipeline);
 
 				Transform transform = configurationContext.Transforms["Distinct"];
-				transform.RegisterForwarding(pipeLineStage);
+				transform.RegisterForwarding(null, pipeLineStage);
 				Hashtable hashtable = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 				hashtable["Columns"] = new string[] {"Id"};
 				Row row = new Row();
@@ -157,7 +157,7 @@ namespace Rhino.ETL.Tests.Joins
 				});
 
 				Transform transform = configurationContext.Transforms["CountRows"];
-				transform.RegisterForwarding(pipeLineStage);
+				transform.RegisterForwarding(null, pipeLineStage);
 				Row row = new Row();
 
 				for (int i = 0; i < 14; i++)
@@ -191,7 +191,7 @@ namespace Rhino.ETL.Tests.Joins
 				});
 
 				Transform transform = configurationContext.Transforms["CalcSumOfSalaryAndId"];
-				transform.RegisterForwarding(pipeLineStage);
+				transform.RegisterForwarding(null, pipeLineStage);
 				Row row = new Row();
 				row["id"] = 2;
 				row["salary"] = 10;

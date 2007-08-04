@@ -64,7 +64,30 @@ namespace Rhino.ETL.Tests.Errors
         {
             Evaluate("transform_no_name.retl",
                 @"TransformMacro must have a name");
-
         }
+
+		[Test]
+		public void WhenComponentThrowsInTarget_WillReturnErrorResult()
+		{
+			EtlConfigurationContext context = BuildContext(@"Errors\target_with_throwing_component.retl");
+			ExecutionPackage package = context.BuildPackage();
+			ExecutionResult result = package.Execute("default");
+			Assert.AreEqual(ExecutionStatus.Failure, result.Status);
+			Assert.AreEqual(1, result.Exceptions.Count);
+			Assert.AreEqual("Just an error", result.Exceptions[0].Message);
+		}
+
+		[Test]
+		public void WhenComponentThrowsInTarget_WillNotExecuteFurtherTasks()
+		{
+			bool copyUserCompeleted = false;
+			EtlConfigurationContext context = BuildContext(@"Errors\target_with_throwing_component.retl");
+			context.Pipelines["CopyUsers"].Completed += delegate { copyUserCompeleted = true; };
+
+			ExecutionPackage package = context.BuildPackage();
+			ExecutionResult result = package.Execute("default");
+			Assert.AreEqual(ExecutionStatus.Failure, result.Status);
+			Assert.IsFalse(copyUserCompeleted);
+		}
 	}
 }

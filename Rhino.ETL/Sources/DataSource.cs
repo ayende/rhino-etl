@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Boo.Lang;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
@@ -19,9 +20,9 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public void RegisterForwarding(PipeLineStage pipeLineStage)
+		public void RegisterForwarding(Target target, PipeLineStage pipeLineStage)
 		{
-			queueManager.RegisterForwarding(pipeLineStage);
+			queueManager.RegisterForwarding(target, pipeLineStage);
 		}
 
 		public void Start(Pipeline pipeline)

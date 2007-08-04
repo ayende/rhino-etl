@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rhino.Commons;
+using Rhino.ETL.Engine;
 
 namespace Rhino.ETL.Commands
 {
@@ -9,9 +10,23 @@ namespace Rhino.ETL.Commands
 		protected List<ICommand> commands = new List<ICommand>();
 		protected CountdownLatch latch;
 
+		public ExecuteInParallelCommand(Target target)
+			: base(target)
+		{
+		}
+
 		public IList<ICommand> Commands
 		{
 			get { return commands; }
+		}
+
+		public void ForceEndOfCompletionWithoutFurtherWait()
+		{
+			int remaining;
+			do
+			{
+				remaining = latch.Set();
+			} while (remaining > 0);
 		}
 
 		public void Add(ICommand command)
@@ -21,7 +36,7 @@ namespace Rhino.ETL.Commands
 
 		public void WaitForCompletion(TimeSpan timeOut)
 		{
-			if (latch==null)
+			if (latch == null)
 				throw new InvalidOperationException("Called WaitForCompletion before calling Execute");
 			latch.WaitOne(timeOut);
 		}
@@ -37,7 +52,7 @@ namespace Rhino.ETL.Commands
 					if (remaining == 0)
 						RaiseCompleted();
 				};
-				ExecutionPackage.Current.RegisterForExecution(command.Execute);
+				ExecutionPackage.Current.RegisterForExecution(target, command.Execute);
 			}
 		}
 	}

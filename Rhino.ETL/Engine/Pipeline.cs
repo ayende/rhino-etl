@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Rhino.Commons;
+using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 using System.Threading;
 
@@ -101,18 +102,18 @@ namespace Rhino.ETL
 			destinationToComplete = new CountdownLatch(destinationCount);
 		}
 
-		public void Start()
+		public void Start(Target target)
 		{
 			if (associations.Count == 0)
 			{
 				Completed(this);
 				return;
 			}
-			if (AcquireAllConnections() == false)
+			if (AcquireAllConnections(target) == false)
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
-				association.ConnectEnds(this);
+				association.ConnectEnds(target, this);
 			}
 			foreach (PipelineAssociation association in associations)
 			{
@@ -121,7 +122,7 @@ namespace Rhino.ETL
 			foreach (DataSource value in EtlConfigurationContext.Current.Sources.Values)
 			{
 				DataSource cSharpSpec_21_5_2_Damn_It = value; 
-				ExecutionPackage.Current.RegisterForExecution(
+				ExecutionPackage.Current.RegisterForExecution(target,
 					delegate { cSharpSpec_21_5_2_Damn_It.Start(this); }
 					);
 			}
@@ -135,7 +136,7 @@ namespace Rhino.ETL
 		}
 
 
-		private bool AcquireAllConnections()
+		private bool AcquireAllConnections(Target target)
 		{
 			List<IConnectionUser> aquiredConnection = new List<IConnectionUser>();
 
@@ -153,7 +154,7 @@ namespace Rhino.ETL
 					{
 						user.ReleaseConnection(this);
 					}
-					ExecutionPackage.Current.ExecuteOnPipelineCompleted(delegate { Start(); });
+					ExecutionPackage.Current.ExecuteOnPipelineCompleted(delegate { Start(target); });
 					return false;
 				}
 			}
