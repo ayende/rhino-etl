@@ -42,15 +42,15 @@ namespace Rhino.ETL
 			queuesManager.RegisterForwarding(pipeLineStage);
 		}
 
-		public void Process(string queueName, Row row, IDictionary parameters)
+		public void Process(QueueKey key, Row row, IDictionary parameters)
 		{
-			if (queueName.Equals(LeftQueueName, StringComparison.InvariantCultureIgnoreCase))
+			if (key.Name.Equals(LeftQueueName, StringComparison.InvariantCultureIgnoreCase))
 			{
-				queuesManager.Add(LeftQueueName, row);
+				queuesManager.Add(new QueueKey(LeftQueueName, key.Pipeline), row);
 			}
-			else if (queueName.Equals(RightQueueName, StringComparison.InvariantCultureIgnoreCase))
+			else if (key.Name.Equals(RightQueueName, StringComparison.InvariantCultureIgnoreCase))
 			{
-				queuesManager.Add(RightQueueName, row);
+				queuesManager.Add(new QueueKey(RightQueueName, key.Pipeline), row);
 			}
 			else
 			{
@@ -58,57 +58,58 @@ namespace Rhino.ETL
 			}
 		}
 
-		public void Complete(string queueName)
+		public void Complete(QueueKey key)
 		{
 			lock (queuesManager)
 			{
-				if (queueName.Equals(LeftQueueName, StringComparison.InvariantCultureIgnoreCase))
+				if (key.Name.Equals(LeftQueueName, StringComparison.InvariantCultureIgnoreCase))
 				{
-					queuesManager.SetCompleted(LeftQueueName);
+					queuesManager.SetCompleted(new QueueKey(LeftQueueName, key.Pipeline));
 				}
-				else if (queueName.Equals(RightQueueName, StringComparison.InvariantCultureIgnoreCase))
+				else if (key.Name.Equals(RightQueueName, StringComparison.InvariantCultureIgnoreCase))
 				{
-					queuesManager.SetCompleted(RightQueueName);
+					queuesManager.SetCompleted(new QueueKey(RightQueueName, key.Pipeline));
 				}
 				else
 				{
 					throw new ValidationExceptionException("A join may only have a left and right input queues");
 				}
 
-				if (queuesManager.IsCompleted(LeftQueueName) && queuesManager.IsCompleted(RightQueueName))
+				if (queuesManager.IsCompleted(new QueueKey(LeftQueueName, key.Pipeline)) &&
+					queuesManager.IsCompleted(new QueueKey(RightQueueName, key.Pipeline)))
 				{
-					List<Row> left = queuesManager.GetQueue(LeftQueueName);
-					List<Row> right = queuesManager.GetQueue(RightQueueName);
+					List<Row> left = queuesManager.GetQueue(new QueueKey(LeftQueueName, key.Pipeline));
+					List<Row> right = queuesManager.GetQueue(new QueueKey(RightQueueName, key.Pipeline));
 
-					JoinQueues(left, right);
+					JoinQueues(key.Pipeline, left, right);
 
-					queuesManager.Clear(LeftQueueName);
-					queuesManager.Clear(RightQueueName);
-					queuesManager.CompleteAll();
-					queuesManager.ForEachOutputQueue(delegate(string outputQueueName)
+					queuesManager.Clear(new QueueKey(LeftQueueName, key.Pipeline));
+					queuesManager.Clear(new QueueKey(RightQueueName, key.Pipeline));
+					queuesManager.CompleteAll(key.Pipeline);
+					queuesManager.ForEachOutputQueue(key.Pipeline, delegate(string outputQueueName)
 					{
-						Completed(this, outputQueueName);
+						Completed(this, new QueueKey(outputQueueName, key.Pipeline));
 					});
 				}
 			}
 		}
 
-		private void JoinQueues(List<Row> left, List<Row> right)
+		private void JoinQueues(Pipeline pipeline, List<Row> left, List<Row> right)
 		{
 			foreach (Row leftRow in left)
 			{
 				foreach (Row rightRow in right)
 				{
-					bool shouldAdd = (bool) Condition.Call(new object[] {leftRow, rightRow});
+					bool shouldAdd = (bool)Condition.Call(new object[] { leftRow, rightRow });
 					if (shouldAdd)
-						Apply(leftRow, rightRow);
+						Apply(pipeline, leftRow, rightRow);
 				}
 			}
 		}
 
-		private void Apply(Row leftValue, Row rightRow)
+		private void Apply(Pipeline pipeline, Row leftValue, Row rightRow)
 		{
-			PrepareCurrentTransformParameters(new Row());
+			PrepareCurrentTransformParameters(pipeline, new Row());
 			DoApply(CurrentTransformParameters.Row, leftValue, rightRow);
 			ForwardRow();
 		}

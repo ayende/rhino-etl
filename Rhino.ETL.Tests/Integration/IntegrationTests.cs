@@ -23,7 +23,7 @@ namespace Rhino.ETL.Tests.Integration
 		[Test]
 		public void CopyUsersWithJoin()
 		{
-			EtlConfigurationContext configurationContext = BuildContext(@"Joins\join_two_tables.retl"); 
+			EtlConfigurationContext configurationContext = BuildContext(@"Joins\join_two_tables.retl");
 			ExecutionPackage package = configurationContext.BuildPackage();
 			package.Execute("default");
 

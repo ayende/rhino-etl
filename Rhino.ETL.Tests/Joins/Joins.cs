@@ -36,8 +36,9 @@ namespace Rhino.ETL.Tests.Joins
 		{
 			int rowCount = 0;
 			Join join = configurationContext.Joins["JoinUsersAndOrganization"];
+			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
 			TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
-				configurationContext.Pipelines["CopyUsers"]
+				pipeline
 				);
 			pipeLineStage.OnProcess("Output", delegate(Row row)
 			{
@@ -59,13 +60,15 @@ namespace Rhino.ETL.Tests.Joins
 			right["UserId"] = 1;
 			right["organization id"] = 2;
 
-			join.Process("Left", left, null);
-			join.Process("Right", right, null);
+			QueueKey leftKey = new QueueKey("Left", pipeline);
+			join.Process(leftKey, left, null);
+			QueueKey rightKey = new QueueKey("Right", pipeline);
+			join.Process(rightKey, right, null);
 			right = right.Clone();
 			right["organization id"] = 3;
-			join.Process("Right", right, null);
-			join.Complete("Left");
-			join.Complete("Right");
+			join.Process(rightKey, right, null);
+			join.Complete(leftKey);
+			join.Complete(rightKey);
 
 			Assert.AreEqual(1, rowCount);
 		}
@@ -91,11 +94,12 @@ namespace Rhino.ETL.Tests.Joins
 				row["OrgId"] = 2;
 				row["City"] = "New York";
 
+				QueueKey key = new QueueKey("Output", pipeline);
 				for (int i = 0; i < 15; i++)
 				{
-					transform.Process("Output", row, new Hashtable());
+					transform.Process(key, row, new Hashtable());
 				}
-				transform.Complete("Output");
+				transform.Complete(key);
 			}
 			Assert.AreEqual(1, rowCount);
 		}
@@ -112,6 +116,7 @@ namespace Rhino.ETL.Tests.Joins
 					);
 				pipeLineStage.OnProcess("Output", delegate { rowCount++; });
 
+				QueueKey key = new QueueKey("Output", pipeline);
 
 				Transform transform = configurationContext.Transforms["Distinct"];
 				transform.RegisterForwarding(pipeLineStage);
@@ -121,13 +126,13 @@ namespace Rhino.ETL.Tests.Joins
 				row["Id"] = 1;
 				row["OrgId"] = 2;
 				row["City"] = "New York";
-				transform.Process("Output", row, hashtable);
+				transform.Process(key, row, hashtable);
 				row["Id"] = 1;
 				row["OrgId"] = 2;
 				row["City"] = "Tel Aviv";
-				transform.Process("Output", row, hashtable);
+				transform.Process(key, row, hashtable);
 
-				transform.Complete("Output");
+				transform.Complete(key);
 			}
 			Assert.AreEqual(1, rowCount);
 		}
@@ -140,13 +145,15 @@ namespace Rhino.ETL.Tests.Joins
 			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
 			using (pipeline.EnterContext())
 			{
+				QueueKey key = new QueueKey("Output", pipeline);
+
 				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
 					pipeline
 					);
 				pipeLineStage.OnProcess("Output", delegate(Row processedRow)
 				{
 					object rowCountObj = processedRow["RowCount"];
-					rowCount = (int)rowCountObj;
+					rowCount = (int) rowCountObj;
 				});
 
 				Transform transform = configurationContext.Transforms["CountRows"];
@@ -155,13 +162,13 @@ namespace Rhino.ETL.Tests.Joins
 
 				for (int i = 0; i < 14; i++)
 				{
-					transform.Process("Output", row, null);
+					transform.Process(key, row, null);
 				}
 
-				transform.Complete("Output");
+				transform.Complete(key);
 			}
 
-			Assert.AreEqual(14, rowCount );
+			Assert.AreEqual(14, rowCount);
 		}
 
 		[Test]
@@ -172,13 +179,15 @@ namespace Rhino.ETL.Tests.Joins
 			Pipeline pipeline = configurationContext.Pipelines["CopyUsers"];
 			using (pipeline.EnterContext())
 			{
+				QueueKey key = new QueueKey("Output", pipeline);
+
 				TestPipeLineStage pipeLineStage = TestOutput.GetPipelineStage(
 					pipeline
 					);
 				pipeLineStage.OnProcess("Output", delegate(Row processedRow)
 				{
-					idSum += (int)processedRow["IdSum"];
-					salarySum += (int)processedRow["SalarySum"];
+					idSum += (int) processedRow["IdSum"];
+					salarySum += (int) processedRow["SalarySum"];
 				});
 
 				Transform transform = configurationContext.Transforms["CalcSumOfSalaryAndId"];
@@ -188,10 +197,10 @@ namespace Rhino.ETL.Tests.Joins
 				row["salary"] = 10;
 				for (int i = 0; i < 14; i++)
 				{
-					transform.Process("Output", row, null);
+					transform.Process(key, row, null);
 				}
 
-				transform.Complete("Output");
+				transform.Complete(key);
 			}
 
 			Assert.AreEqual(28, idSum);

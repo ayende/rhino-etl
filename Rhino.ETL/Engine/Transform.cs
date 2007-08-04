@@ -11,14 +11,14 @@ namespace Rhino.ETL
 		protected Transform(string name)
 		{
 			this.name = name;
-			this.queuesManager = new QueuesManager(name, Logger);
+			queuesManager = new QueuesManager(name, Logger);
 			EtlConfigurationContext.Current.AddTransform(name, this);
 		}
 
 
-		public void Apply(Row row, IDictionary parameters)
+		public void Apply(Pipeline pipeline, Row row, IDictionary parameters)
 		{
-			PrepareCurrentTransformParameters(row);
+			PrepareCurrentTransformParameters(pipeline, row);
 			DoApply(row, new QuackingDictionary(parameters));
 		}
 
@@ -28,25 +28,25 @@ namespace Rhino.ETL
 		}
 
 
-		public void Process(string queueName, Row row, IDictionary parameters)
+		public void Process(QueueKey key, Row row, IDictionary parameters)
 		{
-			Apply(row, parameters);
+			Apply(key.Pipeline, row, parameters);
 			ForwardRow();
 		}
 
-		public void Complete(string queueName)
+		public void Complete(QueueKey key)
 		{
-			OnComplete(queueName);
-			queuesManager.CompleteAll();
-			queuesManager.ForEachOutputQueue(delegate(string outputQueueName)
+			OnComplete(key.Name);
+			queuesManager.CompleteAll(key.Pipeline);
+			queuesManager.ForEachOutputQueue(key.Pipeline, delegate(string outputQueueName)
 			{
-				Completed(this, outputQueueName);
+				Completed(this, new QueueKey(outputQueueName, key.Pipeline));
 			});
 		}
 
 		protected virtual void OnComplete(string QueueName)
 		{
-			
+
 		}
 
 		protected abstract void DoApply(Row Row, QuackingDictionary Parameters);

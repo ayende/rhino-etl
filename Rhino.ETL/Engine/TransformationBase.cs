@@ -32,7 +32,7 @@ namespace Rhino.ETL
 		public void SendRow(string queueName, Row row)
 		{
 			TransformParameters old = CurrentTransformParameters;
-			PrepareCurrentTransformParameters(row);
+			PrepareCurrentTransformParameters(CurrentTransformParameters.Pipeline, row);
 			CurrentTransformParameters.OutputQueueName = queueName;
 			ForwardRow();
 			CurrentTransformParameters = old;
@@ -43,12 +43,13 @@ namespace Rhino.ETL
 			get { return Pipeline.Current; }
 		}
 
-		protected static void PrepareCurrentTransformParameters(Row row)
+		protected static void PrepareCurrentTransformParameters(Pipeline pipeline,Row row)
 		{
 			CurrentTransformParameters = new TransformParameters();
 			CurrentTransformParameters.OutputQueueName = DefaultOutputQueue;
 			CurrentTransformParameters.ShouldSkipRow = false;
 			CurrentTransformParameters.Row = row;
+			CurrentTransformParameters.Pipeline = pipeline;
 		}
 
 		protected void ForwardRow()
@@ -57,7 +58,7 @@ namespace Rhino.ETL
 				return;
 			if (CurrentTransformParameters.Row == null)
 				return;
-			queuesManager.Forward(CurrentTransformParameters.OutputQueueName,
+			queuesManager.Forward(CurrentTransformParameters.QueueKey,
 								  CurrentTransformParameters.Row);
 		}
 

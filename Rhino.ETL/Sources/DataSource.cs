@@ -24,9 +24,10 @@ namespace Rhino.ETL
 			queueManager.RegisterForwarding(pipeLineStage);
 		}
 
-		public void Start()
+		public void Start(Pipeline pipeline)
 		{
-			using (IDbCommand command = dbConnection.CreateCommand())
+			QueueKey key = new QueueKey(OutputQueueName, pipeline);
+			using (IDbCommand command = GetDbConnection(pipeline).CreateCommand())
 			{
 				command.CommandText = Command;
 				AddParameters(command);
@@ -49,11 +50,11 @@ namespace Rhino.ETL
 								value = null;
 							row[columns[i]] = value;
 						}
-						queueManager.Forward(OutputQueueName, row);
+						queueManager.Forward(key, row);
 					}
 				}
 			}
-			queueManager.Complete(OutputQueueName);
+			queueManager.Complete(key);
 		}
 	}
 }

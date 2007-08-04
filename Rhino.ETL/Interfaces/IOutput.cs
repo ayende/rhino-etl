@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Rhino.ETL
 {
-	public delegate void OutputCompleted(IOutput output, string queueName);
+	public delegate void OutputCompleted(IOutput output, QueueKey key);
 
 	public interface IOutput
 	{
@@ -11,8 +11,8 @@ namespace Rhino.ETL
 
 		event OutputCompleted Completed;
 
-		void Process(string queueName, Row row, IDictionary parameters);
+		void Process(QueueKey key, Row row, IDictionary parameters);
 
-		void Complete(string queueName);
+		void Complete(QueueKey key);
 	}
 }

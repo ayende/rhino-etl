@@ -24,7 +24,7 @@ namespace Rhino.ETL
 			set { batchSize = value; }
 		}
 
-		public void Process(string queueName, Row row, IDictionary ignored)
+		public void Process(QueueKey key, Row row, IDictionary ignored)
 		{
 			lock (rows)
 			{
@@ -33,22 +33,25 @@ namespace Rhino.ETL
 				rows.Add(row);
 				if (rows.Count >= BatchSize)
 				{
-					ExecutionPackage.Current.RegisterForExecution(ProcessOutput);
+					ExecutionPackage.Current.RegisterForExecution(delegate
+					{
+						ProcessOutput(key.Pipeline);
+					});
 				}
 			}
 		}
 
-		public void Complete(string queueName)
+		public void Complete(QueueKey key)
 		{
 			lock(rows)
 			{
 				hasCompleted = true;
 			}
-			ProcessOutput();//flush any additional output
-			Completed(this, queueName);
+			ProcessOutput(key.Pipeline);//flush any additional output
+			Completed(this, key);
 		}
 
-		public void ProcessOutput()
+		public void ProcessOutput(Pipeline pipeline)
 		{
 			List<Row> copyRows;
 			lock (rows)
@@ -59,7 +62,7 @@ namespace Rhino.ETL
 
 			foreach (Row row in copyRows)
 			{
-				using (IDbCommand command = dbConnection.CreateCommand())
+				using (IDbCommand command = GetDbConnection(pipeline).CreateCommand())
 				{
 					command.CommandText = Command;
 					AddParameters(command);

@@ -5,5 +5,14 @@ namespace Rhino.ETL
 		public bool ShouldSkipRow;
 		public Row Row;
 		public string OutputQueueName;
+		public Pipeline Pipeline;
+
+		public QueueKey QueueKey
+		{
+			get
+			{
+				return new QueueKey(OutputQueueName, Pipeline);
+			}
+		}
 	}
 }

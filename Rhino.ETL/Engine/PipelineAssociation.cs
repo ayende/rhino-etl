@@ -160,9 +160,9 @@ namespace Rhino.ETL
 	    			ToInstance,
 					destinationQueue, 500, Parameters)
 					);
-	    	ToInstance.Completed += delegate(IOutput output, string queueName)
+	    	ToInstance.Completed += delegate(IOutput output, QueueKey key)
 	    	{
-				if (destinationQueue.Equals(queueName,StringComparison.InvariantCultureIgnoreCase))
+				if (destinationQueue.Equals(key.Name, StringComparison.InvariantCultureIgnoreCase))
 	    			Completed(this);
 	    	};
 	    }

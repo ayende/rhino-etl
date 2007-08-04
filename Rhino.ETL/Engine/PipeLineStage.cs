@@ -12,9 +12,10 @@ namespace Rhino.ETL
 		private readonly string outgoing;
 		private readonly IDictionary parameters;
 		private int batchSize;
+		private QueueKey incomingKey;
 
 		public PipeLineStage(Pipeline pipeline, string incoming, IOutput output,
-		                     string outgoing, int batchSize, IDictionary parameters)
+							 string outgoing, int batchSize, IDictionary parameters)
 		{
 			this.pipeline = pipeline;
 			this.incoming = incoming;
@@ -50,23 +51,35 @@ namespace Rhino.ETL
 			set { batchSize = value; }
 		}
 
+		public QueueKey IncomingKey
+		{
+			get
+			{
+				if (incomingKey == null)
+					incomingKey = new QueueKey(incoming, pipeline);
+				return incomingKey;
+			}
+		}
+
 		public void Process(ICollection<Row> rows)
 		{
+			QueueKey key = new QueueKey(Outgoing, pipeline);
 			using (pipeline.EnterContext())
 			{
 				foreach (Row row in rows)
 				{
-					Output.Process(Outgoing, row, Parameters);
+					Output.Process(key, row, Parameters);
 				}
 			}
 		}
 
 		public void Complete(string name)
 		{
+			QueueKey key = new QueueKey(Outgoing, pipeline);
 			using (pipeline.EnterContext())
 			{
 				if (Incoming.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-					Output.Complete(Outgoing);
+					Output.Complete(key);
 			}
 		}
 	}

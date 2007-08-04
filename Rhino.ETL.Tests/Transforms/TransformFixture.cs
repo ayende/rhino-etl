@@ -23,7 +23,7 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["NameToUpper"];
 			Row row = new Row();
 			row["Name"] = "ayende";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("AYENDE", row["Name"]);
 		}
 
@@ -35,7 +35,7 @@ namespace Rhino.ETL.Tests.Transforms
 			row["Name"] = "Ayende, Rahien";
 			row["Today"] = DateTime.Today;
 			row["City"] = "Tel-Aviv";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("Ayende Rahien", row["Name"]);
 			Assert.AreEqual(DateTime.Today, row["Today"]);
 			Assert.AreEqual("Tel-Aviv", row["City"]);
@@ -49,7 +49,7 @@ namespace Rhino.ETL.Tests.Transforms
 			row["Name"] = "A  \t";
 			row["City"] = "  ";
 			row["Street"] = "\t\t";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("A  \t", row["Name"]);
 			Assert.IsNull(row["City"]);
 			Assert.IsNull(row["Street"]);
@@ -61,7 +61,7 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["IntroduceSpace"];
 			Row row = new Row();
 			row["PostalCode"] = "SW1A0AA";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("SW1A 0AA", row["PostalCode"]);
 		}
 
@@ -71,7 +71,7 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["MakeTitleCase"];
 			Row row = new Row();
 			row["Name"] = "ayende";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("Ayende", row["Title"]);
 		}
 
@@ -81,10 +81,10 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["RemoveRowsWithoutId"];
 			Row row = new Row();
 			row["Id"] = 1;
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.IsFalse(Transform.CurrentTransformParameters.ShouldSkipRow);
 			row["Id"] = null;
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.IsTrue(Transform.CurrentTransformParameters.ShouldSkipRow);
 		}
 
@@ -94,7 +94,7 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["TranslateDate"];
 			Row row = new Row();
 			row["Date"] = new DateTime(2007, 03, 04).ToString("MMM dd, yyyy");
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.AreEqual("2007-03-04", row["Date"]);
 		}
 
@@ -104,10 +104,10 @@ namespace Rhino.ETL.Tests.Transforms
 			Transform transform = configurationContext.Transforms["RemoveBadDate"];
 			Row row = new Row();
 			row["Date"] = new DateTime(2007, 03, 04).ToString("MMM dd, yyyy");
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.IsNotNull(row["Date"]);
 			row["Date"] = "nonesense";
-			transform.Apply(row, new Hashtable());
+			transform.Apply(null, row, new Hashtable());
 			Assert.IsNull(row["Date"]);
 		}
 
@@ -121,7 +121,7 @@ namespace Rhino.ETL.Tests.Transforms
 			row["City"] = "Tel, Aviv";
 			Hashtable parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 			parameters["ColumnsToClean"] = new string[] { "Name" };
-			transform.Apply(row, parameters);
+			transform.Apply(null, row, parameters);
 			Assert.AreEqual("Ayende Rahien", row["Name"]);
 			Assert.AreEqual(DateTime.Today, row["Today"]);
 			Assert.AreEqual("Tel, Aviv", row["City"]);

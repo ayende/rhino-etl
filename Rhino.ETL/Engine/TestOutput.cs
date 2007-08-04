@@ -15,15 +15,15 @@ namespace Rhino.ETL
 
 		public event OutputCompleted Completed = delegate { };
 
-		public void Process(string queueName, Row row, IDictionary parameters)
+		public void Process(QueueKey key, Row row, IDictionary parameters)
 		{
-			actions[queueName](row);
+			actions[key.Name](row);
 		}
 
-		public void Complete(string queueName)
+		public void Complete(QueueKey key)
 		{
-			completedActions[queueName] = true;
-			Completed(this, queueName);
+			completedActions[key.Name] = true;
+			Completed(this, key);
 		}
 
 		public bool IsComplete(string queueName)

@@ -14,7 +14,6 @@ namespace Rhino.ETL
 		private ICallable commandGenerator;
 		private string connection;
 		private Connection connectionInstance;
-		protected IDbConnection dbConnection;
 		[CLSCompliant(false)]
 		protected IDictionary<string, ICallable> parameters;
 
@@ -69,15 +68,30 @@ namespace Rhino.ETL
 			get { return connectionInstance; }
 		}
 
-		public bool TryAcquireConnection()
+		public bool TryAcquireConnection(Pipeline pipeline)
 		{
-			dbConnection = ConnectionInstance.TryAcquire();
-			return dbConnection != null;
+			SetDbConnection(pipeline, ConnectionInstance.TryAcquire());
+			return GetDbConnection(pipeline) != null;
 		}
 
-		public void ReleaseConnection()
+		protected IDbConnection GetDbConnection(Pipeline pipeline)
 		{
-			ConnectionInstance.Release(dbConnection);
+			return (IDbConnection)pipeline.Items[DatabaseConnectionKey];
+		}
+
+		protected void SetDbConnection(Pipeline pipeline, IDbConnection dbConnection)
+		{
+			pipeline.Items[DatabaseConnectionKey] = dbConnection;
+		}
+
+		private string DatabaseConnectionKey
+		{
+			get { return Name + "DatabaseConnection"; }
+		}
+
+		public void ReleaseConnection(Pipeline pipeline)
+		{
+			ConnectionInstance.Release(GetDbConnection(pipeline));
 		}
 
 		public string Command
@@ -88,7 +102,7 @@ namespace Rhino.ETL
 				{
 					using (EnterContext())
 					{
-						return (string) CommandGenerator.Call(new object[0]);
+						return (string)CommandGenerator.Call(new object[0]);
 					}
 				}
 				return command;
@@ -100,17 +114,17 @@ namespace Rhino.ETL
 		{
 			using (EnterContext())
 			{
-				block.Call(new object[] {this});
+				block.Call(new object[] { this });
 			}
 		}
 
 		public void Validate(ICollection<string> messages)
 		{
 			bool hasConnection = EtlConfigurationContext.Current.Connections.ContainsKey(Connection);
-			if(hasConnection==false)
+			if (hasConnection == false)
 			{
 				string msg = string.Format("Could not find connection '{0}' in context '{1}'", Connection, EtlConfigurationContext.Current.Name);
-				Logger.WarnFormat("{0} failed validation: {1}",Name, msg);
+				Logger.WarnFormat("{0} failed validation: {1}", Name, msg);
 				messages.Add(msg);
 			}
 		}

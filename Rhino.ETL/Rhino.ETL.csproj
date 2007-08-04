@@ -67,6 +67,7 @@
     <Compile Include="Engine\Join.cs" />
     <Compile Include="Engine\ObjectArrayKeys.cs" />
     <Compile Include="Engine\PipeLineStage.cs" />
+    <Compile Include="Engine\QueueKey.cs" />
     <Compile Include="Engine\Target.cs" />
     <Compile Include="Engine\TestOutput.cs" />
     <Compile Include="Engine\TestPipeLineStage.cs" />

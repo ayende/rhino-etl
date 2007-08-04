@@ -9,7 +9,9 @@ namespace Rhino.ETL
 	public class Pipeline : ContextfulObjectBase<Pipeline>
 	{
 		private IList<PipelineAssociation> associations = new List<PipelineAssociation>();
+
 		public delegate void PipelineCompleted(Pipeline completed);
+
 		public event PipelineCompleted Completed = delegate { };
 
 		private string name;
@@ -101,7 +103,7 @@ namespace Rhino.ETL
 
 		public void Start()
 		{
-			if (associations.Count==0)
+			if (associations.Count == 0)
 			{
 				Completed(this);
 				return;
@@ -110,15 +112,18 @@ namespace Rhino.ETL
 				return;
 			foreach (PipelineAssociation association in associations)
 			{
-			    association.ConnectEnds(this);
+				association.ConnectEnds(this);
 			}
 			foreach (PipelineAssociation association in associations)
 			{
-				association.Completed+=AssociationCompleted;
+				association.Completed += AssociationCompleted;
 			}
 			foreach (DataSource value in EtlConfigurationContext.Current.Sources.Values)
 			{
-				ExecutionPackage.Current.RegisterForExecution(value.Start);
+				DataSource cSharpSpec_21_5_2_Damn_It = value; 
+				ExecutionPackage.Current.RegisterForExecution(
+					delegate { cSharpSpec_21_5_2_Damn_It.Start(this); }
+					);
 			}
 		}
 
@@ -136,7 +141,7 @@ namespace Rhino.ETL
 
 			foreach (IConnectionUser connectionUser in GetFromAssoicationsAll<IConnectionUser>())
 			{
-				if (connectionUser.TryAcquireConnection())
+				if (connectionUser.TryAcquireConnection(this))
 				{
 					aquiredConnection.Add(connectionUser);
 				}
@@ -146,7 +151,7 @@ namespace Rhino.ETL
 						"Could not aquired all connections in pipeline '{0}', will retry when the next pipeline completes", Name);
 					foreach (IConnectionUser user in aquiredConnection)
 					{
-						user.ReleaseConnection();
+						user.ReleaseConnection(this);
 					}
 					ExecutionPackage.Current.ExecuteOnPipelineCompleted(delegate { Start(); });
 					return false;
