@@ -52,13 +52,21 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebDev.WebHost, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_32\WebDev.WebHost\8.0.0.0__b03f5f7f11d50a3a\WebDev.WebHost.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Connections\ConnectionFixture.cs" />
     <Compile Include="ContextfulObjectFixture.cs" />
     <Compile Include="Destinations\DestinationsFixture.cs" />
+    <Compile Include="GetEmployees.asmx.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Integration\IntegrationTestBase.cs" />
     <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="Joins\Joins.cs" />
@@ -135,6 +143,11 @@
     <None Include="Transforms\transforms_only.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GetEmployees.asmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

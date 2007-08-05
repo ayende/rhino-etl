@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Rhino.Commons;
 using Rhino.ETL.Engine;
@@ -50,7 +51,7 @@ namespace Rhino.ETL
 						if (configurationContext.Targets.TryGetValue(targetName, out target) == false)
 						{
 							ExecutionResult result = new ExecutionResult(ExecutionStatus.Failure);
-							InvalidTargetException exception = 
+							InvalidTargetException exception =
 								new InvalidTargetException("Could not find target '" + targetName + "'");
 							result.Exceptions.Add(exception);
 							return result;
@@ -99,8 +100,8 @@ namespace Rhino.ETL
 			if (target.IsFaulted)
 			{
 				Logger.WarnFormat("Ignoring request to execute {0} because target {1} has faulted",
-				                  DelegateToString(action),
-				                  target.Name
+								  DelegateToString(action),
+								  target.Name
 					);
 				return;
 			}
@@ -116,7 +117,9 @@ namespace Rhino.ETL
 				}
 				catch (Exception e)
 				{
-					Logger.Error("Error occured when executing " + DelegateToString(action) + " on target " + target.Name, e);
+					string msg = "Error occured when executing " + DelegateToString(action) + " on target " + target.Name;
+					Debug.WriteLine(msg + ": " + e);
+					Logger.Error(msg, e);
 					target.AddFault(e);
 					//note that this will also abort the currently executing thread!
 					RhinoThreadPool.CancelAll(true);

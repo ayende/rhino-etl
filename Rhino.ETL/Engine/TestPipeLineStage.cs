@@ -18,5 +18,10 @@ namespace Rhino.ETL
 		{
 			TestOutput.OnProcess(queueName, action);
 		}
+
+		public void OnComplete(OutputCompleted cmd)
+		{
+			TestOutput.Completed += cmd;
+		}
 	}
 }

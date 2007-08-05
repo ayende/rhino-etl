@@ -11,6 +11,7 @@ namespace Rhino.ETL
 	public class DataSource : BaseDataElement<DataSource>, IInput
 	{
 		private QueuesManager queueManager;
+		private string currentQueueKey = "Current.Queue.Key";
 		private const string OutputQueueName = "Output";
 
 		public DataSource(string name)
@@ -28,6 +29,30 @@ namespace Rhino.ETL
 		public void Start(Pipeline pipeline)
 		{
 			QueueKey key = new QueueKey(OutputQueueName, pipeline);
+			Items[CurrentQueueKey] = key;
+			if (blockToExecute != null)
+			{
+				using (EnterContext())
+					blockToExecute.Call(new object[] {this});
+			}
+			else
+			{
+				ReadFromDatabase(key, pipeline);
+			}
+			queueManager.Complete(key);
+		}
+
+		/// <summary>
+		/// Custom behaviors can be had by overriding it using a block
+		/// in the source element in the DSL
+		/// </summary>
+		protected virtual void ReadData(QueueKey key, Pipeline pipeline)
+		{
+			ReadFromDatabase(key, pipeline);
+		}
+
+		private void ReadFromDatabase(QueueKey key, Pipeline pipeline)
+		{
 			using (IDbCommand command = GetDbConnection(pipeline).CreateCommand())
 			{
 				command.CommandText = Command;
@@ -51,11 +76,25 @@ namespace Rhino.ETL
 								value = null;
 							row[columns[i]] = value;
 						}
-						queueManager.Forward(key, row);
+						SendRow(key, row);
 					}
 				}
 			}
-			queueManager.Complete(key);
+		}
+
+		public void SendRow(QueueKey key, Row row)
+		{
+			queueManager.Forward(key, row);
+		}
+
+		public void SendRow(Row row)
+		{
+			queueManager.Forward((QueueKey) Items[CurrentQueueKey], row);
+		}
+
+		public string CurrentQueueKey
+		{
+			get { return currentQueueKey; }
 		}
 	}
 }

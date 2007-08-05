@@ -18,24 +18,24 @@ namespace Rhino.ETL
 		private ICallable connectionStringGenerator;
 		private static ILog logger = LogManager.GetLogger(typeof (Connection));
 
-		private Semaphore connectionSejoinhore;
+		private Semaphore connectionSemaphore;
 
-		private Semaphore ConnectionSejoinhore
+		private Semaphore ConnectionSemaphore
 		{
 			get
 			{
-				if(connectionSejoinhore==null)
+				if(connectionSemaphore==null)
 				{
 					lock(this)
 					{
-						if(connectionSejoinhore==null)
+						if(connectionSemaphore==null)
 						{
-							connectionSejoinhore = new Semaphore(0, ConcurrentConnections);
-							connectionSejoinhore.Release(ConcurrentConnections);
+							connectionSemaphore = new Semaphore(0, ConcurrentConnections);
+							connectionSemaphore.Release(ConcurrentConnections);
 						}
 					}
 				}
-				return connectionSejoinhore;
+				return connectionSemaphore;
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace Rhino.ETL
 
 		public IDbConnection TryAcquire()
 		{
-			bool aquired = ConnectionSejoinhore.WaitOne(0,false);
+			bool aquired = ConnectionSemaphore.WaitOne(0,false);
 			if(aquired==false)
 				return null;
 			try
@@ -134,7 +134,7 @@ namespace Rhino.ETL
 			{
 				logger.Error("Exception when disposing of connection in "+name, e);
 			}
-			ConnectionSejoinhore.Release();
+			ConnectionSemaphore.Release();
 		}
 	}
 

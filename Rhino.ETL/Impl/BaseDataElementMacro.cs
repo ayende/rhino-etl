@@ -1,7 +1,4 @@
-using System;
-using Boo.Lang.Compiler;
 using Boo.Lang.Compiler.Ast;
-using Boo.Lang.Compiler.Steps;
 using Boo.Lang.Compiler.TypeSystem;
 
 namespace Rhino.ETL.Impl
@@ -32,6 +29,10 @@ namespace Rhino.ETL.Impl
 			ReplaceParametersMethodSource<TElement> source = new ReplaceParametersMethodSource<TElement>(localRef);
 			source.Initialize(Context);
 			source.Visit(macro.Block);
+
+			ReplaceMethodTargetAndAddParameter replaceMethodTargetAndAddParameter = new ReplaceMethodTargetAndAddParameter(localRef);
+			replaceMethodTargetAndAddParameter.Initialize(Context);
+			replaceMethodTargetAndAddParameter.Visit(macro.Block);
 			return macro.Block;
 		}
 

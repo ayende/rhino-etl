@@ -6,6 +6,16 @@ connection(
 
 source UsersSource, Connection="Connection":
 	Command: "SELECT Id, Name, Email FROM Users_Source"
+
+source WebServiceGenerator:
+	execute:
+		whois = WebService(WsdlUrl: "http://localhost:9090/GetEmployees.asmx?wsdl" )
+		results = whois.GetEmployees("Northwind")
+		for result in results:
+			SendRow( Row(
+				Id: result.Id,
+				Name: result.Name
+				))
 	
 transform SplitName:
 	Row.FirstName = Row.Name.Split(char(' '))[0]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Boo.Lang;
+using Boo.Lang.Compiler.MetaProgramming;
 using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
@@ -15,33 +16,35 @@ namespace Rhino.ETL
 		private string connection;
 		private Connection connectionInstance;
 		[CLSCompliant(false)]
-		protected IDictionary<string, ICallable> parameters;
+		protected IDictionary<string, ICallable> commandParameters;
+
+		protected ICallable blockToExecute;
 
 		public BaseDataElement(string name)
 		{
 			this.name = name;
-			parameters = new Dictionary<string, ICallable>(StringComparer.InvariantCultureIgnoreCase);
+			commandParameters = new Dictionary<string, ICallable>(StringComparer.InvariantCultureIgnoreCase);
 		}
 
 		[CLSCompliant(false)]
 		public void AddParameter(string parameterName, ICallable callable)
 		{
-			if (parameters.ContainsKey(parameterName))
+			if (commandParameters.ContainsKey(parameterName))
 			{
 				throw new DuplicateKeyException("[Source " + Name + "] already has a parameter called '" + parameterName + "'");
 			}
-			parameters.Add(parameterName, callable);
+			commandParameters.Add(parameterName, callable);
 		}
 
 		public object GetParameterValue(string parameterName)
 		{
-			if (parameters.ContainsKey(parameterName) == false)
+			if (commandParameters.ContainsKey(parameterName) == false)
 			{
 				throw new KeyNotFoundException("[Source " + Name + "] does not contains a parameter called '" + parameterName + "'");
 			}
 			using (EnterContext())
 			{
-				return parameters[parameterName].Call(new object[0]);
+				return commandParameters[parameterName].Call(new object[0]);
 			}
 		}
 
@@ -70,6 +73,8 @@ namespace Rhino.ETL
 
 		public bool TryAcquireConnection(Pipeline pipeline)
 		{
+			if (blockToExecute != null)//no need to grab connection
+				return true;
 			SetDbConnection(pipeline, ConnectionInstance.TryAcquire());
 			return GetDbConnection(pipeline) != null;
 		}
@@ -110,6 +115,7 @@ namespace Rhino.ETL
 			set { command = value; }
 		}
 
+		[Meta]
 		public void Parameters(ICallable block)
 		{
 			using (EnterContext())
@@ -118,10 +124,29 @@ namespace Rhino.ETL
 			}
 		}
 
+		[Meta]
+		public void parameters(ICallable block)
+		{
+			Parameters(block);
+		}
+
+		[Meta]
+		public void Execute(ICallable block)
+		{
+			blockToExecute = block;
+		}
+
+		[Meta]
+		public void execute(ICallable block)
+		{
+			Execute(block);
+		}
+
 		public void Validate(ICollection<string> messages)
 		{
 			bool hasConnection = EtlConfigurationContext.Current.Connections.ContainsKey(Connection);
-			if (hasConnection == false)
+			if (hasConnection == false &&
+				blockToExecute == null)//we assume that a block to execute would not use a standard connection
 			{
 				string msg = string.Format("Could not find connection '{0}' in context '{1}'", Connection, EtlConfigurationContext.Current.Name);
 				Logger.WarnFormat("{0} failed validation: {1}", Name, msg);
@@ -131,12 +156,14 @@ namespace Rhino.ETL
 
 		public void PerformSecondStagePass()
 		{
+			if (blockToExecute != null)
+				return;
 			connectionInstance = EtlConfigurationContext.Current.Connections[Connection];
 		}
 
 		protected void AddParameters(IDbCommand dbCommand)
 		{
-			foreach (KeyValuePair<string, ICallable> pair in parameters)
+			foreach (KeyValuePair<string, ICallable> pair in commandParameters)
 			{
 				IDbDataParameter parameter = dbCommand.CreateParameter();
 				parameter.ParameterName = pair.Key;

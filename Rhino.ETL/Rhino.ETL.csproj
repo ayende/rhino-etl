@@ -50,6 +50,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -95,10 +96,14 @@
     <Compile Include="Engine\TestPipeLineStage.cs" />
     <Compile Include="Engine\TransformationBase.cs" />
     <Compile Include="Engine\TransformParameters.cs" />
+    <Compile Include="Engine\WebService.cs">
+    </Compile>
     <Compile Include="Exceptions\InvalidPipelineException.cs" />
     <Compile Include="Exceptions\InvalidTargetException.cs" />
+    <Compile Include="Exceptions\InvalidWebServiceException.cs" />
     <Compile Include="Impl\JoinMacro.cs" />
     <Compile Include="Impl\OnCompleteMacro.cs" />
+    <Compile Include="Impl\ReplaceMethodTargetAndAddParameter.cs" />
     <Compile Include="Impl\TargetMacro.cs" />
     <Compile Include="Interfaces\ICommandContainer.cs" />
     <Compile Include="Sources\DataSource.cs" />
