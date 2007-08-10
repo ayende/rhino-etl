@@ -170,5 +170,10 @@ namespace Rhino.ETL
 			}
 			return new ExecutionPackage(this);
 		}
+
+		public FluentFileHelper Read(Type type)
+		{
+			return new FluentFileHelper(type);
+		}
 	}
 }

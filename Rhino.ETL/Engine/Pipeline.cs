@@ -79,6 +79,8 @@ namespace Rhino.ETL
 			Dictionary<Connection, int> connectionCount = new Dictionary<Connection, int>();
 			foreach (IConnectionUser useConnection in GetFromAssoicationsAll<IConnectionUser>())
 			{
+				if(useConnection.ConnectionInstance==null)
+					continue;
 				if (connectionCount.ContainsKey(useConnection.ConnectionInstance) == false)
 					connectionCount.Add(useConnection.ConnectionInstance, 0);
 				connectionCount[useConnection.ConnectionInstance] += 1;

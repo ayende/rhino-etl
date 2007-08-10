@@ -23,6 +23,7 @@ namespace Rhino.ETL
 		                                                  	"System.Data.Odbc",
 		                                                  	"System.Data.OleDb",
 		                                                  	"Rhino.ETL",
+															"FileHelpers",
 		                                                  	"Rhino.ETL.Impl",
 		                                                  	"Rhino.ETL.Commands",
 		                                                  	"System.Transactions",
@@ -77,6 +78,7 @@ namespace Rhino.ETL
 			compiler.Parameters.References.Add(Assembly.GetExecutingAssembly());
 			compiler.Parameters.References.Add(typeof(System.Data.DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
+			compiler.Parameters.References.Add(typeof (FileHelpers.CsvEngine).Assembly);
 			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports));
 			compiler.Parameters.Pipeline.Insert(10, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
