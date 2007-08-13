@@ -105,6 +105,7 @@
     <Compile Include="Exceptions\InvalidPipelineException.cs" />
     <Compile Include="Exceptions\InvalidTargetException.cs" />
     <Compile Include="Exceptions\InvalidWebServiceException.cs" />
+    <Compile Include="Impl\DestinationExtensionMacro.cs" />
     <Compile Include="Impl\JoinMacro.cs" />
     <Compile Include="Impl\OnCompleteMacro.cs" />
     <Compile Include="Impl\ReplaceMethodTargetAndAddParameter.cs" />

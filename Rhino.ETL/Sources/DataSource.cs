@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Boo.Lang;
+using Boo.Lang.Compiler.MetaProgramming;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
@@ -13,6 +14,7 @@ namespace Rhino.ETL
 		private QueuesManager queueManager;
 		private string currentQueueKey = "Current.Queue.Key";
 		private const string OutputQueueName = "Output";
+		protected ICallable blockToExecute;
 
 		public DataSource(string name)
 			: base(name)
@@ -95,6 +97,24 @@ namespace Rhino.ETL
 		public string CurrentQueueKey
 		{
 			get { return currentQueueKey; }
+		}
+
+		[Meta]
+		public void Execute(ICallable block)
+		{
+			blockToExecute = block;
+		}
+
+		[Meta]
+		public void execute(ICallable block)
+		{
+			Execute(block);
+		}
+
+
+		protected override bool CustomActionSpecified
+		{
+			get { return blockToExecute != null; }
 		}
 	}
 }

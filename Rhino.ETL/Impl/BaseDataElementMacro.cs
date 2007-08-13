@@ -5,18 +5,20 @@ namespace Rhino.ETL.Impl
 {
 	public class BaseDataElementMacro<TElement> : AbstractNamedMacro
 	{
+		protected  MethodInvocationExpression methodInvocationExpression;
+
 		public override Statement Expand(MacroStatement macro)
 		{
 			if (ValidateHasName(macro) == false)
 				return null;
-			MethodInvocationExpression create = new MethodInvocationExpression(
+			methodInvocationExpression = new MethodInvocationExpression(
 				AstUtil.CreateReferenceExpression(typeof(TElement).FullName)
 				);
-			if(MacroArgumentsToCreateNamedArguments(create, macro)==false)
+			if(MacroArgumentsToCreateNamedArguments(methodInvocationExpression, macro)==false)
 				return null;
-			create.Arguments.Add(GetNameExpression(macro));
-			AddNamedArgument(create, macro, "Command", CommandMacro.Key);
-			AddNamedArgument(create, macro, "CommandGenerator", CommandGeneratorMacro.Key);
+			methodInvocationExpression.Arguments.Add(GetNameExpression(macro));
+			AddNamedArgument(methodInvocationExpression, macro, "Command", CommandMacro.Key);
+			AddNamedArgument(methodInvocationExpression, macro, "CommandGenerator", CommandGeneratorMacro.Key);
 			InternalLocal internalLocal = CodeBuilder.DeclareLocal(CodeHelper.GetMethod(macro.Block), "source",
 																   TypeSystemServices.Map(typeof(TElement)));
 			ReferenceExpression localRef = CodeBuilder.CreateLocalReference("sourceReference", internalLocal);
@@ -24,7 +26,7 @@ namespace Rhino.ETL.Impl
 			                   new BinaryExpression(
 			                   	BinaryOperatorType.Assign,
 			                   	localRef,
-			                   	create)
+			                   	methodInvocationExpression)
 				);
 			ReplaceParametersMethodSource<TElement> source = new ReplaceParametersMethodSource<TElement>(localRef);
 			source.Initialize(Context);

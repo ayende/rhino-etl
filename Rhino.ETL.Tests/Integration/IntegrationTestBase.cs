@@ -35,12 +35,7 @@ namespace Rhino.ETL.Tests.Integration
 
 		public void AssertRowCount(int expectedCount)
 		{
-			ExecuteCommand(delegate(IDbCommand com)
-			{
-				com.CommandText = "SELECT COUNT(*) FROM Users_Destination";
-				int count = Convert.ToInt32(com.ExecuteScalar());
-				Assert.AreEqual(expectedCount, count);
-			});
+			AssertRowCount("Users_Destination", expectedCount);
 		}
 
 		private static void ExecuteCommand(Action<IDbCommand> action)
@@ -54,6 +49,16 @@ namespace Rhino.ETL.Tests.Integration
 					action(com);
 				}
 			}
+		}
+
+		protected void AssertRowCount(string tableName, int expectedRowCount)
+		{
+			ExecuteCommand(delegate(IDbCommand com)
+			{
+				com.CommandText = "SELECT COUNT(*) FROM " + tableName;
+				int count = Convert.ToInt32(com.ExecuteScalar());
+				Assert.AreEqual(count, expectedRowCount);
+			});
 		}
 	}
 }

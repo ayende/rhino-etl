@@ -175,5 +175,10 @@ namespace Rhino.ETL
 		{
 			return new FluentFileHelper(type);
 		}
+
+		public FluentFileHelper Write(Type type)
+		{
+			return new FluentFileHelper(type);
+		}
 	}
 }

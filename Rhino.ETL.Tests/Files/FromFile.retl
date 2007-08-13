@@ -9,26 +9,24 @@ class Customers:
 	Country as string
 	
 connection( 
-	"DestinationDB",
+	"Database",
 	ConnectionType: SqlConnection,
 	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;"
 	)
-connection( 
-	"Northwind",
-	ConnectionType: SqlConnection,
-	ConnectionString: "Data Source=localhost;Initial Catalog=Northwind; Integrated Security=SSPI;"
-	)	
+	
 	
 source CustomersFile:
 	execute:
-		for customer in super.Read(typeof(Customers)).From("""Files\CustomersTab.txt"""):
+		file = Read(typeof(Customers)).From("""Files\CustomersTab.txt""")
+		for customer in file:
 			SendRow( Row( 
 				CustomerId: customer.CustomerID, 
 				CompanyName: customer.CompanyName,
 				ContactName: customer.ContactName
 				)) 
+		file.Dispose()
 
-source OrdersFromDatabase, Connection="Northwind":
+source OrdersFromDatabase, Connection="Database":
 	Command: "SELECT * FROM Orders"
 	
 join CustomersAndOrders:
@@ -37,7 +35,7 @@ join CustomersAndOrders:
 		Row.CompanyName = Left.CompanyName
 		Row.ContactName = Left.ContactName
 		
-destination Final, Connection="DestinationDB":
+destination Final, Connection="Database":
 	Command: "INSERT INTO OrdersWareHousing VALUES(@OrderID, @CompanyName,@ContactName)"
 		
 pipeline OrdersWareHouse:

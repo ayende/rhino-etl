@@ -18,7 +18,6 @@ namespace Rhino.ETL
 		[CLSCompliant(false)]
 		protected IDictionary<string, ICallable> commandParameters;
 
-		protected ICallable blockToExecute;
 
 		public BaseDataElement(string name)
 		{
@@ -73,11 +72,13 @@ namespace Rhino.ETL
 
 		public bool TryAcquireConnection(Pipeline pipeline)
 		{
-			if (blockToExecute != null)//no need to grab connection
+			if (CustomActionSpecified)//no need to grab connection
 				return true;
 			SetDbConnection(pipeline, ConnectionInstance.TryAcquire());
 			return GetDbConnection(pipeline) != null;
 		}
+
+		protected abstract bool CustomActionSpecified { get; }
 
 		protected IDbConnection GetDbConnection(Pipeline pipeline)
 		{
@@ -130,23 +131,11 @@ namespace Rhino.ETL
 			Parameters(block);
 		}
 
-		[Meta]
-		public void Execute(ICallable block)
-		{
-			blockToExecute = block;
-		}
-
-		[Meta]
-		public void execute(ICallable block)
-		{
-			Execute(block);
-		}
-
 		public void Validate(ICollection<string> messages)
 		{
 			bool hasConnection = EtlConfigurationContext.Current.Connections.ContainsKey(Connection);
 			if (hasConnection == false &&
-				blockToExecute == null)//we assume that a block to execute would not use a standard connection
+				CustomActionSpecified==false)//we assume that a block to execute would not use a standard connection
 			{
 				string msg = string.Format("Could not find connection '{0}' in context '{1}'", Connection, EtlConfigurationContext.Current.Name);
 				Logger.WarnFormat("{0} failed validation: {1}", Name, msg);
@@ -156,7 +145,7 @@ namespace Rhino.ETL
 
 		public void PerformSecondStagePass()
 		{
-			if (blockToExecute != null)
+			if (CustomActionSpecified)
 				return;
 			connectionInstance = EtlConfigurationContext.Current.Connections[Connection];
 		}

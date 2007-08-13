@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Boo.Lang;
 
 namespace Rhino.ETL
 {
@@ -10,10 +11,36 @@ namespace Rhino.ETL
 		private int batchSize = 500;
 		private List<Row> rows = new List<Row>();
 		private bool hasCompleted = false;
+		private bool firstCall = true;
+		private ICallable initializeBlock, onRowBlock, cleanUpBlock;
+
+		public ICallable InitializeBlock
+		{
+			get { return initializeBlock; }
+			set { initializeBlock = value; }
+		}
+
+		public ICallable OnRowBlock
+		{
+			get { return onRowBlock; }
+			set { onRowBlock = value; }
+		}
+
+		public ICallable CleanUpBlock
+		{
+			get { return cleanUpBlock; }
+			set { cleanUpBlock = value; }
+		}
+
+		protected override bool CustomActionSpecified
+		{
+			get { return onRowBlock != null; }
+		}
 
 		public event OutputCompleted Completed = delegate { };
 
-		public DataDestination(string name) : base(name)
+		public DataDestination(string name)
+			: base(name)
 		{
 			EtlConfigurationContext.Current.AddDestination(name, this);
 		}
@@ -28,6 +55,14 @@ namespace Rhino.ETL
 		{
 			lock (rows)
 			{
+				if (firstCall && initializeBlock != null)
+				{
+					lock (onRowBlock)
+					{
+						initializeBlock.Call(new object[] { Items });
+					}
+				}
+				firstCall = false;
 				if (hasCompleted)
 					throw new InvalidOperationException("Cannot process rows to a destination after it has been marked complete");
 				rows.Add(row);
@@ -45,6 +80,14 @@ namespace Rhino.ETL
 				hasCompleted = true;
 			}
 			ProcessOutput(key.Pipeline); //flush any additional output
+			if (onRowBlock != null)
+			{
+				lock (onRowBlock)
+				{
+					if (cleanUpBlock != null)
+						cleanUpBlock.Call(new object[] { Items });
+				}
+			}
 			Completed(this, key);
 		}
 
@@ -56,7 +99,24 @@ namespace Rhino.ETL
 				copyRows = rows;
 				rows = new List<Row>();
 			}
+			if (CustomActionSpecified == false)
+			{
+				SendToDatabase(copyRows, pipeline);
+			}
+			else
+			{
+				lock (onRowBlock)
+				{
+					foreach (Row copyRow in copyRows)
+					{
+						onRowBlock.Call(new object[] { Items, copyRow });
+					}
+				}
+			}
+		}
 
+		private void SendToDatabase(List<Row> copyRows, Pipeline pipeline)
+		{
 			foreach (Row row in copyRows)
 			{
 				using (IDbCommand command = GetDbConnection(pipeline).CreateCommand())

@@ -130,6 +130,9 @@
     <None Include="Files\FromFile.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\ToFile.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Integration\Database.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
