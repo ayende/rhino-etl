@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Transactions;
 using Boo.Lang;
@@ -29,6 +30,7 @@ namespace Rhino.ETL.Engine
 			get { return name; }
 		}
 
+		[ReadOnly(false)]
 		public TimeSpan TimeOut
 		{
 			get { return timeOut; }

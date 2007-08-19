@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using Rhino.ETL.UI.Model;
 
 namespace Rhino.ETL.UI.Commands
 {
@@ -11,8 +12,8 @@ namespace Rhino.ETL.UI.Commands
 		public override void Execute()
 		{
 			Document d = new Document();
-			d.MdiParent = Parent;
-			d.Show();
+			d.InputSource = RetlProject.Instance.AddDocument(d);
+			d.Show(Parent.DockPanel);
 		}
 	}
 }

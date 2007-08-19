@@ -4,16 +4,16 @@ namespace Rhino.ETL.UI.Commands
 {
 	public abstract class AbstractUICommand
 	{
-		private readonly Form parent;
+		private readonly MainGui parent;
 
-		public Form Parent
+		public MainGui Parent
 		{
 			get { return parent; }
 		}
 
 		public abstract void Execute();
 
-		protected AbstractUICommand(Form mainGui)
+		protected AbstractUICommand(MainGui mainGui)
 		{
 			this.parent = mainGui;
 		}

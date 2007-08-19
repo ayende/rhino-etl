@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Threading;
@@ -45,13 +46,14 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddConnection(name, this);
 		}
 
-
+		[Browsable(false)]
 		public ICallable ConnectionStringGenerator
 		{
 			get { return connectionStringGenerator; }
 			set { connectionStringGenerator = value; }
 		}
 
+		[ReadOnly(true)]
 		public Type ConnectionType
 		{
 			get { return connectionType; }
@@ -63,6 +65,7 @@ namespace Rhino.ETL
 			get { return name; }
 		}
 
+		[ReadOnly(true)]
 		public string ConnectionString
 		{
 			get
@@ -85,12 +88,14 @@ namespace Rhino.ETL
 			set { connectionString = value; }
 		}
 
+		[ReadOnly(true)]
 		public string ConnectionStringName
 		{
 			get { return connectionStringName; }
 			set { connectionStringName = value; }
 		}
 
+		[ReadOnly(true)]
 		public int ConcurrentConnections
 		{
 			get { return concurrentConnections; }

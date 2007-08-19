@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Boo.Lang;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
@@ -26,6 +27,7 @@ namespace Rhino.ETL
 			get { return queuesManager; }
 		}
 
+		[Browsable(false)]
 		public ICallable Condition
 		{
 			get { return condition; }

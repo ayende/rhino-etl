@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Transactions;
@@ -33,10 +34,10 @@ namespace Rhino.ETL
 		public static EtlConfigurationContext FromFile(string filename)
 		{
 			string rootName = Path.GetFileNameWithoutExtension(filename);
-			return BuildAndConfigure(rootName, new FileInput(filename));
+			return From(rootName, new FileInput(filename));
 		}
 
-		private static EtlConfigurationContext BuildAndConfigure(string rootName, params ICompilerInput[] inputs)
+		public static EtlConfigurationContext From(string rootName, params ICompilerInput[] inputs)
 		{
 			EtlConfigurationContext etlConfigurationContext;
 			try
@@ -79,7 +80,7 @@ namespace Rhino.ETL
 			compiler.Parameters.References.Add(typeof(System.Data.DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
 			compiler.Parameters.References.Add(typeof (FileHelpers.CsvEngine).Assembly);
-			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports));
+			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports, rootName));
 			compiler.Parameters.Pipeline.Insert(10, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
 			if (run.Errors.Count != 0)

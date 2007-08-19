@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Boo.Lang.Compiler.Ast;
 using Boo.Lang.Compiler.Steps;
 
@@ -5,33 +6,31 @@ namespace Rhino.ETL.Impl
 {
 	public class TransformModuleToContextClass : AbstractNamespaceSensitiveVisitorCompilerStep
 	{
-		private string[] imports;
+		private readonly string[] imports;
 
-		public TransformModuleToContextClass(string[] imports)
+		private readonly string finalName;
+
+		public TransformModuleToContextClass(string[] imports, string finalName)
 		{
 			this.imports = imports;
+			this.finalName = finalName;
 		}
 
 		public override void Run()
 		{
-			Visit(CompileUnit);
-		}
+			Visit(this.CompileUnit);
 
-		public override void OnModule(Module module)
-		{
-			foreach (string theNamespace in imports)
-			{
-				Import import = new Import();
-				import.Namespace = theNamespace;
-				module.Imports.Add(import);
-			}
 			ClassDefinition definition = new ClassDefinition();
-			definition.Name = module.FullName;
+			definition.Name = finalName;
 			definition.BaseTypes.Add(new SimpleTypeReference(typeof(EtlConfigurationContext).FullName));
 			Method method = new Method("BuildConfig");
-			method.Body = module.Globals;
-			module.Globals = new Block();
 			definition.Members.Add(method);
+
+			foreach (Module module in this.CompileUnit.Modules)
+			{
+				method.Body.Add(module.Globals);
+				module.Globals= new Block();
+			}
 
 			Property property = new Property("Name");
 			property.Getter = new Method("getter_Name");
@@ -41,8 +40,16 @@ namespace Rhino.ETL.Impl
 					)
 				);
 			definition.Members.Add(property);
-
-			module.Members.Add(definition);
+			CompileUnit.Modules[0].Members.Add(definition);
+		}
+		public override void OnModule(Module module)
+		{
+			foreach (string theNamespace in imports)
+			{
+				Import import = new Import();
+				import.Namespace = theNamespace;
+				module.Imports.Add(import);
+			}
 		}
 	}
 }

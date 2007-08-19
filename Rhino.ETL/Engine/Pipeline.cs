@@ -9,13 +9,13 @@ namespace Rhino.ETL
 {
 	public class Pipeline : ContextfulObjectBase<Pipeline>
 	{
-		private IList<PipelineAssociation> associations = new List<PipelineAssociation>();
+		private readonly IList<PipelineAssociation> associations = new List<PipelineAssociation>();
 
 		public delegate void PipelineCompleted(Pipeline completed);
 
 		public event PipelineCompleted Completed = delegate { };
 
-		private string name;
+		private readonly string name;
 		private CountdownLatch destinationToComplete;
 
 		public Pipeline(string name)

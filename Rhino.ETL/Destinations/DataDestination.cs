@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using Boo.Lang;
 
@@ -14,18 +15,21 @@ namespace Rhino.ETL
 		private bool firstCall = true;
 		private ICallable initializeBlock, onRowBlock, cleanUpBlock;
 
+		[Browsable(false)]
 		public ICallable InitializeBlock
 		{
 			get { return initializeBlock; }
 			set { initializeBlock = value; }
 		}
 
+		[Browsable(false)]
 		public ICallable OnRowBlock
 		{
 			get { return onRowBlock; }
 			set { onRowBlock = value; }
 		}
-
+		
+		[Browsable(false)]
 		public ICallable CleanUpBlock
 		{
 			get { return cleanUpBlock; }
@@ -45,6 +49,7 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddDestination(name, this);
 		}
 
+		[ReadOnly(true)]
 		public int BatchSize
 		{
 			get { return batchSize; }
@@ -115,7 +120,7 @@ namespace Rhino.ETL
 			}
 		}
 
-		private void SendToDatabase(List<Row> copyRows, Pipeline pipeline)
+		private void SendToDatabase(IEnumerable<Row> copyRows, Pipeline pipeline)
 		{
 			foreach (Row row in copyRows)
 			{

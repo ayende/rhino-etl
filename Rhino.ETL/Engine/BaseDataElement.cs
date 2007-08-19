@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using Boo.Lang;
 using Boo.Lang.Compiler.MetaProgramming;
@@ -47,12 +48,14 @@ namespace Rhino.ETL
 			}
 		}
 
+		[ReadOnly(true)]
 		public string Connection
 		{
 			get { return connection ?? Name; }
 			set { connection = value; }
 		}
 
+		[Browsable(false)]
 		[CLSCompliant(false)]
 		public ICallable CommandGenerator
 		{
@@ -100,6 +103,7 @@ namespace Rhino.ETL
 			ConnectionInstance.Release(GetDbConnection(pipeline));
 		}
 
+		[ReadOnly(true)]
 		public string Command
 		{
 			get

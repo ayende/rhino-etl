@@ -13,9 +13,10 @@ namespace Rhino.ETL.UI.Controls
 		public CommandAwareToolStripMenuItem()
 		{
 			this.Click += delegate
-			              	{
-								CommandDispatcher.Dispatch(Command);
-			              	};
+							{
+								if (Command != null)
+									CommandDispatcher.Dispatch(Command);
+							};
 		}
 
 		public string Command

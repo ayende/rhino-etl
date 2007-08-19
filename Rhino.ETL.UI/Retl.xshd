@@ -231,7 +231,7 @@
 				<Key word="yieldAll" />
 			</KeyWords>
 
-			<KeyWords name="RhinoEtlMacros" bold="false" italic="false" color="DarkOrange" >
+			<KeyWords name="RhinoEtlMacros" bold="true" italic="false" color="DarkOrange" >
 				<Key word="target"/>
 				<Key word="connection"/>
 				<Key word="source"/>
