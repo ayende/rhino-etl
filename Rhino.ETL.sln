@@ -14,6 +14,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL", "Rhino.ETL\Rhin
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.UI", "Rhino.ETL.UI\Rhino.ETL.UI.csproj", "{34273260-13C8-4E3F-836B-651BEDA01DC1}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.Cmd", "Rhino.Etl.Cmd\Rhino.ETL.Cmd.csproj", "{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +43,10 @@ Global
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

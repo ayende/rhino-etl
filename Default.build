@@ -24,5 +24,33 @@
 	<ItemGroup>
 		<TestAssembly Include="$(MSBuildProjectDirectory)\Rhino.ETL.Tests\bin\$(Configuration)\Rhino.ETL.Tests.dll"/>
 	</ItemGroup>
+
+  <ItemGroup>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\Rhino.ETL.Cmd.exe"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\Rhino.ETL.dll"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\Boo.Lang.dll"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\Boo.Lang.Parser.dll"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\Boo.Lang.Compiler.dll"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\log4net.dll"/>
+		<ZipFiles Include="$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\bin\$(Configuration)\FileHelpers.dll"/>
+	</ItemGroup>
 	
+	<Target Name="BeforeZip">	
+			<ILMerge
+				ToolPath="$(SharedLibsDir)\Tools\"
+				InputAssemblies="$(MSBuildProjectDirectory)\Rhino.Etl.Cmd\bin\$(Configuration)\Rhino.Etl.Cmd.exe;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\Rhino.ETL.dll;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\log4net.dll;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\FileHelpers.dll;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\Boo.Lang.Parser.dll;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\Boo.Lang.Compiler.dll;
+				    $(MSBuildProjectDirectory)\Rhino.Etl\bin\$(Configuration)\Boo.Lang.dll;"
+        ExcludeFile="$(MSBuildProjectDirectory)\ilmerge.exclude"
+        OutputFile="$(MSBuildProjectDirectory)\RunEtl.exe"
+        LogFile="$(logFile)"
+        DebugInfo="true"
+        XmlDocumentation="true"
+        KeyFile="$(SharedLibsDir)\..\ayende-open-source.snk"
+        />
+	</Target>
 </Project>
