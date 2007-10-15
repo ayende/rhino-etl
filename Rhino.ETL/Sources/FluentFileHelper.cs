@@ -7,7 +7,7 @@ namespace Rhino.ETL
 {
 	public class FluentFileHelper
 	{
-		private FileHelperAsyncEngine engine;
+		private readonly FileHelperAsyncEngine engine;
 
 		public FluentFileHelper(Type type)
 		{
@@ -47,6 +47,22 @@ namespace Rhino.ETL
 			public void Write(object t)
 			{
 				engine.WriteNext(t);
+			}
+
+			public NicerSyntaxAdapter OnError(ErrorMode errorMode)
+			{
+				engine.ErrorMode = errorMode;
+				return this;
+			}
+
+			public bool HasErrors
+			{
+				get { return engine.ErrorManager.HasErrors;  }
+			}
+
+			public void OutputErrors(string file)
+			{
+				engine.ErrorManager.SaveErrors(file);
 			}
 
 			public void Dispose()

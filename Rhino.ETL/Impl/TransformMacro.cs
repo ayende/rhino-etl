@@ -2,7 +2,9 @@ using Boo.Lang.Compiler.Ast;
 
 namespace Rhino.ETL.Impl
 {
-    public class TransformMacro : AbstractNamedMacro
+	using Engine;
+
+	public class TransformMacro : AbstractNamedMacro
     {
     	public override Statement Expand(MacroStatement macro)
         {

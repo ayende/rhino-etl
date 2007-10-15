@@ -6,6 +6,8 @@ using MbUnit.Framework;
 
 namespace Rhino.ETL.Tests.Transforms
 {
+	using Engine;
+
 	[TestFixture]
 	public class TransformFixture : BaseTest
 	{

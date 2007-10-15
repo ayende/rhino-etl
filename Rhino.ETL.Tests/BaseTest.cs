@@ -3,7 +3,9 @@ using System.IO;
 
 namespace Rhino.ETL.Tests
 {
-    public class BaseTest
+	using Engine;
+
+	public class BaseTest
     {
         /// <summary>
         /// Builds the context.

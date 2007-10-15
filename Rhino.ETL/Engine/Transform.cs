@@ -3,7 +3,7 @@ using System.Collections;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Impl;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	public abstract class Transform : TransformationBase<Transform>, IInputOutput
 	{

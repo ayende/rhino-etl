@@ -3,6 +3,8 @@ using System.Collections;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class TestPipeLineStage : PipeLineStage
 	{
 		public TestPipeLineStage(Pipeline pipeline, string incoming, IOutput output, string outgoing, int batchSize, IDictionary parameters) : base(pipeline, incoming, output, outgoing, batchSize, parameters)

@@ -1,26 +1,30 @@
-using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Web.Services;
-using System.Web.Services.Description;
-using System.Web.Services.Protocols;
-using System.Xml.Serialization;
-using Boo.Lang;
-using Boo.Lang.Runtime;
-using Rhino.ETL.Exceptions;
-
 namespace Rhino.ETL.Engine
 {
+	using System;
+	using System.CodeDom;
+	using System.CodeDom.Compiler;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.IO;
+	using System.Net;
+	using System.Reflection;
+	using System.Text;
+	using System.Web.Services;
+	using System.Web.Services.Description;
+	using System.Xml.Serialization;
+	using Boo.Lang;
+	using Boo.Lang.Runtime;
+	using Exceptions;
+	using Microsoft.CSharp;
+
 	[WebServiceBinding()]
 	public class WebService : IQuackFu
 	{
-		private string wsdlUrl;
+		private static Dictionary<string, KeyValuePair<Assembly, string>> urlToAssembliesCache = new Dictionary<string, KeyValuePair<Assembly, string>>();
+
+		private ICredentials credentials;
 		private object instance;
+		private string wsdlUrl;
 
 		public object Instance
 		{
@@ -32,11 +36,19 @@ namespace Rhino.ETL.Engine
 			}
 		}
 
+		public ICredentials Credentials
+		{
+			get { return credentials; }
+			set { credentials = value; }
+		}
+
 		public string WsdlUrl
 		{
 			get { return wsdlUrl; }
 			set { wsdlUrl = value; }
 		}
+
+		#region IQuackFu Members
 
 		public object QuackGet(string name, object[] parameters)
 		{
@@ -48,7 +60,7 @@ namespace Rhino.ETL.Engine
 		public object QuackSet(string name, object[] parameters, object value)
 		{
 			if ("WsdlUrl".Equals(name, StringComparison.InvariantCultureIgnoreCase))
-				WsdlUrl = (string) value;
+				WsdlUrl = (string)value;
 			return RuntimeServices.SetProperty(Instance, name, value);
 		}
 
@@ -57,6 +69,7 @@ namespace Rhino.ETL.Engine
 			return RuntimeServices.Invoke(Instance, name, args);
 		}
 
+		#endregion
 
 		private object CreateInstance()
 		{
@@ -65,10 +78,43 @@ namespace Rhino.ETL.Engine
 				throw new InvalidWebServiceException("You must specify the 'WsdlUrl' for the web service");
 			}
 
+
+			object createdInstance = GetCreatedInstance();
+
+			createdInstance.GetType()
+				.GetProperty("Credentials")
+				.SetValue(createdInstance, Credentials, null);
+			return createdInstance;
+		}
+
+		private object GetCreatedInstance()
+		{
+			KeyValuePair<Assembly, string> value;
+			if (urlToAssembliesCache.TryGetValue(WsdlUrl, out value) == false)
+			{
+				lock (urlToAssembliesCache)
+				{
+					if (urlToAssembliesCache.TryGetValue(WsdlUrl, out value) == false)
+					{
+						string serviceName;
+						Assembly tmpAssembly = GetWsdlAndCreateAssembly(out serviceName);
+						value = new KeyValuePair<Assembly, string>(tmpAssembly, serviceName);
+						urlToAssembliesCache.Add(WsdlUrl, value);
+					}
+				}
+			}
+
+			Assembly asm = value.Key;
+			string srvName = value.Value;
+			return Activator.CreateInstance(asm.GetType(srvName));
+		}
+
+		private Assembly GetWsdlAndCreateAssembly(out string sdName)
+		{
 			Uri uri = new Uri(WsdlUrl);
 
 			WebRequest webRequest = WebRequest.Create(uri);
-
+			webRequest.Credentials = Credentials;
 			ServiceDescription sd;
 
 			try
@@ -79,10 +125,10 @@ namespace Rhino.ETL.Engine
 			}
 			catch (WebException e)
 			{
-				using(Stream stream = e.Response.GetResponseStream())
+				using (Stream stream = e.Response.GetResponseStream())
 				{
 					StreamReader sr = new StreamReader(stream);
-					throw new InvalidWebServiceException("Could not get WSDL for url '" + WsdlUrl + "'. Server reply was: "+ sr.ReadToEnd(), e);
+					throw new InvalidWebServiceException("Could not get WSDL for url '" + WsdlUrl + "'. Server reply was: " + sr.ReadToEnd(), e);
 				}
 			}
 			catch (Exception e)
@@ -90,7 +136,7 @@ namespace Rhino.ETL.Engine
 				throw new InvalidWebServiceException("Could not get WSDL for url '" + WsdlUrl + "'", e);
 			}
 
-			string sdName = sd.Services[0].Name;
+			sdName = sd.Services[0].Name;
 
 			ServiceDescriptionImporter servImport = new ServiceDescriptionImporter();
 			servImport.AddServiceDescription(sd, String.Empty, String.Empty);
@@ -105,8 +151,8 @@ namespace Rhino.ETL.Engine
 			if (warnings != 0)
 				throw new InvalidWebServiceException("Could not generate proxy from '" + WsdlUrl + "' because: " + warnings);
 
-			StringWriter stringWriter = new StringWriter(System.Globalization.CultureInfo.CurrentCulture);
-			Microsoft.CSharp.CSharpCodeProvider prov = new Microsoft.CSharp.CSharpCodeProvider();
+			StringWriter stringWriter = new StringWriter(CultureInfo.CurrentCulture);
+			CSharpCodeProvider prov = new CSharpCodeProvider();
 			prov.GenerateCodeFromNamespace(nameSpace, stringWriter, new CodeGeneratorOptions());
 			CompilerParameters param = new CompilerParameters(new string[]
 			                                                  	{
@@ -130,9 +176,7 @@ namespace Rhino.ETL.Engine
 				}
 				throw new InvalidWebServiceException(sb.ToString());
 			}
-			Assembly assembly = results.CompiledAssembly;
-
-			return Activator.CreateInstance(assembly.GetType(sdName));
+			return results.CompiledAssembly;
 		}
 	}
 }

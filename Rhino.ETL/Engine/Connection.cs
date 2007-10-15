@@ -7,7 +7,7 @@ using System.Threading;
 using Boo.Lang;
 using log4net;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	public class Connection
 	{

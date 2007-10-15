@@ -12,9 +12,11 @@ using Rhino.ETL.Impl;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class EtlContextBuilder
 	{
-		private static ILog logger = LogManager.GetLogger(typeof (EtlContextBuilder));
+		private static readonly ILog logger = LogManager.GetLogger(typeof (EtlContextBuilder));
 
 		private static readonly string[] defaultImports = {
 		                                                  	"System",

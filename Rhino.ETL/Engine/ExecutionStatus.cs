@@ -1,4 +1,4 @@
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	public enum ExecutionStatus
 	{

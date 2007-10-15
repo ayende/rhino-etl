@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.WebHost;
 
 namespace Rhino.ETL.Tests.Integration
 {
+	using Engine;
+
 	[TestFixture]
 	public class IntegrationTests : IntegrationTestBase
 	{

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class TestOutput : IOutput
 	{
 		private Dictionary<string, bool> completedActions = new Dictionary<string, bool>();

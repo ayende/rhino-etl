@@ -8,6 +8,8 @@ using Boo.Lang.Compiler.IO;
 
 namespace Rhino.ETL.UI.Model
 {
+	using Engine;
+
 	public class RetlProject
 	{
 
@@ -92,7 +94,8 @@ namespace Rhino.ETL.UI.Model
 			string path = Path.GetFullPath(fileName);
 			foreach (InputSource file in sources)
 			{
-				if(file.FileInfo.FullName.Equals(path,StringComparison.InvariantCultureIgnoreCase))
+				if(file.FileInfo != null && 
+					file.FileInfo.FullName.Equals(path,StringComparison.InvariantCultureIgnoreCase))
 					return file;
 			}
 			InputSource source = new InputSource(null, new FileInfo(fileName));

@@ -1,5 +1,7 @@
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public interface IConnectionUser
 	{
 		Connection ConnectionInstance { get; }

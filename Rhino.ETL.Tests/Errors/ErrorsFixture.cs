@@ -7,6 +7,8 @@ using System.IO;
 
 namespace Rhino.ETL.Tests.Errors
 {
+	using Engine;
+
 	[TestFixture]
 	public class ErrorsFixture : BaseTest
 	{

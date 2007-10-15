@@ -3,6 +3,8 @@ using System.Collections;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class TransformationBase<T> : ContextfulObjectBase<T>
 		where T : TransformationBase<T>
 	{

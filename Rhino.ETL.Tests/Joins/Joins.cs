@@ -6,6 +6,8 @@ using Rhino.ETL.Tests.Integration;
 
 namespace Rhino.ETL.Tests.Joins
 {
+	using Engine;
+
 	[TestFixture]
 	public class Joins : BaseTest
 	{

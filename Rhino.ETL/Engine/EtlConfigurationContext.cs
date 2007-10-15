@@ -1,27 +1,33 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using log4net;
-using log4net.Core;
-using Rhino.ETL.Engine;
-using Rhino.ETL.Exceptions;
-
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
+	using System;
+	using System.Collections.Generic;
+	using Exceptions;
+	using log4net;
+
 	public abstract class EtlConfigurationContext : ContextfulObjectBase<EtlConfigurationContext>
 	{
-		private IDictionary<string, Connection> connections;
-		private IDictionary<string, DataSource> sources;
-		private IDictionary<string, DataDestination> destinations;
-		private IDictionary<string, Join> joins;
-		private IDictionary<string, Transform> transforms;
-		private IDictionary<string, Pipeline> pipelines;
-		private IDictionary<string, Target> targets;
+		private readonly IDictionary<string, Connection> connections;
+		private readonly IDictionary<string, DataSource> sources;
+		private readonly IDictionary<string, DataDestination> destinations;
+		private readonly IDictionary<string, Join> joins;
+		private readonly IDictionary<string, Transform> transforms;
+		private readonly IDictionary<string, Pipeline> pipelines;
+		private readonly IDictionary<string, Target> targets;
 		private List<string> validationMessages = new List<string>();
+
+		private ILog log;
+		private List<string> errors = new List<string>();
+
+		public ILog Log
+		{
+			get { return log; }
+		}
 
 		public EtlConfigurationContext()
 		{
+			log = LogManager.GetLogger(GetType());
+
 			connections = new Dictionary<string, Connection>(StringComparer.InvariantCultureIgnoreCase);
 			sources = new Dictionary<string, DataSource>(StringComparer.InvariantCultureIgnoreCase);
 			transforms = new Dictionary<string, Transform>(StringComparer.InvariantCultureIgnoreCase);
@@ -125,6 +131,11 @@ namespace Rhino.ETL
 			get { return validationMessages; }
 		}
 
+		public List<string> Errors
+		{
+			get { return errors; }
+		}
+
 		public void AddPipeline(string name, Pipeline pipeline)
 		{
 			if (pipelines.ContainsKey(name))
@@ -169,6 +180,12 @@ namespace Rhino.ETL
 				}
 			}
 			return new ExecutionPackage(this);
+		}
+
+		public void AddError(string error)
+		{
+			Log.Error(error);
+			errors.Add(error);
 		}
 
 		public FluentFileHelper Read(Type type)

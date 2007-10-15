@@ -3,6 +3,8 @@ using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL.Tests
 {
+	using Engine;
+
 	[TestFixture]
 	public class ValidationsFixture : BaseTest
 	{

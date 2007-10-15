@@ -5,7 +5,7 @@ using System.Diagnostics;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	[DebuggerDisplay("Assoication: {From}.{FromQueue} >> {To}.{ToQueue}")]
 	public class PipelineAssociation
@@ -16,7 +16,7 @@ namespace Rhino.ETL
 		private string toQueue;
 		private AssociationType fromType;
 		private AssociationType toType;
-		private IDictionary parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+		private readonly IDictionary parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 		private IInput fromInstance;
 		private IOutput toInstance;
 
@@ -83,7 +83,7 @@ namespace Rhino.ETL
 			    (associationType == AssociationType.Any || associationType == AssociationType.Transforms))
 				count += 1;
 			if (EtlConfigurationContext.Current.Joins.ContainsKey(name) &&
-				(associationType == AssociationType.Any || associationType == AssociationType.Joins))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Joins))
 				count += 1;
 
 			if (count == 0)
@@ -139,7 +139,7 @@ namespace Rhino.ETL
 				obj = EtlConfigurationContext.Current.Transforms[name] as T;
 			}
 			if (EtlConfigurationContext.Current.Joins.ContainsKey(name) &&
-				(associationType == AssociationType.Any || associationType == AssociationType.Joins))
+			    (associationType == AssociationType.Any || associationType == AssociationType.Joins))
 			{
 				obj = EtlConfigurationContext.Current.Joins[name] as T;
 			}
@@ -151,24 +151,24 @@ namespace Rhino.ETL
 			return obj;
 		}
 
-	    public void ConnectEnds(Target target,Pipeline pipeline)
-	    {
-	    	string destinationQueue = ToQueue ?? DefaultQueue;
-	    	FromInstance.RegisterForwarding(
+		public void ConnectEnds(Target target,Pipeline pipeline)
+		{
+			string destinationQueue = ToQueue ?? DefaultQueue;
+			FromInstance.RegisterForwarding(
 				target,
-	    		new PipeLineStage(
+				new PipeLineStage(
 					pipeline,
 					FromQueue ?? DefaultQueue,
-	    			ToInstance,
+					ToInstance,
 					destinationQueue, 500, Parameters)
-					);
-	    	ToInstance.Completed += delegate(IOutput output, QueueKey key)
-	    	{
+				);
+			ToInstance.Completed += delegate(IOutput output, QueueKey key)
+			{
 				if (destinationQueue.Equals(key.Name, StringComparison.InvariantCultureIgnoreCase))
-	    			Completed(this);
-	    	};
-	    }
+					Completed(this);
+			};
+		}
 
-        private const string DefaultQueue = "Output";
+		private const string DefaultQueue = "Output";
 	}
 }

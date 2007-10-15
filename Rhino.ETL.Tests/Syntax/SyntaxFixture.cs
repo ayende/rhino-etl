@@ -3,6 +3,8 @@ using MbUnit.Framework;
 
 namespace Rhino.ETL.Tests.EndToEnd
 {
+	using Engine;
+
 	[TestFixture]
 	public class SyntaxFixture : BaseTest
 	{

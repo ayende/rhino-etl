@@ -59,6 +59,7 @@
     <Compile Include="BooBinding\BooFormattingStrategy.cs" />
     <Compile Include="Commands\ExecuteProject.cs" />
     <Compile Include="Commands\OpenFile.cs" />
+    <Compile Include="Commands\SaveFile.cs" />
     <Compile Include="Controls\CommandAwareToolStripButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -158,6 +159,9 @@
       <Project>{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}</Project>
       <Name>Rhino.ETL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

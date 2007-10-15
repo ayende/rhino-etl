@@ -7,6 +7,8 @@ using Boo.Lang;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class DataDestination : BaseDataElement<DataDestination>, IOutput
 	{
 		private int batchSize = 500;

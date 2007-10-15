@@ -51,6 +51,9 @@ namespace Rhino.ETL.UI
 			this.aboutToolStripMenuItem = new Rhino.ETL.UI.Controls.CommandAwareToolStripMenuItem();
 			this.developToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.addPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addDocsViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addLiveViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.newToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
 			this.openToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
@@ -59,9 +62,6 @@ namespace Rhino.ETL.UI
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.DockPanel = new WeifenLuo.WinFormsUI.DockPanel();
-			this.addPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.addDocsViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.addLiveViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -104,7 +104,7 @@ namespace Rhino.ETL.UI
 			this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
 			this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.newToolStripMenuItem.Text = "&New";
 			// 
 			// openToolStripMenuItem
@@ -114,35 +114,35 @@ namespace Rhino.ETL.UI
 			this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			// 
 			// toolStripSeparator
 			// 
 			this.toolStripSeparator.Name = "toolStripSeparator";
-			this.toolStripSeparator.Size = new System.Drawing.Size(137, 6);
+			this.toolStripSeparator.Size = new System.Drawing.Size(149, 6);
 			// 
 			// saveToolStripMenuItem
 			// 
-			this.saveToolStripMenuItem.Command = null;
+			this.saveToolStripMenuItem.Command = "SaveFile";
 			this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
 			this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			// 
 			// saveAsToolStripMenuItem
 			// 
 			this.saveAsToolStripMenuItem.Command = null;
 			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.saveAsToolStripMenuItem.Text = "Save &As";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(137, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
 			// 
 			// printToolStripMenuItem
 			// 
@@ -151,7 +151,7 @@ namespace Rhino.ETL.UI
 			this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.printToolStripMenuItem.Name = "printToolStripMenuItem";
 			this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.printToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.printToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.printToolStripMenuItem.Text = "&Print";
 			// 
 			// printPreviewToolStripMenuItem
@@ -160,19 +160,19 @@ namespace Rhino.ETL.UI
 			this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
 			this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(137, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Command = null;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			// 
 			// toolsToolStripMenuItem
@@ -239,6 +239,27 @@ namespace Rhino.ETL.UI
 			this.saveToolStripMenuItem1.Text = "&Save Window Layout";
 			this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
 			// 
+			// addPropertiesToolStripMenuItem
+			// 
+			this.addPropertiesToolStripMenuItem.Name = "addPropertiesToolStripMenuItem";
+			this.addPropertiesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+			this.addPropertiesToolStripMenuItem.Text = "Add Properties";
+			this.addPropertiesToolStripMenuItem.Click += new System.EventHandler(this.addPropertiesToolStripMenuItem_Click);
+			// 
+			// addDocsViewToolStripMenuItem
+			// 
+			this.addDocsViewToolStripMenuItem.Name = "addDocsViewToolStripMenuItem";
+			this.addDocsViewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+			this.addDocsViewToolStripMenuItem.Text = "Add Docs View";
+			this.addDocsViewToolStripMenuItem.Click += new System.EventHandler(this.addDocsViewToolStripMenuItem_Click);
+			// 
+			// addLiveViewToolStripMenuItem
+			// 
+			this.addLiveViewToolStripMenuItem.Name = "addLiveViewToolStripMenuItem";
+			this.addLiveViewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+			this.addLiveViewToolStripMenuItem.Text = "Add Live View";
+			this.addLiveViewToolStripMenuItem.Click += new System.EventHandler(this.addLiveViewToolStripMenuItem_Click);
+			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -276,7 +297,7 @@ namespace Rhino.ETL.UI
 			// 
 			// saveToolStripButton
 			// 
-			this.saveToolStripButton.Command = null;
+			this.saveToolStripButton.Command = "SaveFile";
 			this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.saveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripButton.Image")));
 			this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -317,27 +338,6 @@ namespace Rhino.ETL.UI
 			this.DockPanel.Name = "DockPanel";
 			this.DockPanel.Size = new System.Drawing.Size(630, 351);
 			this.DockPanel.TabIndex = 3;
-			// 
-			// addPropertiesToolStripMenuItem
-			// 
-			this.addPropertiesToolStripMenuItem.Name = "addPropertiesToolStripMenuItem";
-			this.addPropertiesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-			this.addPropertiesToolStripMenuItem.Text = "Add Properties";
-			this.addPropertiesToolStripMenuItem.Click += new System.EventHandler(this.addPropertiesToolStripMenuItem_Click);
-			// 
-			// addDocsViewToolStripMenuItem
-			// 
-			this.addDocsViewToolStripMenuItem.Name = "addDocsViewToolStripMenuItem";
-			this.addDocsViewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-			this.addDocsViewToolStripMenuItem.Text = "Add Docs View";
-			this.addDocsViewToolStripMenuItem.Click += new System.EventHandler(this.addDocsViewToolStripMenuItem_Click);
-			// 
-			// addLiveViewToolStripMenuItem
-			// 
-			this.addLiveViewToolStripMenuItem.Name = "addLiveViewToolStripMenuItem";
-			this.addLiveViewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-			this.addLiveViewToolStripMenuItem.Text = "Add Live View";
-			this.addLiveViewToolStripMenuItem.Click += new System.EventHandler(this.addLiveViewToolStripMenuItem_Click);
 			// 
 			// MainGui
 			// 

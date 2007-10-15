@@ -4,6 +4,8 @@ using MbUnit.Framework;
 
 namespace Rhino.ETL.Tests.Pipelines
 {
+	using Engine;
+
 	[TestFixture]
 	public class PipelineFixture : BaseTest
 	{

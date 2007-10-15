@@ -6,7 +6,7 @@ using Boo.Lang;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	public abstract class Join : TransformationBase<Join>, IInputOutput
 	{
@@ -79,7 +79,7 @@ namespace Rhino.ETL
 				}
 
 				if (queuesManager.IsCompleted(new QueueKey(LeftQueueName, key.Pipeline)) &&
-					queuesManager.IsCompleted(new QueueKey(RightQueueName, key.Pipeline)))
+				    queuesManager.IsCompleted(new QueueKey(RightQueueName, key.Pipeline)))
 				{
 					List<Row> left = queuesManager.GetQueue(new QueueKey(LeftQueueName, key.Pipeline));
 					List<Row> right = queuesManager.GetQueue(new QueueKey(RightQueueName, key.Pipeline));

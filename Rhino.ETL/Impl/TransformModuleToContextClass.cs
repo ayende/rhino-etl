@@ -4,6 +4,8 @@ using Boo.Lang.Compiler.Steps;
 
 namespace Rhino.ETL.Impl
 {
+	using Engine;
+
 	public class TransformModuleToContextClass : AbstractNamespaceSensitiveVisitorCompilerStep
 	{
 		private readonly string[] imports;

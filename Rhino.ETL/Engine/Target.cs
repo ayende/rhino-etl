@@ -1,22 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
-using System.Transactions;
-using Boo.Lang;
-using Boo.Lang.Compiler.MetaProgramming;
-using Rhino.Commons;
-using Rhino.ETL.Commands;
-using Rhino.ETL.Exceptions;
-
 namespace Rhino.ETL.Engine
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Transactions;
+	using Boo.Lang;
+	using Boo.Lang.Compiler.MetaProgramming;
+	using Commands;
+	using Exceptions;
+
 	public abstract class Target : ContextfulObjectBase<Target>
 	{
-		private string name;
+		private readonly string name;
 		private TimeSpan timeOut = TimeSpan.FromSeconds(5000);
 		private ICommandContainer container;
-		private List<Exception> exceptions = new List<Exception>();
+		private readonly List<Exception> exceptions = new List<Exception>();
 
 		public Target(string name)
 		{
@@ -144,10 +142,10 @@ namespace Rhino.ETL.Engine
 			container.ForceEndOfCompletionWithoutFurtherWait();
 		}
 
-		public ExecutionResult GetExecutionResult()
+		public ExecutionResult GetExecutionResult(EtlConfigurationContext configurationContext)
 		{
 			return new ExecutionResult(exceptions, 
-				IsFaulted ? ExecutionStatus.Failure : ExecutionStatus.Success);
+				IsFaulted ? ExecutionStatus.Failure : ExecutionStatus.Success, configurationContext.Errors);
 		}
 	}
 }

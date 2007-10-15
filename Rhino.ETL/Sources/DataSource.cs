@@ -11,8 +11,8 @@ namespace Rhino.ETL
 {
 	public class DataSource : BaseDataElement<DataSource>, IInput
 	{
-		private QueuesManager queueManager;
-		private string currentQueueKey = "Current.Queue.Key";
+		private readonly QueuesManager queueManager;
+		private readonly string currentQueueKey = "Current.Queue.Key";
 		private const string OutputQueueName = "Output";
 		protected ICallable blockToExecute;
 

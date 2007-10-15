@@ -5,6 +5,8 @@ using Boo.Lang.Compiler.TypeSystem;
 
 namespace Rhino.ETL.Impl
 {
+	using Engine;
+
 	public class PipelineMacro : AbstractNamedMacro
 	{
 		private static string[] associationTypeNames = Enum.GetNames(typeof (AssociationType));

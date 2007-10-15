@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using Rhino.ETL.Engine;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	/// <summary>
 	/// Manages actionsOnQueue and dispatch actions.
@@ -12,50 +12,50 @@ namespace Rhino.ETL
 	/// </summary>
 	public class QueuesManager
 	{
-        private string name;
-		private ILog logger;
-		Dictionary<QueueKey, List<Queue>> queueToOutputs = new Dictionary<QueueKey, List<Queue>>();
-		Dictionary<QueueKey, List<Row>> savedQueues = new Dictionary<QueueKey, List<Row>>();
-		Dictionary<QueueKey, bool> completedQueues = new Dictionary<QueueKey, bool>();
-		Dictionary<Pipeline, List<string>> outputQueuesNames = new Dictionary<Pipeline, List<string>>();
+		private readonly string name;
+		private readonly ILog logger;
+		readonly Dictionary<QueueKey, List<Queue>> queueToOutputs = new Dictionary<QueueKey, List<Queue>>();
+		readonly Dictionary<QueueKey, List<Row>> savedQueues = new Dictionary<QueueKey, List<Row>>();
+		readonly Dictionary<QueueKey, bool> completedQueues = new Dictionary<QueueKey, bool>();
+		readonly Dictionary<Pipeline, List<string>> outputQueuesNames = new Dictionary<Pipeline, List<string>>();
 
 		public QueuesManager(string name, ILog logger)
 		{
-	        this.name = name;
-		    this.logger = logger;
+			this.name = name;
+			this.logger = logger;
 		}
 
 		// Note: We assume registration is done before we start to actually run
-        // so we don't bother with thread safety here.
+		// so we don't bother with thread safety here.
 		public void RegisterForwarding(Target target,PipeLineStage pipeLineStage)
-	    {
-            if(queueToOutputs.ContainsKey(pipeLineStage.IncomingKey)==false)
+		{
+			if(queueToOutputs.ContainsKey(pipeLineStage.IncomingKey)==false)
 				queueToOutputs.Add(pipeLineStage.IncomingKey, new List<Queue>());
-        	Queue queue = new Queue(
+			Queue queue = new Queue(
 				pipeLineStage.Incoming, 
 				pipeLineStage.BatchSize,
 				pipeLineStage, target);
 			queueToOutputs[pipeLineStage.IncomingKey].Add(queue);
-            logger.DebugFormat("{0}.{1} registered for {1}.{2}", pipeLineStage.Output.Name, pipeLineStage.Outgoing, name, pipeLineStage.Incoming);
-	    }
+			logger.DebugFormat("{0}.{1} registered for {1}.{2}", pipeLineStage.Output.Name, pipeLineStage.Outgoing, name, pipeLineStage.Incoming);
+		}
 
 		public void Forward(QueueKey key, Row row)
-	    {
-	        List<Queue> destinations;
+		{
+			List<Queue> destinations;
 			if (queueToOutputs.TryGetValue(key, out destinations) == false)
-            {
+			{
 				logger.DebugFormat("No listeners to forward to in queue {0}", key.Name);
-                return;
-            }
+				return;
+			}
 			EnsureListedInOutputQueues(key);
 			//We send copies of the row to additional outputs, to prevent
-            //a case where both write to the same row
-	        for (int i = 1; i < destinations.Count; i++)
-	        {
-                destinations[i].Enqueue(row.Clone());	            
-	        }
-	        destinations[0].Enqueue(row);
-	    }
+			//a case where both write to the same row
+			for (int i = 1; i < destinations.Count; i++)
+			{
+				destinations[i].Enqueue(row.Clone());	            
+			}
+			destinations[0].Enqueue(row);
+		}
 
 		private void EnsureListedInOutputQueues(QueueKey key)
 		{
@@ -79,18 +79,18 @@ namespace Rhino.ETL
 		}
 
 		public void Complete(QueueKey key)
-	    {
+		{
 			List<Queue> destinations;
-            if (queueToOutputs.TryGetValue(key, out destinations) == false)
-            {
-                logger.DebugFormat("No listeners to mark complete to in queue {0}", key.Name);
-                return;
-            }
-        	foreach (Queue queue in destinations)
-        	{
-        		queue.Complete();
-        	}
-	    }
+			if (queueToOutputs.TryGetValue(key, out destinations) == false)
+			{
+				logger.DebugFormat("No listeners to mark complete to in queue {0}", key.Name);
+				return;
+			}
+			foreach (Queue queue in destinations)
+			{
+				queue.Complete();
+			}
+		}
 
 		public void Add(QueueKey key, Row row)
 		{

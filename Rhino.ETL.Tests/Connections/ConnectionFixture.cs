@@ -8,6 +8,8 @@ using MbUnit.Framework;
 
 namespace Rhino.ETL.Tests
 {
+	using Engine;
+
 	[TestFixture]
 	public class ConnectionFixture : BaseTest
 	{

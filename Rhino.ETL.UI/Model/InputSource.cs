@@ -21,7 +21,7 @@ namespace Rhino.ETL.UI.Model
 			{
 				if(Document != null)
 				{
-					string name = Regex.Replace(Document.DocumentName, @"#|$|\s", "");
+					string name = Regex.Replace(Document.Name, @"#|$|\s", "");
 					return new StringInput(name, Document.Code);
 				}
 				if(FileInfo!=null && FileInfo.Exists)

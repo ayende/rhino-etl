@@ -10,7 +10,10 @@ namespace Rhino.ETL.Cmd
         [Argument(ArgumentType.Required, HelpText = "Specify the .retl file to execute", ShortName = "f")]
         public string File;
 
-        [Argument(ArgumentType.AtMostOnce, HelpText = "Show log4net output to console.", ShortName = "v", DefaultValue = false)]
+		[Argument(ArgumentType.AtMostOnce, HelpText = "Specify the .config file to use", ShortName = "c")]
+        public string Config;
+
+        [Argument(ArgumentType.AtMostOnce, HelpText = "Show log4net output to console).", ShortName = "v", DefaultValue = false)]
         public bool Verbose;
     }
 }

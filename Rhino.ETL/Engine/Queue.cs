@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Rhino.ETL.Engine;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	/// <summary>
 	/// This simple class will batch actions on queues, and then execute them.
@@ -17,7 +17,7 @@ namespace Rhino.ETL
 		private readonly int batchSize;
 		private readonly PipeLineStage pipeLineStage;
 		private int currentlyProcessing = 0;
-		private Target target;
+		private readonly Target target;
 
 		public Queue(
 			string name, int batchSize,

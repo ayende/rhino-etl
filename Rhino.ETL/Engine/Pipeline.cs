@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using Rhino.Commons;
-using Rhino.ETL.Engine;
-using Rhino.ETL.Exceptions;
-using System.Threading;
-
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
+	using System.Collections.Generic;
+	using Commons;
+	using Exceptions;
+
 	public class Pipeline : ContextfulObjectBase<Pipeline>
 	{
 		private readonly IList<PipelineAssociation> associations = new List<PipelineAssociation>();
@@ -125,7 +122,7 @@ namespace Rhino.ETL
 			{
 				DataSource cSharpSpec_21_5_2_Damn_It = value; 
 				ExecutionPackage.Current.RegisterForExecution(target,
-					delegate { cSharpSpec_21_5_2_Damn_It.Start(this); }
+				                                              delegate { cSharpSpec_21_5_2_Damn_It.Start(this); }
 					);
 			}
 		}

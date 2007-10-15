@@ -4,6 +4,8 @@ using Boo.Lang.Compiler.Ast;
 
 namespace Rhino.ETL.Impl
 {
+	using Engine;
+
 	public class DestinationMacro : BaseDataElementMacro<DataDestination>
 	{
 		public override Statement Expand(MacroStatement macro)

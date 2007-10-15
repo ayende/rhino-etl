@@ -9,6 +9,8 @@ using Rhino.ETL.Tests.Joins;
 
 namespace Rhino.ETL.Tests.Files
 {
+	using Engine;
+
 	[TestFixture]
 	public class Files : IntegrationTestBase
 	{

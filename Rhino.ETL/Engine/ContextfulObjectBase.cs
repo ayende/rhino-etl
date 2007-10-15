@@ -5,10 +5,10 @@ using log4net;
 using Rhino.ETL.Exceptions;
 using Rhino.ETL.Impl;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	[DebuggerDisplay("{GetType().Name}: {Name}")]
-	public abstract class ContextfulObjectBase<T>
+	public abstract class ContextfulObjectBase<T> : Configurable
 		where T : ContextfulObjectBase<T>
 	{
 		[ThreadStatic]
@@ -16,9 +16,9 @@ namespace Rhino.ETL
 		[ThreadStatic]
 		protected static int nestedCount;
 
-		private QuackingDictionary items = new QuackingDictionary(
+		private readonly QuackingDictionary items = new QuackingDictionary(
 			new Hashtable(StringComparer.InvariantCultureIgnoreCase));
-		private ILog logger;
+		private readonly ILog logger;
 
 		public abstract string Name
 		{

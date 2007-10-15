@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using Rhino.Commons;
 using Rhino.ETL.Engine;
 using Rhino.ETL.Exceptions;
 
-namespace Rhino.ETL
+namespace Rhino.ETL.Engine
 {
 	public class ExecutionPackage : ContextfulObjectBase<ExecutionPackage>
 	{
-		private EtlConfigurationContext configurationContext;
+		private readonly EtlConfigurationContext configurationContext;
 		private List<Command> onPipelineCompletedCommands = new List<Command>();
 
 		public event EventHandler PipelineCompleted = delegate { };
@@ -50,7 +49,7 @@ namespace Rhino.ETL
 						Target target;
 						if (configurationContext.Targets.TryGetValue(targetName, out target) == false)
 						{
-							ExecutionResult result = new ExecutionResult(ExecutionStatus.Failure);
+							ExecutionResult result = new ExecutionResult(ExecutionStatus.Failure, configurationContext.Errors);
 							InvalidTargetException exception =
 								new InvalidTargetException("Could not find target '" + targetName + "'");
 							result.Exceptions.Add(exception);
@@ -59,14 +58,14 @@ namespace Rhino.ETL
 						target.Prepare();
 						target.Run();
 						target.WaitForCompletion();
-						return target.GetExecutionResult();
+						return target.GetExecutionResult(configurationContext);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				Logger.Fatal("Error executing target '" + targetName + "'", e);
-				ExecutionResult result = new ExecutionResult(ExecutionStatus.InvalidPackage);
+				ExecutionResult result = new ExecutionResult(ExecutionStatus.InvalidPackage, configurationContext.Errors);
 				result.Exceptions.Add(e);
 				return result;
 			}
@@ -100,8 +99,8 @@ namespace Rhino.ETL
 			if (target.IsFaulted)
 			{
 				Logger.WarnFormat("Ignoring request to execute {0} because target {1} has faulted",
-								  DelegateToString(action),
-								  target.Name
+				                  DelegateToString(action),
+				                  target.Name
 					);
 				return;
 			}

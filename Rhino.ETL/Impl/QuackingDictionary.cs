@@ -11,9 +11,13 @@ namespace Rhino.ETL.Impl
 	{
 		protected IDictionary items;
 
+		public QuackingDictionary() : this(new Hashtable())
+		{
+		}
+
 		public QuackingDictionary(IDictionary items)
 		{
-			this.items = items;
+			this.items = new Hashtable(items, StringComparer.InvariantCultureIgnoreCase);
 		}
 
 
@@ -23,7 +27,7 @@ namespace Rhino.ETL.Impl
 			set { items[key] = value; }
 		}
 
-		public object QuackGet(string name, object[] parameters)
+		public virtual object QuackGet(string name, object[] parameters)
 		{
 			if (parameters == null || parameters.Length == 0)
 				return items[name];

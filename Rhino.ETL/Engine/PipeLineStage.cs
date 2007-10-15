@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class PipeLineStage
 	{
 		private readonly Pipeline pipeline;

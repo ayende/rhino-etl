@@ -2,6 +2,8 @@ using MbUnit.Framework;
 
 namespace Rhino.ETL.Tests.Destinations
 {
+	using Engine;
+
 	[TestFixture]
 	public class DestinationsFixture : BaseTest
 	{

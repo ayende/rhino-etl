@@ -1,5 +1,7 @@
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class TransformParameters
 	{
 		public bool ShouldSkipRow;

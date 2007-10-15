@@ -8,6 +8,8 @@ using Rhino.ETL.Exceptions;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public abstract class BaseDataElement<T> : ContextfulObjectBase<T>, IConnectionUser
 		where T : BaseDataElement<T>
 	{

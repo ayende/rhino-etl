@@ -4,6 +4,8 @@ using Boo.Lang.Compiler.Ast;
 
 namespace Rhino.ETL.Impl
 {
+	using Engine;
+
 	public class JoinMacro : AbstractNamedMacro
 	{
 		public override Statement Expand(MacroStatement macro)

@@ -2,6 +2,8 @@ using System;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public class QueueKey
 	{
 		private string name;

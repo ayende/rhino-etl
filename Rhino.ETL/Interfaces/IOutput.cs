@@ -3,6 +3,8 @@ using System.Collections;
 
 namespace Rhino.ETL
 {
+	using Engine;
+
 	public delegate void OutputCompleted(IOutput output, QueueKey key);
 
 	public interface IOutput
