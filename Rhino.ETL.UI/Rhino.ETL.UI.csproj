@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\ICSharpCode\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -57,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BooBinding\BooFormattingStrategy.cs" />
+    <Compile Include="Commands\BuildProject.cs" />
     <Compile Include="Commands\ExecuteProject.cs" />
     <Compile Include="Commands\OpenFile.cs" />
     <Compile Include="Commands\SaveFile.cs" />
@@ -69,6 +74,18 @@
     <Compile Include="Commands\AbstractUICommand.cs" />
     <Compile Include="Commands\CommandDispatcher.cs" />
     <Compile Include="Commands\CreateNewFile.cs" />
+    <Compile Include="Controls\LoggingGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LoggingGrid.Designer.cs">
+      <DependentUpon>LoggingGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Output.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Output.Designer.cs">
+      <DependentUpon>Output.cs</DependentUpon>
+    </Compile>
     <Compile Include="Document.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +109,15 @@
     <Compile Include="Panes\ItemPropertiesView.Designer.cs">
       <DependentUpon>ItemPropertiesView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Panes\LoggingPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panes\OutputPane.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Panes\OutputPane.Designer.cs">
+      <DependentUpon>OutputPane.cs</DependentUpon>
+    </Compile>
     <Compile Include="Panes\ProjectDocsTreeView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +132,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\LoggingGrid.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LoggingGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Output.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Output.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Document.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Document.cs</DependentUpon>
@@ -117,6 +151,10 @@
     <EmbeddedResource Include="Panes\ItemPropertiesView.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ItemPropertiesView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Panes\LoggingPane.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>LoggingPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panes\ProjectDocsTreeView.resx">
       <SubType>Designer</SubType>

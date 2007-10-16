@@ -58,9 +58,9 @@ namespace Rhino.ETL.UI
 			this.newToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
 			this.openToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
 			this.saveToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
-			this.printToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
+			this.buildStripButton1 = new Rhino.ETL.UI.Controls.CommandAwareToolStripMenuItem();
+			this.executeToolStripButton = new Rhino.ETL.UI.Controls.CommandAwareToolStripButton();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.DockPanel = new WeifenLuo.WinFormsUI.DockPanel();
 			this.menuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
@@ -104,7 +104,7 @@ namespace Rhino.ETL.UI
 			this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
 			this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.newToolStripMenuItem.Text = "&New";
 			// 
 			// openToolStripMenuItem
@@ -114,13 +114,13 @@ namespace Rhino.ETL.UI
 			this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			// 
 			// toolStripSeparator
 			// 
 			this.toolStripSeparator.Name = "toolStripSeparator";
-			this.toolStripSeparator.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator.Size = new System.Drawing.Size(137, 6);
 			// 
 			// saveToolStripMenuItem
 			// 
@@ -129,20 +129,20 @@ namespace Rhino.ETL.UI
 			this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.saveToolStripMenuItem.Text = "&Save";
 			// 
 			// saveAsToolStripMenuItem
 			// 
 			this.saveAsToolStripMenuItem.Command = null;
 			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.saveAsToolStripMenuItem.Text = "Save &As";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(137, 6);
 			// 
 			// printToolStripMenuItem
 			// 
@@ -151,7 +151,7 @@ namespace Rhino.ETL.UI
 			this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.printToolStripMenuItem.Name = "printToolStripMenuItem";
 			this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-			this.printToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.printToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.printToolStripMenuItem.Text = "&Print";
 			// 
 			// printPreviewToolStripMenuItem
@@ -160,19 +160,19 @@ namespace Rhino.ETL.UI
 			this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
 			this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(137, 6);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Command = null;
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			// 
 			// toolsToolStripMenuItem
@@ -191,7 +191,7 @@ namespace Rhino.ETL.UI
 			this.executeToolStripMenuItem.Command = "ExecuteProject";
 			this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
 			this.executeToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-			this.executeToolStripMenuItem.Text = "&Execute";
+			this.executeToolStripMenuItem.Text = "&Build";
 			// 
 			// toolStripMenuItem1
 			// 
@@ -266,9 +266,9 @@ namespace Rhino.ETL.UI
             this.newToolStripButton,
             this.openToolStripButton,
             this.saveToolStripButton,
-            this.printToolStripButton,
-            this.toolStripSeparator6,
-            this.toolStripButton1});
+            this.buildStripButton1,
+            this.executeToolStripButton,
+            this.toolStripSeparator6});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(630, 25);
@@ -305,29 +305,30 @@ namespace Rhino.ETL.UI
 			this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
 			this.saveToolStripButton.Text = "&Save";
 			// 
-			// printToolStripButton
+			// buildStripButton1
 			// 
-			this.printToolStripButton.Command = "ExecuteProject";
-			this.printToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.printToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripButton.Image")));
-			this.printToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.printToolStripButton.Name = "printToolStripButton";
-			this.printToolStripButton.Size = new System.Drawing.Size(23, 22);
-			this.printToolStripButton.Text = "&Print";
+			this.buildStripButton1.Command = "BuildProject";
+			this.buildStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buildStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("buildStripButton1.Image")));
+			this.buildStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buildStripButton1.Name = "buildStripButton1";
+			this.buildStripButton1.Size = new System.Drawing.Size(28, 25);
+			this.buildStripButton1.Text = "toolStripButton1";
+			// 
+			// executeToolStripButton
+			// 
+			this.executeToolStripButton.Command = "ExecuteProject";
+			this.executeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.executeToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("executeToolStripButton.Image")));
+			this.executeToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.executeToolStripButton.Name = "executeToolStripButton";
+			this.executeToolStripButton.Size = new System.Drawing.Size(23, 22);
+			this.executeToolStripButton.Text = "&Print";
 			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
 			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
-			// 
-			// toolStripButton1
-			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-			this.toolStripButton1.Text = "toolStripButton1";
 			// 
 			// DockPanel
 			// 
@@ -382,16 +383,16 @@ namespace Rhino.ETL.UI
 		private Rhino.ETL.UI.Controls.CommandAwareToolStripButton newToolStripButton;
 		private Rhino.ETL.UI.Controls.CommandAwareToolStripButton openToolStripButton;
 		private Rhino.ETL.UI.Controls.CommandAwareToolStripButton saveToolStripButton;
-		private Rhino.ETL.UI.Controls.CommandAwareToolStripButton printToolStripButton;
+		private Rhino.ETL.UI.Controls.CommandAwareToolStripButton executeToolStripButton;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 		public WeifenLuo.WinFormsUI.DockPanel DockPanel;
 		private CommandAwareToolStripMenuItem executeToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem developToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripMenuItem addPropertiesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem addDocsViewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem addLiveViewToolStripMenuItem;
+		private Rhino.ETL.UI.Controls.CommandAwareToolStripMenuItem buildStripButton1;
 	}
 }

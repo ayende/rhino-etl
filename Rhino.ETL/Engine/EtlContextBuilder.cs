@@ -1,23 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Transactions;
-using Boo.Lang.Compiler;
-using Boo.Lang.Compiler.IO;
-using Boo.Lang.Compiler.Pipelines;
-using log4net;
-using Rhino.ETL.Exceptions;
-using Rhino.ETL.Impl;
-
 namespace Rhino.ETL
 {
+	using System;
+	using System.Data;
+	using System.IO;
+	using System.Reflection;
+	using System.Transactions;
+	using Boo.Lang.Compiler;
+	using Boo.Lang.Compiler.IO;
+	using Boo.Lang.Compiler.Pipelines;
 	using Engine;
-
+	using Exceptions;
+	using FileHelpers;
+	using Impl;
+	using log4net;
+	
 	public class EtlContextBuilder
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof (EtlContextBuilder));
-
 		private static readonly string[] defaultImports = {
 		                                                  	"System",
 		                                                  	"System.Configuration",
@@ -26,12 +24,15 @@ namespace Rhino.ETL
 		                                                  	"System.Data.Odbc",
 		                                                  	"System.Data.OleDb",
 		                                                  	"Rhino.ETL",
-															"FileHelpers",
+		                                                  	"FileHelpers",
 		                                                  	"Rhino.ETL.Impl",
 		                                                  	"Rhino.ETL.Commands",
+		                                                  	"Rhino.ETL.FileHelpersExtensions",
 		                                                  	"System.Transactions",
 		                                                  	"Rhino.ETL.Engine"
 		                                                  };
+
+		private static readonly ILog logger = LogManager.GetLogger(typeof (EtlContextBuilder));
 
 		public static EtlConfigurationContext FromFile(string filename)
 		{
@@ -79,9 +80,9 @@ namespace Rhino.ETL
 				compiler.Parameters.Input.Add(compilerInput);
 			}
 			compiler.Parameters.References.Add(Assembly.GetExecutingAssembly());
-			compiler.Parameters.References.Add(typeof(System.Data.DbType).Assembly);
+			compiler.Parameters.References.Add(typeof (DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
-			compiler.Parameters.References.Add(typeof (FileHelpers.CsvEngine).Assembly);
+			compiler.Parameters.References.Add(typeof (CsvEngine).Assembly);
 			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports, rootName));
 			compiler.Parameters.Pipeline.Insert(10, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();

@@ -23,7 +23,7 @@ namespace Rhino.ETL.UI.Model
 		{
 		}
 
-		public void Execute()
+		public void Build()
 		{
 			List<ICompilerInput> inputs = new List<ICompilerInput>();
 			foreach (InputSource source in sources)
@@ -121,6 +121,12 @@ namespace Rhino.ETL.UI.Model
 			proj.Folders.Add(new ProjectFolder("Pipelines"));
 			proj.Folders.Add(new ProjectFolder("Targets"));
 			return proj;
+		}
+
+		public ExecutionResult Execute()
+		{
+			ExecutionPackage package = configurationContext.BuildPackage();
+			return package.Execute("default");
 		}
 	}
 }

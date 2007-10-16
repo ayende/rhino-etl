@@ -25,7 +25,7 @@ namespace Rhino.ETL.Cmd
 				AddColorMapping(appender, Level.Warn, ColoredConsoleAppender.Colors.Yellow);
 				AddColorMapping(appender, Level.Info, ColoredConsoleAppender.Colors.Green | ColoredConsoleAppender.Colors.HighIntensity);
 				AddColorMapping(appender, Level.Debug, ColoredConsoleAppender.Colors.Green);
-				BasicConfigurator.Configure();
+				BasicConfigurator.Configure(appender);
 			}
 
 			BulidConfiguration(options);

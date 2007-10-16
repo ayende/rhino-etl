@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Rhino.ETL.UI.Model;
-
 namespace Rhino.ETL.UI.Commands
 {
+	using Model;
+
 	public class ExecuteProject : AbstractUICommand
 	{
 		public ExecuteProject(MainGui mainGui) : base(mainGui)
@@ -13,6 +10,8 @@ namespace Rhino.ETL.UI.Commands
 
 		public override void Execute()
 		{
+			Parent.EnsureLoggingGridVisible();
+			RetlProject.Instance.Build();
 			RetlProject.Instance.Execute();
 		}
 	}

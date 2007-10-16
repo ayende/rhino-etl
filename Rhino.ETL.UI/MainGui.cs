@@ -7,6 +7,8 @@ using WeifenLuo.WinFormsUI;
 
 namespace Rhino.ETL.UI
 {
+	using ICSharpCode.TextEditor.Document;
+
 	public partial class MainGui : Form
 	{
 		public MainGui()
@@ -43,6 +45,11 @@ namespace Rhino.ETL.UI
 		private void addLiveViewToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			new ProjectLiveView().Show(DockPanel);
+		}
+
+		public void EnsureLoggingGridVisible()
+		{
+			new LoggingPane().Show(DockPanel,DockState.DockBottom);
 		}
 	}
 }
