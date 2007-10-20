@@ -109,6 +109,7 @@
     <Compile Include="Exceptions\InvalidTargetException.cs" />
     <Compile Include="Exceptions\InvalidWebServiceException.cs" />
     <Compile Include="FileHelpersExtensions\DateTimeConverterWithNullValue.cs" />
+    <Compile Include="Impl\DebuggerMacro.cs" />
     <Compile Include="Impl\DestinationExtensionMacro.cs" />
     <Compile Include="Impl\JoinMacro.cs" />
     <Compile Include="Impl\OnCompleteMacro.cs" />
