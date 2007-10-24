@@ -84,7 +84,7 @@ namespace Rhino.ETL
 			compiler.Parameters.References.Add(typeof (DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
 			compiler.Parameters.References.Add(typeof (CsvEngine).Assembly);
-			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesCompilerStep(rootDir));
+			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesAndAddToContextCompilerStep(rootDir, rootName));
 			compiler.Parameters.Pipeline.Insert(3, new TransformModuleToContextClass(defaultImports, rootName));
 			compiler.Parameters.Pipeline.Insert(11, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();

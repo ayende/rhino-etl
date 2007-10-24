@@ -1,8 +1,5 @@
-connection( 
-	"Connection",
-	ConnectionType: SqlConnection,
-	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;"
-	)
+import file from connections.retl
+
 
 source UsersSource, Connection="Connection":
 	Command: "SELECT Id, Name, Email FROM Users_Source"

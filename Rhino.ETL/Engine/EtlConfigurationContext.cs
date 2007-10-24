@@ -16,8 +16,8 @@ namespace Rhino.ETL.Engine
 		private readonly IDictionary<string, Target> targets;
 		private List<string> validationMessages = new List<string>();
 
-		private ILog log;
-		private List<string> errors = new List<string>();
+		private readonly ILog log;
+		private readonly List<string> errors = new List<string>();
 
 		public ILog Log
 		{
@@ -155,7 +155,29 @@ namespace Rhino.ETL.Engine
 			if (targets.ContainsKey(name))
 				throw new DuplicateKeyException("The current context already contains a target named [" + name + "]");
 			targets.Add(name, target);
-		
+
+		}
+
+		public void ImportConfig(EtlConfigurationContext context)
+		{
+			context.BuildConfig();
+			Copy("connection", connections, context.Connections);
+			Copy("source", sources, context.Sources);
+			Copy("destination", destinations, context.Destinations);
+			Copy("join", joins, context.Joins);
+			Copy("transform", transforms, context.Transforms);
+			Copy("pipeline", pipelines, context.Pipelines);
+			Copy("target", targets, context.Targets);
+		}
+
+		private static void Copy<T>(string name, IDictionary<string, T> destination, IEnumerable<KeyValuePair<string, T>> source)
+		{
+			foreach (KeyValuePair<string, T> pair in source)
+			{
+				if (destination.ContainsKey(pair.Key))
+					throw new DuplicateKeyException("The current context already contains a " + name + " named [" + pair.Key + "]");
+				destination.Add(pair.Key, pair.Value);
+			}
 		}
 
 		public ExecutionPackage BuildPackage()
