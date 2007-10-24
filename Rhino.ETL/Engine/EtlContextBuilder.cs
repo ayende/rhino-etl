@@ -13,7 +13,8 @@ namespace Rhino.ETL
 	using FileHelpers;
 	using Impl;
 	using log4net;
-	
+	using Rhino.Commons.Boo;
+
 	public class EtlContextBuilder
 	{
 		private static readonly string[] defaultImports = {
@@ -37,15 +38,16 @@ namespace Rhino.ETL
 		public static EtlConfigurationContext FromFile(string filename)
 		{
 			string rootName = Path.GetFileNameWithoutExtension(filename);
-			return From(rootName, new FileInput(filename));
+			string rootDir = Path.GetDirectoryName(filename);
+			return From(rootDir, rootName, new FileInput(filename));
 		}
 
-		public static EtlConfigurationContext From(string rootName, params ICompilerInput[] inputs)
+		public static EtlConfigurationContext From(string rootDir, string rootName, params ICompilerInput[] inputs)
 		{
 			EtlConfigurationContext etlConfigurationContext;
 			try
 			{
-				etlConfigurationContext = Compile(rootName, inputs);
+				etlConfigurationContext = Compile(rootDir, rootName, inputs);
 			}
 			catch (Exception e)
 			{
@@ -68,11 +70,10 @@ namespace Rhino.ETL
 			return etlConfigurationContext;
 		}
 
-		private static EtlConfigurationContext Compile(string rootName, params ICompilerInput[] inputs)
+		private static EtlConfigurationContext Compile(string rootDir, string rootName, params ICompilerInput[] inputs)
 		{
 			BooCompiler compiler = new BooCompiler();
 			compiler.Parameters.Ducky = true;
-			compiler.Parameters.Pipeline = new CompileToMemory();
 			compiler.Parameters.Pipeline = new CompileToFile();
 			compiler.Parameters.OutputType = CompilerOutputType.Library;
 			foreach (ICompilerInput compilerInput in inputs)
@@ -83,8 +84,9 @@ namespace Rhino.ETL
 			compiler.Parameters.References.Add(typeof (DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
 			compiler.Parameters.References.Add(typeof (CsvEngine).Assembly);
-			compiler.Parameters.Pipeline.Insert(2, new TransformModuleToContextClass(defaultImports, rootName));
-			compiler.Parameters.Pipeline.Insert(10, new TransfromGeneratorExpressionToBlocks());
+			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesCompilerStep(rootDir));
+			compiler.Parameters.Pipeline.Insert(3, new TransformModuleToContextClass(defaultImports, rootName));
+			compiler.Parameters.Pipeline.Insert(11, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
 			if (run.Errors.Count != 0)
 			{

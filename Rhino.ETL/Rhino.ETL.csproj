@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\rhino-commons\Rhino.Commons\Boo\AutoReferenceFilesCompilerStep.cs">
+      <Link>FromRhinoCommons\AutoReferenceFilesCompilerStep.cs</Link>
+    </Compile>
     <Compile Include="..\..\rhino-commons\Rhino.Commons\DelegateDefinations.cs">
       <Link>FromRhinoCommons\DelegateDefinations.cs</Link>
     </Compile>

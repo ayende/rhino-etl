@@ -11,13 +11,13 @@ namespace Rhino.ETL.Impl
 	{
 		protected IDictionary items;
 
-		public QuackingDictionary() : this(new Hashtable())
+		public QuackingDictionary() : this(null)
 		{
 		}
 
 		public QuackingDictionary(IDictionary items)
 		{
-			this.items = new Hashtable(items, StringComparer.InvariantCultureIgnoreCase);
+			this.items = new Hashtable(items ?? new Hashtable(), StringComparer.InvariantCultureIgnoreCase);
 		}
 
 
