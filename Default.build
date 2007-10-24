@@ -19,6 +19,12 @@
 		<AssemblyInfo Include="Item">
 			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Tests\Properties\AssemblyInfo.cs</File>
 		</AssemblyInfo>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\Properties\AssemblyInfo.cs</File>
+		</AssemblyInfo>
+		<AssemblyInfo Include="Item">
+			<File>$(MSBuildProjectDirectory)\Rhino.ETL.UI\Properties\AssemblyInfo.cs</File>
+		</AssemblyInfo>
 	</ItemGroup>
 
 	<ItemGroup>
