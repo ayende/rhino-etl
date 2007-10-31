@@ -62,14 +62,7 @@ namespace Rhino.ETL
 		{
 			lock (rows)
 			{
-				if (firstCall && initializeBlock != null)
-				{
-					lock (onRowBlock)
-					{
-						initializeBlock.Call(new object[] { Items });
-					}
-				}
-				firstCall = false;
+				EnsureInitializeWasCalled();
 				if (hasCompleted)
 					throw new InvalidOperationException("Cannot process rows to a destination after it has been marked complete");
 				rows.Add(row);
@@ -80,8 +73,21 @@ namespace Rhino.ETL
 			}
 		}
 
+		private void EnsureInitializeWasCalled()
+		{
+			if (firstCall && initializeBlock != null)
+			{
+				lock (onRowBlock)
+				{
+					initializeBlock.Call(new object[] { Items });
+				}
+			}
+			firstCall = false;
+		}
+
 		public void Complete(QueueKey key)
 		{
+			EnsureInitializeWasCalled();
 			lock (rows)
 			{
 				hasCompleted = true;
