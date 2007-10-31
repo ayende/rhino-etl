@@ -16,6 +16,7 @@ namespace Rhino.ETL.UI.Model
 		private static RetlProject instance = RetlProject.CreateDefault();
 		private readonly List<InputSource> sources = new List<InputSource>();
 		private string name;
+		private string directory;
 		private EtlConfigurationContext configurationContext;
 		private readonly List<ProjectFolder> folders = new List<ProjectFolder>();
 
@@ -32,7 +33,7 @@ namespace Rhino.ETL.UI.Model
 				if(input!=null)
 					inputs.Add(input);
 			}
-			configurationContext = EtlContextBuilder.From(name, inputs.ToArray());
+			configurationContext = EtlContextBuilder.From(directory, name, inputs.ToArray());
 			EventHub.RaiseProjectChanged(this);
 		}
 
@@ -69,6 +70,7 @@ namespace Rhino.ETL.UI.Model
 			XmlDocument xdoc = new XmlDocument();
 			xdoc.Load(file);
 			instance = new RetlProject();
+			instance.directory = Path.GetDirectoryName(file);
 			XmlNode projectNode = xdoc.SelectSingleNode("/project/@name");
 			if (projectNode != null)
 				instance.name = projectNode.Value;
