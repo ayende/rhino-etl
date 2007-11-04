@@ -1,0 +1,2 @@
+foo as string = null
+foo.ToUpper()

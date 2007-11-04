@@ -1,0 +1,14 @@
+destination SouthSand, BatchSize = 500,	Connection = "SoundSand_Oracle":
+	Command: """
+		INSERT INTO  [Customers]
+			(	
+				[CustomerID] ,[CompanyName],[ContactName],[ContactTitle],
+				[Address],[City],[Region],[PostalCode],[Country],[Phone],
+				[Fax],[Registered]
+			)
+		VALUES
+			(
+				@CustomerID,@CompanyName,@ContactName,@ContactTitle,@Address,
+				@City,@Region,@PostalCode,@Country,@Phone,@Fax,@Registered
+			)
+		"""

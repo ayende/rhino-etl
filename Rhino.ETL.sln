@@ -25,28 +25,47 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.Cmd", "Rhino.Etl.
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL2", "Rhino.ETL2\Rhino.ETL2.csproj", "{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL2.Tests", "Rhino.ETL2.Tests\Rhino.ETL2.Tests.csproj", "{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

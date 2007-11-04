@@ -1,0 +1,2 @@
+transform:
+	row.Name = row.Name.ToUpper()
