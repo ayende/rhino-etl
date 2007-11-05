@@ -13,6 +13,7 @@ namespace Rhino.ETL.Impl
 	public class QuackingDictionary : IQuackFu
 	{
 		protected IDictionary items;
+		protected string lastAccess;
 
 		public QuackingDictionary() : this(null)
 		{
@@ -26,25 +27,33 @@ namespace Rhino.ETL.Impl
 
 		public object this[string key]
 		{
-			get { return items[key]; }
-			set { items[key] = value; }
+			get
+			{
+				lastAccess = key;
+				return items[key];
+			}
+			set
+			{
+				lastAccess = key;
+				items[key] = value;
+			}
 		}
 
 		public virtual object QuackGet(string name, object[] parameters)
 		{
 			if (parameters == null || parameters.Length == 0)
-				return items[name];
+				return this[name];
 			if (parameters.Length == 1)
-				return items[parameters[0]];
+				return this[(string)parameters[0]];
 			throw new ParameterCountException("You can only call indexer with a single parameter");
 		}
 
 		public object QuackSet(string name, object[] parameters, object value)
 		{
 			if (parameters == null || parameters.Length == 0)
-				return items[name] = value;
+				return this[name] = value;
 			if (parameters.Length == 1)
-				return items[parameters[0]] = value;
+				return this[(string)parameters[0]] = value;
 			throw new ParameterCountException("You can only call indexer with a single parameter");
 		}
 

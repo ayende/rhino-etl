@@ -59,13 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rhino.ETL\Rhino.ETL.csproj">
-      <Project>{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}</Project>
-      <Name>Rhino.ETL</Name>
-    </ProjectReference>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+    <ProjectReference Include="..\Rhino.ETL2\Rhino.ETL2.csproj">
+      <Project>{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}</Project>
+      <Name>Rhino.ETL2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

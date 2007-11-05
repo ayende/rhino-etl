@@ -95,6 +95,7 @@
     <Compile Include="Engine\Configurable.cs" />
     <Compile Include="Engine\Configuration.cs" />
     <Compile Include="Engine\ContextfulObjectBase.cs" />
+    <Compile Include="Engine\DebugProcessContextFactory.cs" />
     <Compile Include="Engine\EtlConfigurationContext.cs" />
     <Compile Include="Engine\EtlContextBuilder.cs" />
     <Compile Include="Engine\ExecutionPackage.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Impl\AutoReferenceFilesAndAddToContextCompilerStep.cs" />
     <Compile Include="Impl\BaseDataElementMacro.cs" />
     <Compile Include="Impl\CodeHelper.cs" />
+    <Compile Include="Impl\ColoredConsole.cs" />
     <Compile Include="Impl\CommandGeneratorMacro.cs" />
     <Compile Include="Impl\CommandMacro.cs" />
     <Compile Include="Impl\DebuggerMacro.cs" />

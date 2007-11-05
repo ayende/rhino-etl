@@ -6,6 +6,7 @@ namespace Rhino.ETL.Engine
 	using Impl;
 	using Interfaces;
 	using Retlang;
+	using Rhino.ETL2.Impl;
 
 	public abstract class Transform : TransformationBase<Transform>, IProcess
 	{
@@ -41,7 +42,8 @@ namespace Rhino.ETL.Engine
 			if (inputNames.Length != 1)
 				throw new ArgumentException("Transform must have a single input name");
 			string input = inputNames[0];
-		
+			ColoredConsole.WriteLine(ConsoleColor.Green, "Starting tranfrom: " + Name);
+
 			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
 			Pipeline currentPipeline = Pipeline.Current;
 			Items[ProcessContextKey] = context;
@@ -51,7 +53,9 @@ namespace Rhino.ETL.Engine
 				using (currentPipeline.EnterContext())
 				{
 					OnComplete(OutputName);
-					context.Publish(Name + "." + OutputName + Messages.Done, Messages.Done);
+					string topic = Name + "." + OutputName + Messages.Done;
+					ColoredConsole.WriteLine(ConsoleColor.DarkGreen, string.Format("Finishing transform {0} {1} rows", topic, rowCount));
+					context.Publish(topic, Messages.Done);
 					context.Stop();
 				}
 			});

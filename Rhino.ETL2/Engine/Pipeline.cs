@@ -129,7 +129,25 @@ namespace Rhino.ETL.Engine
 					IProcessContext processContext = contextFactory.Create();
 					pipelineProcesses.Add(processContext);
 					processContext.Start();
-					process.Start(processContext, inputNames.ToArray());
+					EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
+					IProcess tempToGoAroundForEachVar = process;
+					processContext.Enqueue(delegate
+					{
+						try
+						{
+							using(configurationContext.EnterContext())
+							using(this.EnterContext())
+							{
+								tempToGoAroundForEachVar.Start(processContext, inputNames.ToArray());
+							}
+						}
+						catch (Exception ex)
+						{
+							processContext.Publish(Messages.Exception, 
+								new InvalidOperationException(process.Name +" threw an exception", ex));
+							processContext.Stop();
+						}
+					});
 				}
 			}
 		}

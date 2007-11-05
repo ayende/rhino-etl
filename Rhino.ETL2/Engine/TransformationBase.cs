@@ -1,13 +1,14 @@
 namespace Rhino.ETL
 {
 	using System;
+	using System.Threading;
 	using Engine;
 
 	public abstract class TransformationBase<T> : ContextfulObjectBase<T>
 		where T : TransformationBase<T>
 	{
 		protected const string DefaultOutputName = "Output";
-
+		protected int rowCount;
 		[ThreadStatic] public static TransformParameters CurrentTransformParameters;
 
 		protected string name;
@@ -67,6 +68,7 @@ namespace Rhino.ETL
 			ProcessContextFromCurrentContext.Publish(
 				Name + "." + CurrentTransformParameters.OutputQueueName,
 				CurrentTransformParameters.Row);
+			Interlocked.Increment(ref rowCount);
 		}
 	}
 }

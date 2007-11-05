@@ -58,10 +58,11 @@ namespace Rhino.ETL.Engine
 						    return result;
 						}
 						target.Prepare();
-						IProcessContextFactory contextFactory = new ProcessContextFactory();
+						IProcessContextFactory contextFactory = new DebugProcessContextFactory();
 						contextFactory.Start();
 						target.Run(contextFactory);
 						target.WaitForCompletion();
+						contextFactory.Stop();
 						return target.GetExecutionResult(configurationContext);
 					}
 				}

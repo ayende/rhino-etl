@@ -87,13 +87,13 @@ namespace Rhino.ETL.Commands
 		protected virtual void RegisterForExecution(ICommand command, IProcessContextFactory contextFactory, IProcessContext context)
 		{
 			EtlConfigurationContext current = EtlConfigurationContext.Current;
-			context.Enqueue(delegate
+			//context.Enqueue(delegate
 			{
 				using(current.EnterContext())
 				{
 					command.Execute(contextFactory);
 				}
-			});
+			}//);
 		}
 	}
 }

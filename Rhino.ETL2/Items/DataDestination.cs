@@ -8,6 +8,7 @@ namespace Rhino.ETL
 	using Engine;
 	using Interfaces;
 	using Retlang;
+	using Rhino.ETL2.Impl;
 
 	public class DataDestination : BaseDataElement<DataDestination>, IProcess
 	{
@@ -15,6 +16,7 @@ namespace Rhino.ETL
 		private bool firstCall = true;
 		private ICallable initializeBlock, onRowBlock, cleanUpBlock;
 		private int batchSize = 250;
+		private int rowCount;
 
 		public int BatchSize
 		{
@@ -77,7 +79,9 @@ namespace Rhino.ETL
 
 		public override void Start(IProcessContext context, params string[] inputNames)
 		{
-			if(inputNames.Length != 1)
+			ColoredConsole.WriteLine(ConsoleColor.Yellow, "Starting data destination: " + Name);
+
+			if (inputNames.Length != 1)
 				throw new ArgumentException("Destination must have a single input name");
 			string inputName = inputNames[0];
 			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
@@ -92,8 +96,8 @@ namespace Rhino.ETL
 				{
 					rows.Add(envelope.Message);
 				}
-				using(configurationContext.EnterContext())
-				using(currentPipeline.EnterContext())
+				using (configurationContext.EnterContext())
+				using (currentPipeline.EnterContext())
 					ProcessOutput(rows);
 			};
 			BatchSubscriber<Row> batchingSubscriber = new BatchSubscriber<Row>(callback, context, BatchSize);
@@ -102,7 +106,9 @@ namespace Rhino.ETL
 			{
 				batchingSubscriber.Flush();
 				Complete();
-				context.Publish(Name + Messages.Done, Messages.Done);
+				string topic = Name + Messages.Done;
+				ColoredConsole.WriteLine(ConsoleColor.DarkYellow, string.Format("Finishing transform {0} {1} rows", topic, rowCount));
+				context.Publish(topic, Messages.Done);
 				context.Stop();
 			});
 			context.Subscribe<Row>(new TopicEquals(inputName), batchingSubscriber.ReceiveMessage);
@@ -111,11 +117,12 @@ namespace Rhino.ETL
 		public string OutputName
 		{
 			get { throw new NotImplementedException(); }
-			set {  }
+			set { }
 		}
 
 		public void ProcessOutput(IList<Row> rows)
 		{
+			rowCount += rows.Count;
 			if (CustomActionSpecified == false)
 			{
 				SendToDatabase(rows);

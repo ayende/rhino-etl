@@ -16,6 +16,7 @@ namespace Rhino.ETL.Engine
 		private TimeSpan timeOut = TimeSpan.FromMinutes(5);
 		private ICommandContainer container;
 		private readonly List<Exception> exceptions = new List<Exception>();
+		private IProcessContext listenToContainer;
 
 		public Target(string name)
 		{
@@ -129,8 +130,8 @@ namespace Rhino.ETL.Engine
 
 		public void Run(IProcessContextFactory contextFactory)
 		{
-			IProcessContext listenToContainer = contextFactory.CreateAndStart();
-			listenToContainer.Subscribe<Exception>(new TopicEquals(Messages.Exception),
+			listenToContainer = contextFactory.CreateAndStart();
+			this.listenToContainer.Subscribe<Exception>(new TopicEquals(Messages.Exception),
 			delegate(IMessageHeader header, Exception msg)
 			{
 				AddFault(msg);
@@ -141,6 +142,7 @@ namespace Rhino.ETL.Engine
 		public void WaitForCompletion()
 		{
 			container.WaitForCompletion(TimeOut);
+			listenToContainer.Stop();
 		}
 
 		public void AddFault(Exception e)

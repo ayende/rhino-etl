@@ -3,16 +3,18 @@ namespace Rhino.ETL
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Threading;
 	using Boo.Lang;
 	using Engine;
 	using Interfaces;
 	using Retlang;
+	using Rhino.ETL2.Impl;
 
 	public class DataSource : BaseDataElement<DataSource>, IProcess
 	{
 		private const string DefaultOutputName = "Output";
 		protected ICallable blockToExecute;
-
+		private int rowCount;
 		private string outputName = DefaultOutputName;
 
 		public string OutputName
@@ -29,6 +31,7 @@ namespace Rhino.ETL
 
 		public override void Start(IProcessContext context, params string [] inputNames)
 		{
+			ColoredConsole.WriteLine(ConsoleColor.Cyan, "Starting data source: "+Name);
 			Items[ProcessContextKey] = context;
 			if (blockToExecute != null)
 			{
@@ -41,7 +44,9 @@ namespace Rhino.ETL
 			{
 				ReadFromDatabase(context);
 			}
-			context.Publish(Name +"." + OutputName + Messages.Done, Messages.Done);
+			string topic = Name +"." + OutputName + Messages.Done;
+			ColoredConsole.WriteLine(ConsoleColor.DarkCyan, string.Format("Finished data source: {0} {1} Rows", topic, rowCount));
+			context.Publish(topic, Messages.Done);
 			context.Stop();
 		}
 
@@ -98,6 +103,7 @@ namespace Rhino.ETL
 		private void SendRow(IObjectPublisher context, string output, Row row)
 		{
 			context.Publish(Name + "." + output, row);
+			Interlocked.Increment(ref rowCount);
 		}
 
 		public void Execute(ICallable block)
