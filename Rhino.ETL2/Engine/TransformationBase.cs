@@ -16,7 +16,7 @@ namespace Rhino.ETL
 
 		public Pipeline Context
 		{
-			get { return ContextfulObjectBase<Pipeline>.Current; }
+			get { return Pipeline.Current; }
 		}
 
 
@@ -65,7 +65,7 @@ namespace Rhino.ETL
 			if (CurrentTransformParameters.Row == null)
 				return;
 			ProcessContextFromCurrentContext.Publish(
-				CurrentTransformParameters.OutputQueueName,
+				Name + "." + CurrentTransformParameters.OutputQueueName,
 				CurrentTransformParameters.Row);
 		}
 	}

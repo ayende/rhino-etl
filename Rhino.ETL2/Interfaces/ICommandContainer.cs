@@ -12,6 +12,6 @@ namespace Rhino.ETL
 
 		IList<ICommand> Commands { get; }
 		void ForceEndOfCompletionWithoutFurtherWait();
-		void Execute(IProcessContext context);
+		void Execute(IProcessContextFactory context);
 	}
 }

@@ -8,30 +8,54 @@ namespace Rhino.ETL.Commands
 
 	public class ExecuteInParallelTransactionCommand : ExecuteInParallelCommand
 	{
+		private readonly IsolationLevel level;
 		private TransactionScope scope;
 
-		public ExecuteInParallelTransactionCommand(Target target) : base(target)
+		public ExecuteInParallelTransactionCommand(Target target) : this(target, IsolationLevel.ReadCommitted)
 		{
-			scope = new TransactionScope();
 		}
 
 		public ExecuteInParallelTransactionCommand(Target target, IsolationLevel level) : base(target)
+		{
+			this.level = level;
+		}
+
+
+		protected override void BeforeExecutingCommands(IProcessContext context)
 		{
 			TransactionOptions transactionOptions = new TransactionOptions();
 			transactionOptions.IsolationLevel = level;
 			scope = new TransactionScope(TransactionScopeOption.Required,
 				transactionOptions);
+
+			context.Subscribe<Exception>(new TopicEquals(Messages.Exception),
+			                             delegate(IMessageHeader header, Exception msg)
+			                             {
+											 Console.WriteLine(msg);
+			                             });
 		}
 
-		protected override void RegisterForExecution(ICommand command, IProcessContext context)
+		protected override void RegisterForExecution(ICommand command,IProcessContextFactory contextFactory, IProcessContext context)
 		{
+			EtlConfigurationContext current = EtlConfigurationContext.Current;
+			if (Transaction.Current == null)
+				throw new InvalidOperationException("You are not running in a transaction!");
 			DependentTransaction dependentTransaction = Transaction.Current.DependentClone(DependentCloneOption.BlockCommitUntilComplete);
 			context.Enqueue(delegate
 			{
+				using(current.EnterContext())
 				using(TransactionScope tx = new TransactionScope(dependentTransaction))
 				{
-					command.Execute(context);
-					tx.Complete();
+					try
+					{
+						command.Execute(contextFactory);
+						tx.Complete();
+					}
+					catch (Exception ex)
+					{
+						dependentTransaction.Rollback(ex);
+						throw;
+					}
 				}
 			});	
 		}

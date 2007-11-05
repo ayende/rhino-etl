@@ -75,8 +75,8 @@ namespace Rhino.ETL.Tests.Errors
 			ExecutionPackage package = context.BuildPackage();
 			ExecutionResult result = package.Execute("default");
 			Assert.AreEqual(ExecutionStatus.Failure, result.Status);
-			Assert.AreEqual(1, result.Exceptions.Count);
-			Assert.AreEqual("Just an error", result.Exceptions[0].Message);
+			Assert.LowerEqualThan(1, result.Exceptions.Count);
+			Assert.AreEqual("Just an error", result.Exceptions[0].InnerException.Message);
 		}
 
 		[Test]

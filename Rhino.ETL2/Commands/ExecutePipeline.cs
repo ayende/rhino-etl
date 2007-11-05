@@ -18,15 +18,12 @@ namespace Rhino.ETL.Commands
 			this.pipeline = pipeline;
 		}
 
-		protected override void DoExecute(IProcessContext context)
+		protected override void DoExecute(IProcessContextFactory contextFactory)
 		{
 			logger.InfoFormat("Starting pipeline {0}", pipeline.Name);
 			pipeline.Completed += delegate { RaiseCompleted(); };
 			pipeline.Prepare();
-			context.Enqueue(delegate
-			{
-				//pipeline.Start(target);
-			});
+			pipeline.Start(contextFactory);
 		}
 	}
 }

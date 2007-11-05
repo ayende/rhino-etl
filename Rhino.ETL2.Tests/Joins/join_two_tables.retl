@@ -1,0 +1,68 @@
+connection( 
+	"Connection",
+	ConnectionType: SqlConnection,
+	ConnectionString: "Data Source=localhost;Initial Catalog=ETL_Test; Integrated Security=SSPI;"
+	)
+
+source UsersSource, Connection="Connection":
+	Command: "SELECT Id, Name, Email FROM Users_Source"
+	
+source User2Org, Connection="Connection":
+	Command: "SELECT [UserId], [organization id] FROM Users2Org"
+	
+join JoinUsersAndOrganization:
+	if Left.OrgId == Right["organization id"] and Left.Id == Right.UserId:
+		Row.Copy(Left)
+		Row.Organization = Right["Organization Id"]
+
+join JoinWithTypeCasting_AndTransformation:
+	if Left.Id.ToString() == Right.UserId:
+		Row.Id = Left.Id
+		Row.Email = Left.Email
+		Row.FirstName = Left.Name.Split(char(' '))[0]
+		Row.LastName = Left.Name.Split(char(' '))[1]
+		Row.Organization = Right["Organization Id"]
+
+transform Distinct:
+	Context.Items["Rows"] = {} if Context.Items["Rows"] is null
+	key = Row.CreateKey(Parameters.Columns)
+	if Context.Items["Rows"].ContainsKey(key):
+		RemoveRow()
+		return
+	Context.Items["Rows"].Add(key, Row)
+
+destination UsersDestination, Connection = "Connection":
+	Command: """INSERT INTO Users_Destination (UserId, [First Name], [Last Name], Email, Orgnaization)
+				VALUES (@Id, @FirstName, @LastName, @Email, @Organization)
+			 """
+	
+pipeline CopyUsers:
+	UsersSource >> JoinWithTypeCasting_AndTransformation.Left
+	User2Org >> JoinWithTypeCasting_AndTransformation.Right
+	JoinWithTypeCasting_AndTransformation >> Distinct(Columns: ['Id'])
+	Distinct >> UsersDestination
+	
+transform CountRows:
+	Context.Items.RowCount = 0 unless Context.Items.RowCount
+	Context.Items.RowCount+=1
+	RemoveRow()
+	OnComplete:
+		SendRow( Row(RowCount: Context.Items.RowCount) )
+		
+transform CalcSumOfSalaryAndId:
+	unless Context.Items.IdSum:
+		Context.Items.IdSum = 0 
+		Context.Items.SalarySum = 0
+		
+	Context.Items.IdSum+=Row.Id
+	Context.Items.SalarySum+=Row.Salary
+	RemoveRow()
+	
+	OnComplete:
+		SendRow( Row(
+			IdSum: Context.Items.IdSum, 
+			SalarySum: Context.Items.SalarySum
+			) )
+			
+target default:
+	Execute("CopyUsers");

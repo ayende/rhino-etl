@@ -10,12 +10,9 @@ namespace Rhino.ETL.Impl
 	{
 		private readonly string[] imports;
 
-		private readonly string finalName;
-
-		public TransformModuleToContextClass(string[] imports, string finalName)
+		public TransformModuleToContextClass(string[] imports)
 		{
 			this.imports = imports;
-			this.finalName = finalName;
 		}
 
 		public override void Run()
@@ -23,7 +20,7 @@ namespace Rhino.ETL.Impl
 			Visit(this.CompileUnit);
 
 			ClassDefinition definition = new ClassDefinition();
-			definition.Name = finalName;
+			definition.Name = CompileUnit.Modules[0].Name;
 			definition.BaseTypes.Add(new SimpleTypeReference(typeof(EtlConfigurationContext).FullName));
 			Method method = new Method("BuildConfig");
 			definition.Members.Add(method);

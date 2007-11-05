@@ -7,12 +7,9 @@ namespace Rhino.ETL.Impl
 
 	public class AutoReferenceFilesAndAddToContextCompilerStep : AutoReferenceFilesCompilerStep
 	{
-		private readonly string finalName;
-
-		public AutoReferenceFilesAndAddToContextCompilerStep(string baseDirectory, string finalName)
+		public AutoReferenceFilesAndAddToContextCompilerStep(string baseDirectory)
 			: base(baseDirectory)
 		{
-			this.finalName = finalName;
 		}
 
 		public override void OnImport(Import node)
@@ -20,16 +17,13 @@ namespace Rhino.ETL.Impl
 			if (node.Namespace != "file")
 				return;
 
-			Module module = node.ParentNode as Module;
+			Module module = (Module)node.ParentNode;
 
 			base.OnImport(node);
 
-			string alias = "_"+Guid.NewGuid().ToString("n");
-			module.Imports.Add(new Import("", 
-				new ReferenceExpression(Path.GetFileNameWithoutExtension(node.AssemblyReference.Name)), 
-				new ReferenceExpression(alias)));
+			string alias = Path.GetFileNameWithoutExtension(node.AssemblyReference.Name);
 
-			MethodInvocationExpression newContext = new MethodInvocationExpression(AstUtil.CreateReferenceExpression(alias + "." + finalName));
+			MethodInvocationExpression newContext = new MethodInvocationExpression(AstUtil.CreateReferenceExpression(alias));
 			MethodInvocationExpression buildContext = new MethodInvocationExpression(
 				new MemberReferenceExpression(new SelfLiteralExpression(), "ImportConfig"),
 				newContext

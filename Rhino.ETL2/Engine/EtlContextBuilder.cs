@@ -27,6 +27,8 @@ namespace Rhino.ETL
 		                                                  	"Rhino.ETL",
 		                                                  	"FileHelpers",
 		                                                  	"Rhino.ETL.Impl",
+															"Rhino.ETL.Commands",
+															"Rhino.ETL.WebServices",
 		                                                  	"Rhino.ETL.FileHelpersExtensions",
 		                                                  	"System.Transactions",
 		                                                  	"Rhino.ETL.Engine"
@@ -83,8 +85,8 @@ namespace Rhino.ETL
 			compiler.Parameters.References.Add(typeof (DbType).Assembly);
 			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
 			compiler.Parameters.References.Add(typeof (CsvEngine).Assembly);
-			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesAndAddToContextCompilerStep(rootDir, rootName));
-			compiler.Parameters.Pipeline.Insert(3, new TransformModuleToContextClass(defaultImports, rootName));
+			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesAndAddToContextCompilerStep(rootDir));
+			compiler.Parameters.Pipeline.Insert(3, new TransformModuleToContextClass(defaultImports));
 			compiler.Parameters.Pipeline.Insert(11, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
 			if (run.Errors.Count != 0)

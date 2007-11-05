@@ -113,7 +113,7 @@ namespace Rhino.ETL.Engine
 					source.Validate(validationMessages);
 				}
 
-				foreach (DataDestination destination in destinations.Values)
+				foreach (BaseDataElement<DataDestination> destination in destinations.Values)
 				{
 					destination.Validate(validationMessages);
 				}
@@ -191,7 +191,7 @@ namespace Rhino.ETL.Engine
 					source.PerformSecondStagePass();
 				}
 
-				foreach (DataDestination destination in destinations.Values)
+				foreach (BaseDataElement<DataDestination> destination in destinations.Values)
 				{
 					destination.PerformSecondStagePass();
 				}

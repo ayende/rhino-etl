@@ -9,7 +9,8 @@ namespace Rhino.ETL.Engine
 	using System.Reflection;
 
 	[DebuggerDisplay("Count = {items.Count}")]
-	[DebuggerTypeProxy(typeof(Rhino.ETL.Impl.QuackingDictionary.QuackingDictionaryDebugView))]
+	[DebuggerTypeProxy(typeof(QuackingDictionaryDebugView))]
+	[Serializable]
 	public class Row : QuackingDictionary
 	{
 		static Dictionary<Type, List<PropertyInfo>> propertiesCache = new Dictionary<Type, List<PropertyInfo>>();

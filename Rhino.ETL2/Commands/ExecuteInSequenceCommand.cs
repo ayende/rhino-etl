@@ -36,12 +36,12 @@ namespace Rhino.ETL.Commands
 				throw new InvalidOperationException("Called WaitForCompletion before calling Execute");
 		}
 
-		protected override void DoExecute(IProcessContext context)
+		protected override void DoExecute(IProcessContextFactory contextfFactory)
 		{
 			started = true;
 			foreach (ICommand command in commands)
 			{
-				command.Execute(context);
+				command.Execute(contextfFactory);
 			}
 			RaiseCompleted();
 		}

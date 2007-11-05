@@ -1,11 +1,13 @@
 namespace Rhino.ETL.Engine
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using Boo.Lang;
+	using Interfaces;
 	using Retlang;
 
-	public abstract class Join : TransformationBase<Join>
+	public abstract class Join : TransformationBase<Join>, IProcess
 	{
 		private const string LeftQueueName = "Left";
 		private const string RightQueueName = "Right";
@@ -33,24 +35,36 @@ namespace Rhino.ETL.Engine
 			get { return name; }
 		}
 
-		public void Start(IProcessContext context, string leftName, string rightName)
+		public void Start(IProcessContext context, params string[] inputNames)
 		{
+			if(inputNames.Length != 2)
+				throw new ArgumentException("join must have two input names");
+			string leftName = inputNames[0];
+			string rightName = inputNames[1];
+
+			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
+			Pipeline currentPipeline = Pipeline.Current;
+			
 			Items[ProcessContextKey] = context;
 			context.Subscribe<object>(new TopicEquals(leftName + Messages.Done), delegate
 			{
 				leftDone = true;
-				TryToComplete(context);
+				using(configurationContext.EnterContext())
+				using(currentPipeline.EnterContext())
+					TryToComplete(context);
 			});
 			context.Subscribe<object>(new TopicEquals(rightName + Messages.Done), delegate
 			{
 				rightDone = true;
-				TryToComplete(context);
+				using (configurationContext.EnterContext())
+				using (currentPipeline.EnterContext())
+					TryToComplete(context);
 			});
-			context.Subscribe<Row>(new TopicEquals(LeftQueueName), delegate(IMessageHeader header, Row msg)
+			context.Subscribe<Row>(new TopicEquals(leftName), delegate(IMessageHeader header, Row msg)
 			{
 				left.Add(msg);
 			});
-			context.Subscribe<Row>(new TopicEquals(RightQueueName), delegate(IMessageHeader header, Row msg)
+			context.Subscribe<Row>(new TopicEquals(rightName), delegate(IMessageHeader header, Row msg)
 			{
 				right.Add(msg);
 			});
@@ -58,19 +72,19 @@ namespace Rhino.ETL.Engine
 
 		private void TryToComplete(IProcessContext context)
 		{
-			if(leftDone == false || rightDone == false)
+			if (leftDone == false || rightDone == false)
 				return;
 
 			JoinQueues(left, right);
-			context.Publish(OutputName + Messages.Done, Messages.Done);
+			context.Publish(Name +"." + OutputName + Messages.Done, Messages.Done);
 			context.Stop();
 		}
 
-		private void JoinQueues(IEnumerable<Row> left, IEnumerable<Row> right)
+		private void JoinQueues(IEnumerable<Row> leftRows, IEnumerable<Row> rightRows)
 		{
-			foreach (Row leftRow in left)
+			foreach (Row leftRow in leftRows)
 			{
-				foreach (Row rightRow in right)
+				foreach (Row rightRow in rightRows)
 				{
 					bool shouldAdd = (bool)Condition.Call(new object[] { leftRow, rightRow });
 					if (shouldAdd)

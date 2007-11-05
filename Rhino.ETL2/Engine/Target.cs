@@ -129,8 +129,13 @@ namespace Rhino.ETL.Engine
 
 		public void Run(IProcessContextFactory contextFactory)
 		{
-			IProcessContext processContext = contextFactory.CreateAndStart();
-			container.Execute(processContext);
+			IProcessContext listenToContainer = contextFactory.CreateAndStart();
+			listenToContainer.Subscribe<Exception>(new TopicEquals(Messages.Exception),
+			delegate(IMessageHeader header, Exception msg)
+			{
+				AddFault(msg);
+			});
+			container.Execute(contextFactory);
 		}
 
 		public void WaitForCompletion()

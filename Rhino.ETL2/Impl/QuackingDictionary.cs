@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace Rhino.ETL.Impl
 {
+	using System.Text;
+
+	[Serializable]
 	public class QuackingDictionary : IQuackFu
 	{
 		protected IDictionary items;
@@ -99,12 +102,32 @@ namespace Rhino.ETL.Impl
 					get { return value; }
 				}
 			}
-
- 
-
 		}
 
- 
 
+		public override string ToString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("{");
+			foreach (DictionaryEntry item in items)
+			{
+				sb.Append(item.Key)
+					.Append(" : ");
+				if (item.Value is string)
+				{
+					sb.Append("\"")
+						.Append(item.Value)
+						.Append("\"");
+				}
+				else
+				{
+					sb.Append(item.Value);
+				}
+				sb.Append(", ");
+					
+			}
+			sb.Append("}");
+			return sb.ToString();
+		}
 	}
 }

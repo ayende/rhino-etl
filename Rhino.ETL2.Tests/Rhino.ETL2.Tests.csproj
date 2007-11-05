@@ -40,34 +40,56 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\Boo\Boo.Lang.Parser.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MbUnit.Framework, Version=1.0.2700.29885, Culture=neutral, PublicKeyToken=5e72ecd30bc408d5">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\Tools\MbUnit\MbUnit.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Retlang, Version=0.2.1.2, Culture=neutral, PublicKeyToken=a99b3bce1dc72e93, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SharedLibs\Retlang\Retlang.dll</HintPath>
+      <HintPath>..\..\..\retlang\src\Retlang\bin\Debug\Retlang.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebDev.WebHost, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_32\WebDev.WebHost\8.0.0.0__b03f5f7f11d50a3a\WebDev.WebHost.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="Connections\ConnectionFixture.cs" />
+    <Compile Include="ContextfulObjectFixture.cs" />
     <Compile Include="Destinations\DestinationsFixture.cs" />
     <Compile Include="Errors\ErrorsFixture.cs" />
     <Compile Include="FakeEtlConfigurationContext.cs" />
+    <Compile Include="Files\Files.cs" />
+    <Compile Include="GetEmployees.asmx.cs">
+    </Compile>
+    <Compile Include="Integration\IntegrationTestBase.cs" />
+    <Compile Include="Integration\IntegrationTests.cs" />
     <Compile Include="IntGenerator.cs" />
+    <Compile Include="Joins\Joins.cs" />
+    <Compile Include="Pipelines\PipelineFixture.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PutInSyncList.cs" />
+    <Compile Include="RowFixture.cs" />
+    <Compile Include="Syntax\SyntaxFixture.cs" />
+    <Compile Include="Targets\TargetFixture.cs" />
+    <Compile Include="Transforms\TransformFixture.cs" />
     <Compile Include="UsingRetlang\DelegateCallable.cs" />
     <Compile Include="UsingRetlang\FakeJoin.cs" />
     <Compile Include="UsingRetlang\FakeTransform.cs" />
     <Compile Include="UsingRetlang\SimpleScenariosFixture.cs" />
+    <Compile Include="ValidationsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhino.ETL2\Rhino.ETL2.csproj">
@@ -107,6 +129,44 @@
     <None Include="Errors\transform_no_name.retl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Files\FromFile.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\ToFile.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Integration\basic.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Integration\connections.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Integration\Database.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Joins\join_two_tables.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Pipelines\Pipeline.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Syntax\full_package.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Targets\targets.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Transforms\transforms_only.retl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Files\CustomersTab.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GetEmployees.asmx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

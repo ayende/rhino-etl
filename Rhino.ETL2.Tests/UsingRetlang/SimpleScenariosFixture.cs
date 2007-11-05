@@ -14,31 +14,35 @@ namespace Rhino.ETL2.Tests.UsingRetlang
 			EtlConfigurationContext ecc = new FakeEtlConfigurationContext();
 			using (ecc.EnterContext())
 			{
-				IProcessContextFactory factory = new ProcessContextFactory();
-				factory.Start();
-				IProcessContext producer = factory.Create();
-				producer.Start();
-				IProcessContext consumer = factory.Create();
-				consumer.Start();
-
-				DataDestination dd = new DataDestination("test");
-				PutInSyncList putInSyncList = new PutInSyncList();
-				dd.OnRowBlock = putInSyncList;
-				dd.Start(consumer, "Output");
-
-				DataSource ds = new DataSource("test");
-				ds.Execute(new IntGenerator(ds));
-				ds.Start(producer, "Output");
-
-				producer.Join();
-				consumer.Join();
-				factory.Stop();
-				factory.Join();
-
-				Assert.AreEqual(50, putInSyncList.List.Count);
-				for (int i = 0; i < 50; i++)
+				Pipeline pipeline = new Pipeline("foo");
+				using (pipeline.EnterContext())
 				{
-					Assert.AreEqual(i, putInSyncList.List[i]);
+					IProcessContextFactory factory = new ProcessContextFactory();
+					factory.Start();
+					IProcessContext producer = factory.Create();
+					producer.Start();
+					IProcessContext consumer = factory.Create();
+					consumer.Start();
+
+					DataDestination dd = new DataDestination("test");
+					PutInSyncList putInSyncList = new PutInSyncList();
+					dd.OnRowBlock = putInSyncList;
+					dd.Start(consumer, "test.Output");
+
+					DataSource ds = new DataSource("test");
+					ds.Execute(new IntGenerator(ds));
+					ds.Start(producer, "Output");
+
+					producer.Join();
+					consumer.Join();
+					factory.Stop();
+					factory.Join();
+
+					Assert.AreEqual(50, putInSyncList.List.Count);
+					for (int i = 0; i < 50; i++)
+					{
+						Assert.AreEqual(i, putInSyncList.List[i]);
+					}
 				}
 			}
 		}
@@ -49,49 +53,53 @@ namespace Rhino.ETL2.Tests.UsingRetlang
 			EtlConfigurationContext ecc = new FakeEtlConfigurationContext();
 			using (ecc.EnterContext())
 			{
-				IProcessContextFactory factory = new ProcessContextFactory();
-				factory.Start();
-				IProcessContext producer1 = factory.Create();
-				producer1.Start();
-				IProcessContext producer2 = factory.Create();
-				producer2.Start();
-				IProcessContext consumer = factory.Create();
-				consumer.Start();
-				IProcessContext joinConsumer = factory.Create();
-				joinConsumer.Start();
+				Pipeline pipeline = new Pipeline("foo");
 
-				Join join = new FakeJoin("test join");
-				join.Condition = new DelegateCallable(delegate(object[] args)
+				using (pipeline.EnterContext())
 				{
-					return (int)((Row)args[0])["id"] == (int)((Row)args[1])["id"];
-				});
-				join.Start(joinConsumer, "Left", "Right");
+					IProcessContextFactory factory = new ProcessContextFactory();
+					factory.Start();
+					IProcessContext producer1 = factory.Create();
+					producer1.Start();
+					IProcessContext producer2 = factory.Create();
+					producer2.Start();
+					IProcessContext consumer = factory.Create();
+					consumer.Start();
+					IProcessContext joinConsumer = factory.Create();
+					joinConsumer.Start();
 
-				DataDestination dd = new DataDestination("test");
-				PutInSyncList putInSyncList = new PutInSyncList();
-				dd.OnRowBlock = putInSyncList;
-				dd.Start(consumer, "Output");
+					Join join = new FakeJoin("test join");
+					join.Condition =
+						new DelegateCallable(
+							delegate(object[] args) { return (int) ((Row) args[0])["id"] == (int) ((Row) args[1])["id"]; });
+					join.Start(joinConsumer, "test1.Left", "test2.Right");
 
-				DataSource ds = new DataSource("test");
-				ds.OutputName = "Left";
-				ds.Execute(new IntGenerator(ds));
-				ds.Start(producer1, "Output");
+					DataDestination dd = new DataDestination("test");
+					PutInSyncList putInSyncList = new PutInSyncList();
+					dd.OnRowBlock = putInSyncList;
+					dd.Start(consumer, "test join.Output");
 
-				DataSource ds2 = new DataSource("test2");
-				ds2.OutputName = "Right";
-				ds2.Execute(new IntGenerator(ds2));
-				ds2.Start(producer2, "Output");
+					DataSource ds = new DataSource("test1");
+					ds.OutputName = "Left";
+					ds.Execute(new IntGenerator(ds));
+					ds.Start(producer1, "Output");
 
-				producer1.Join();
-				joinConsumer.Join();
-				consumer.Join();
-				factory.Stop();
-				factory.Join();
+					DataSource ds2 = new DataSource("test2");
+					ds2.OutputName = "Right";
+					ds2.Execute(new IntGenerator(ds2));
+					ds2.Start(producer2, "Output");
 
-				Assert.AreEqual(50, putInSyncList.List.Count);
-				for (int i = 0; i < 50; i++)
-				{
-					Assert.AreEqual(i * i, putInSyncList.List[i]);
+					producer1.Join();
+					joinConsumer.Join();
+					consumer.Join();
+					factory.Stop();
+					factory.Join();
+
+					Assert.AreEqual(50, putInSyncList.List.Count);
+					for (int i = 0; i < 50; i++)
+					{
+						Assert.AreEqual(i*i, putInSyncList.List[i]);
+					}
 				}
 			}
 		}
@@ -102,39 +110,44 @@ namespace Rhino.ETL2.Tests.UsingRetlang
 			EtlConfigurationContext ecc = new FakeEtlConfigurationContext();
 			using (ecc.EnterContext())
 			{
-				IProcessContextFactory factory = new ProcessContextFactory();
-				factory.Start();
-				IProcessContext producer = factory.Create();
-				producer.Start();
-				IProcessContext transformer = factory.Create();
-				transformer.Start();
-				IProcessContext consumer = factory.Create();
-				consumer.Start();
+				Pipeline pipeline = new Pipeline("foo");
 
-				DataDestination dd = new DataDestination("test");
-				PutInSyncList putInSyncList = new PutInSyncList();
-				dd.OnRowBlock = putInSyncList;
-				dd.Start(consumer, "Output");
-
-				Transform transform = new FakeTransform("foo");
-				transform.OutputName = "Output";
-				transform.Start(transformer, "OutputToTransform");
-
-				DataSource ds = new DataSource("test");
-				ds.Execute(new IntGenerator(ds));
-				ds.OutputName = "OutputToTransform";
-				ds.Start(producer, "");
-
-				producer.Join();
-				transformer.Join();
-				consumer.Join();
-				factory.Stop();
-				factory.Join();
-
-				Assert.AreEqual(50, putInSyncList.List.Count);
-				for (int i = 0; i < 50; i++)
+				using (pipeline.EnterContext())
 				{
-					Assert.AreEqual("Id: " + i, putInSyncList.List[i]);
+					IProcessContextFactory factory = new ProcessContextFactory();
+					factory.Start();
+					IProcessContext producer = factory.Create();
+					producer.Start();
+					IProcessContext transformer = factory.Create();
+					transformer.Start();
+					IProcessContext consumer = factory.Create();
+					consumer.Start();
+
+					DataDestination dd = new DataDestination("test");
+					PutInSyncList putInSyncList = new PutInSyncList();
+					dd.OnRowBlock = putInSyncList;
+					dd.Start(consumer, "foo.Output");
+
+					Transform transform = new FakeTransform("foo");
+					transform.OutputName = "Output";
+					transform.Start(transformer, "test.OutputToTransform");
+
+					DataSource ds = new DataSource("test");
+					ds.Execute(new IntGenerator(ds));
+					ds.OutputName = "OutputToTransform";
+					ds.Start(producer, "");
+
+					producer.Join();
+					transformer.Join();
+					consumer.Join();
+					factory.Stop();
+					factory.Join();
+
+					Assert.AreEqual(50, putInSyncList.List.Count);
+					for (int i = 0; i < 50; i++)
+					{
+						Assert.AreEqual("Id: " + i, putInSyncList.List[i]);
+					}
 				}
 			}
 		}

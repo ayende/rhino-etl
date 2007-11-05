@@ -8,6 +8,7 @@ using Rhino.ETL.Exceptions;
 namespace Rhino.ETL.Engine
 {
 	using Impl;
+	using Interfaces;
 
 	[DebuggerDisplay("Assoication: {From}.{FromQueue} >> {To}.{ToQueue}")]
 	public class PipelineAssociation
@@ -20,7 +21,8 @@ namespace Rhino.ETL.Engine
 		private AssociationType toType;
 		private readonly IDictionary parameters = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
 
-		public event Action<PipelineAssociation> Completed = delegate { };
+		private IProcess input, output;
+
 
 		public IDictionary Parameters
 		{
@@ -103,10 +105,21 @@ namespace Rhino.ETL.Engine
 
 		public void PerformSecondStagePass()
 		{
-			FindFromContext<object>(From, FromType);
-			FindFromContext<object>(To, ToType);
+			input = FindFromContext<IProcess>(from, fromType);
+			output = FindFromContext<IProcess>(to, toType);
 		}
 
+		public IProcess Input
+		{
+			get { return input; }
+			set { input = value; }
+		}
+
+		public IProcess Output
+		{
+			get { return output; }
+			set { output = value; }
+		}
 
 		public T FindFromContext<T>(string name, AssociationType associationType)
 			where T : class
@@ -139,27 +152,5 @@ namespace Rhino.ETL.Engine
 			}
 			return obj;
 		}
-
-		public void ConnectEnds(Target target,Pipeline pipeline)
-		{
-			/*
-			 * string destinationQueue = ToQueue ?? DefaultQueue;
-			FromInstance.RegisterForwarding(
-				target,
-				new PipeLineStage(
-					pipeline,
-					FromQueue ?? DefaultQueue,
-					ToInstance,
-					destinationQueue, 500, Parameters)
-				);
-			ToInstance.Completed += delegate(IOutput output, QueueKey key)
-			{
-				if (destinationQueue.Equals(key.Name, StringComparison.InvariantCultureIgnoreCase))
-					Completed(this);
-			};
-			 */ 
-		}
-
-		private const string DefaultQueue = "Output";
 	}
 }

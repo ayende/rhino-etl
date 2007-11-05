@@ -1,6 +1,10 @@
 namespace Rhino.ETL.Engine
 {
+	using System;
 	using System.Collections.Generic;
+	using Commons;
+	using Interfaces;
+	using Retlang;
 
 	public class Pipeline : ContextfulObjectBase<Pipeline>
 	{
@@ -26,12 +30,12 @@ namespace Rhino.ETL.Engine
 
 		public IList<PipelineAssociation> Associations
 		{
-		    get { return associations; }
+			get { return associations; }
 		}
 
 		public void AddAssociation(PipelineAssociation association)
 		{
-		    associations.Add(association);
+			associations.Add(association);
 		}
 
 		public void Validate(ICollection<string> messages)
@@ -40,7 +44,7 @@ namespace Rhino.ETL.Engine
 			{
 				foreach (PipelineAssociation association in associations)
 				{
-				    association.Validate(messages);
+					association.Validate(messages);
 				}
 			}
 		}
@@ -51,7 +55,7 @@ namespace Rhino.ETL.Engine
 			{
 				foreach (PipelineAssociation association in associations)
 				{
-				    association.PerformSecondStagePass();
+					association.PerformSecondStagePass();
 				}
 			}
 		}
@@ -59,34 +63,132 @@ namespace Rhino.ETL.Engine
 
 		public void Prepare()
 		{
-	
+			PerformSecondStagePass();
 		}
 
-		//public void Start(Target target)
-		//{
-		//    if (associations.Count == 0)
-		//    {
-		//        Completed(this);
-		//        return;
-		//    }
-		//    if (AcquireAllConnections(target) == false)
-		//        return;
-		//    foreach (PipelineAssociation association in associations)
-		//    {
-		//        association.ConnectEnds(target, this);
-		//    }
-		//    foreach (PipelineAssociation association in associations)
-		//    {
-		//        association.Completed += AssociationCompleted;
-		//    }
-		//    foreach (DataSource value in EtlConfigurationContext.Current.Sources.Values)
-		//    {
-		//        DataSource cSharpSpec_21_5_2_Damn_It = value; 
-		//        ExecutionPackage.Current.RegisterForExecution(target,
-		//                                                      delegate { cSharpSpec_21_5_2_Damn_It.Start(this); }
-		//            );
-		//    }
-		//}
+		public void Start(IProcessContextFactory contextFactory)
+		{
+			if (associations.Count == 0)
+			{
+				Completed(this);
+				return;
+			}
+			IDictionary<IProcess, IList<IProcess>> deps;
+			Dictionary<IProcess, IList<PipelineAssociation>> associationsByOutput;
+			Dictionary<IProcess, IList<PipelineAssociation>> associationsByInput;
+			BuildDependencies(out deps, out associationsByOutput, out associationsByInput);
+			IProcessContext listenToPipeline = contextFactory.CreateAndStart();
+			List<IProcessContext> pipelineProcesses = new List<IProcessContext>();
+			bool stopped = false;
+			listenToPipeline.Subscribe<Exception>(new TopicEquals(Messages.Exception),
+												delegate(IMessageHeader header, Exception msg)
+												{
+													Logger.Fatal("Error when running pipeline " + Name, msg);
+													if (stopped)
+														return;
+													stopped = true;
+													foreach (IProcessContext process in pipelineProcesses)
+													{
+														process.Stop();
+													}
+													Completed(this);
+													listenToPipeline.Stop();
+												});
+			int completedDestinations = 0;
+			int totalDestinations = deps.Count - associationsByInput.Count;
+			using (EnterContext())
+			{
+				IList<IProcess> dependencies = SortByReverseDependencies(deps);
+				foreach (IProcess process in dependencies)
+				{
+					List<string> inputNames = new List<string>();
+					if (associationsByOutput.ContainsKey(process)) // if not, it is an input only
+					{
+						IList<PipelineAssociation> outputs = associationsByOutput[process];
+						foreach (PipelineAssociation output in outputs)
+						{
+							output.Input.OutputName = output.ToQueue ?? "Output";
+							string inputName = output.Input.Name + "." + output.Input.OutputName;
+							inputNames.Add(inputName);
+						}
+					}
+					if (associationsByInput.ContainsKey(process) == false)// this is destination node
+					{
+						listenToPipeline.Subscribe<object>(new TopicEquals(process.Name + Messages.Done),
+						delegate
+						{
+							completedDestinations += 1;
+							if (completedDestinations == totalDestinations)
+							{
+								Completed(this);
+								listenToPipeline.Stop();
+							}
+						});
+					}
 
+					IProcessContext processContext = contextFactory.Create();
+					pipelineProcesses.Add(processContext);
+					processContext.Start();
+					process.Start(processContext, inputNames.ToArray());
+				}
+			}
+		}
+
+		private void BuildDependencies(
+			out IDictionary<IProcess, IList<IProcess>> deps,
+			out Dictionary<IProcess, IList<PipelineAssociation>> associationsByOutput,
+			out Dictionary<IProcess, IList<PipelineAssociation>> associationsByInput)
+		{
+			deps = new Dictionary<IProcess, IList<IProcess>>();
+			associationsByOutput = new Dictionary<IProcess, IList<PipelineAssociation>>();
+			associationsByInput = new Dictionary<IProcess, IList<PipelineAssociation>>();
+			foreach (PipelineAssociation association in associations)
+			{
+				if (deps.ContainsKey(association.Output) == false)
+					deps.Add(association.Output, new List<IProcess>());
+				if (deps.ContainsKey(association.Input) == false)
+					deps.Add(association.Input, new List<IProcess>());
+
+				if (associationsByOutput.ContainsKey(association.Output) == false)
+					associationsByOutput.Add(association.Output, new List<PipelineAssociation>());
+				if (associationsByInput.ContainsKey(association.Input) == false)
+					associationsByInput.Add(association.Input, new List<PipelineAssociation>());
+
+				associationsByOutput[association.Output].Add(association);
+				associationsByInput[association.Input].Add(association);
+				deps[association.Output].Add(association.Input);
+			}
+		}
+
+
+		private static IList<IProcess> SortByReverseDependencies(IDictionary<IProcess, IList<IProcess>> deps)
+		{
+			List<IProcess> orderedList = new List<IProcess>();
+			Dictionary<IProcess, bool> visited = new Dictionary<IProcess, bool>();
+
+			foreach (IProcess key in deps.Keys)
+			{
+				visited[key] = false;
+			}
+
+			Proc<IProcess> visit = null;
+			visit = delegate(IProcess process)
+			{
+				if (visited[process])
+					return;
+				visited[process] = true;
+				foreach (IProcess dependingProcess in deps[process])
+				{
+					visit(dependingProcess);
+				}
+				orderedList.Insert(0, process);
+			};
+			foreach (IProcess key in deps.Keys)
+			{
+				visit(key);
+			}
+
+			return orderedList;
+		}
 	}
 }

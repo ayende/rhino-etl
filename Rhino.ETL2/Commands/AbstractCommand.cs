@@ -25,7 +25,7 @@ namespace Rhino.ETL.Commands
 			get { return commandsThatMustBeCompletedBeforeThisCommandCanRun; }
 		}
 
-		public void Execute(IProcessContext context)
+		public void Execute(IProcessContextFactory context)
 		{
 			foreach (ICommand command in commandsThatMustBeCompletedBeforeThisCommandCanRun)
 			{
@@ -35,15 +35,18 @@ namespace Rhino.ETL.Commands
 			DoExecute(context);
 		}
 
-		protected abstract void DoExecute(IProcessContext context);
+		protected abstract void DoExecute(IProcessContextFactory contextFactory);
 
 		public WaitHandle GetWaitHandle()
 		{
 			ManualResetEvent resetEvent = new ManualResetEvent(false);
-			Completed += delegate
+			Action<ICommand> done = null;
+			done = delegate
 			{
+				Completed -= done;
 				resetEvent.Set();
 			};
+			Completed += done;
 			if (HasCompleted)
 				resetEvent.Set();
 			return resetEvent;

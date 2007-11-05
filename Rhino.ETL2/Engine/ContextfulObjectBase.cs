@@ -66,7 +66,8 @@ namespace Rhino.ETL.Engine
 					nestedCount += 1;
 					return;
 				}
-				if (current != null && value != null)
+				T hackToGetDebuggerSuppoer = current;
+				if (hackToGetDebuggerSuppoer != null && value != null)
 				{
 					string s = string.Format("Tried to set the Current context for {0} without first clearing the existing one!", typeof(T).Name);
 					throw new ContextException(s);

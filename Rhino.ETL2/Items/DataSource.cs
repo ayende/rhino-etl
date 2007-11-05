@@ -1,16 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
-using Boo.Lang;
-using Boo.Lang.Compiler.MetaProgramming;
-using Rhino.ETL.Engine;
-
 namespace Rhino.ETL
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using Boo.Lang;
+	using Engine;
+	using Interfaces;
 	using Retlang;
 
-	public class DataSource : BaseDataElement<DataSource>
+	public class DataSource : BaseDataElement<DataSource>, IProcess
 	{
 		private const string DefaultOutputName = "Output";
 		protected ICallable blockToExecute;
@@ -29,7 +27,7 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public override void Start(IProcessContext context, string input)
+		public override void Start(IProcessContext context, params string [] inputNames)
 		{
 			Items[ProcessContextKey] = context;
 			if (blockToExecute != null)
@@ -43,7 +41,7 @@ namespace Rhino.ETL
 			{
 				ReadFromDatabase(context);
 			}
-			context.Publish(OutputName + Messages.Done, Messages.Done);
+			context.Publish(Name +"." + OutputName + Messages.Done, Messages.Done);
 			context.Stop();
 		}
 
@@ -97,9 +95,9 @@ namespace Rhino.ETL
 			SendRow(ProcessContextFromCurrentContext, name, row);
 		}
 
-		private static void SendRow(IObjectPublisher context, string name, Row row)
+		private void SendRow(IObjectPublisher context, string output, Row row)
 		{
-			context.Publish(name, row);
+			context.Publish(Name + "." + output, row);
 		}
 
 		public void Execute(ICallable block)

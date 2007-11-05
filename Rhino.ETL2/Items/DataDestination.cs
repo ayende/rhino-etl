@@ -1,16 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using Boo.Lang;
-
 namespace Rhino.ETL
 {
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Data;
+	using Boo.Lang;
 	using Engine;
+	using Interfaces;
 	using Retlang;
 
-	public class DataDestination : BaseDataElement<DataDestination>
+	public class DataDestination : BaseDataElement<DataDestination>, IProcess
 	{
 		private bool hasCompleted = false;
 		private bool firstCall = true;
@@ -76,8 +75,13 @@ namespace Rhino.ETL
 		}
 
 
-		public override void Start(IProcessContext context, string inputName)
+		public override void Start(IProcessContext context, params string[] inputNames)
 		{
+			if(inputNames.Length != 1)
+				throw new ArgumentException("Destination must have a single input name");
+			string inputName = inputNames[0];
+			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
+			Pipeline currentPipeline = Pipeline.Current;
 			On<IList<IMessageEnvelope<Row>>> callback = delegate(IList<IMessageEnvelope<Row>> rowMsgs)
 			{
 				if (hasCompleted)
@@ -88,7 +92,9 @@ namespace Rhino.ETL
 				{
 					rows.Add(envelope.Message);
 				}
-				ProcessOutput(rows);
+				using(configurationContext.EnterContext())
+				using(currentPipeline.EnterContext())
+					ProcessOutput(rows);
 			};
 			BatchSubscriber<Row> batchingSubscriber = new BatchSubscriber<Row>(callback, context, BatchSize);
 
@@ -96,9 +102,16 @@ namespace Rhino.ETL
 			{
 				batchingSubscriber.Flush();
 				Complete();
+				context.Publish(Name + Messages.Done, Messages.Done);
 				context.Stop();
 			});
 			context.Subscribe<Row>(new TopicEquals(inputName), batchingSubscriber.ReceiveMessage);
+		}
+
+		public string OutputName
+		{
+			get { throw new NotImplementedException(); }
+			set {  }
 		}
 
 		public void ProcessOutput(IList<Row> rows)

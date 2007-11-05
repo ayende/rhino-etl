@@ -43,26 +43,56 @@ namespace Rhino.ETL.Commands
 			latch.WaitOne(timeOut);
 		}
 
-		protected override void DoExecute(IProcessContext context)
+		protected override void DoExecute(IProcessContextFactory contextFactory)
 		{
 			latch = new CountdownLatch(commands.Count);
-			foreach (ICommand command in commands)
+			IProcessContext context = contextFactory.CreateAndStart();
+			try
 			{
-				command.Completed += delegate
+				BeforeExecutingCommands(context);
+				foreach (ICommand command in commands)
 				{
-					int remaining = latch.Set();
-					if (remaining == 0)
-						RaiseCompleted();
-				};
-				RegisterForExecution(command, context);
+					command.Completed += delegate
+					{
+						int remaining = latch.Set();
+						if (remaining == 0)
+						{
+							RaiseCompleted();
+							context.Stop();
+						}
+					};
+					try
+					{
+						RegisterForExecution(command, contextFactory, context);
+					}
+					catch (Exception ex)
+					{
+						context.Publish(Messages.Exception, ex);
+						context.Stop();
+						throw;
+					}
+				}
+			}
+			finally
+			{
+				context.Stop();
 			}
 		}
 
-		protected virtual void RegisterForExecution(ICommand command, IProcessContext context)
+		protected virtual void BeforeExecutingCommands(IProcessContext context)
 		{
+			
+		}
+
+		protected virtual void RegisterForExecution(ICommand command, IProcessContextFactory contextFactory, IProcessContext context)
+		{
+			EtlConfigurationContext current = EtlConfigurationContext.Current;
 			context.Enqueue(delegate
 			{
-				command.Execute(context);
+				using(current.EnterContext())
+				{
+					command.Execute(contextFactory);
+				}
 			});
 		}
 	}

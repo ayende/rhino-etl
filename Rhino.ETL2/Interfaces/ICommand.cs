@@ -7,7 +7,7 @@ namespace Rhino.ETL
 	public interface ICommand
 	{
 		event Action<ICommand> Completed;
-		void Execute(IProcessContext context);
+		void Execute(IProcessContextFactory context);
 		WaitHandle GetWaitHandle();
 		void After(ICommand command);
 	}

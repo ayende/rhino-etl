@@ -50,7 +50,7 @@ namespace Rhino.ETL
 			}
 		}
 
-		public abstract void Start(IProcessContext context, string input);
+		public abstract void Start(IProcessContext context, params string[] inputNames);
 
 		[ReadOnly(true)]
 		public string Connection
