@@ -27,6 +27,12 @@ namespace Rhino.ETL
 			engine.BeginWriteFile(filename);
 			return new NicerSyntaxAdapter(engine);
 		}
+		
+		public NicerSyntaxAdapter AppendTo(string filename)
+		{
+			   engine.BeginAppendToFile(filename);
+			   return new NicerSyntaxAdapter(engine);
+		}
 
 		private static string NormalizeFilename(string filename)
 		{
