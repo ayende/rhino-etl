@@ -38,9 +38,9 @@ namespace Rhino.ETL.FileHelpersExtensions
 		public override object StringToField(string from)
 		{
 			object val;
-			if (from == null || nullValue == from)
+			if (string.IsNullOrEmpty(from) || nullValue == from)
 			{
-				from = string.Empty;
+				return null;
 			}
 			try
 			{

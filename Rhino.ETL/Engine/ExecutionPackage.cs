@@ -26,7 +26,7 @@ namespace Rhino.ETL.Engine
 			get { return configurationContext; }
 		}
 
-		protected ExecutionPackage()
+		public ExecutionPackage()
 		{
 		}
 

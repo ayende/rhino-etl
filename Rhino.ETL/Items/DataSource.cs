@@ -29,25 +29,37 @@ namespace Rhino.ETL
 			EtlConfigurationContext.Current.AddSource(name, this);
 		}
 
-		public override void Start(IProcessContext context, params string [] inputNames)
+		public override void Start(IProcessContext context, params string[] inputNames)
 		{
-			ColoredConsole.WriteLine(ConsoleColor.Cyan, "Starting data source: "+Name);
-			Items[ProcessContextKey] = context;
-			if (blockToExecute != null)
+			try
 			{
-				using (EnterContext())
+				ColoredConsole.WriteLine(ConsoleColor.Cyan, "Starting data source: " + Name);
+				Items[ProcessContextKey] = context;
+				if (blockToExecute != null)
 				{
-					blockToExecute.Call(new object[] { this });
+					using (EnterContext())
+					{
+						blockToExecute.Call(new object[] { this });
+					}
 				}
+				else
+				{
+					ReadFromDatabase(context);
+				}
+				string topic = Name + "." + OutputName + Messages.Done;
+				ColoredConsole.WriteLine(ConsoleColor.DarkCyan, string.Format("Finished data source: {0} {1} Rows", topic, rowCount));
+				context.Publish(topic, Messages.Done);
 			}
-			else
+			catch (Exception e)
 			{
-				ReadFromDatabase(context);
+				Logger.Error(Name +" threw an exception",e);
+				context.Publish(Messages.Exception, 
+								new InvalidOperationException(Name +" threw an exception", e));
 			}
-			string topic = Name +"." + OutputName + Messages.Done;
-			ColoredConsole.WriteLine(ConsoleColor.DarkCyan, string.Format("Finished data source: {0} {1} Rows", topic, rowCount));
-			context.Publish(topic, Messages.Done);
-			context.Stop();
+			finally
+			{
+				context.Stop();
+			}
 		}
 
 		/// <summary>

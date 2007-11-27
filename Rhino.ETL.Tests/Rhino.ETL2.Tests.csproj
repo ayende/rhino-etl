@@ -92,7 +92,7 @@
     <Compile Include="ValidationsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rhino.ETL2\Rhino.ETL2.csproj">
+    <ProjectReference Include="..\Rhino.ETL\Rhino.ETL2.csproj">
       <Project>{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}</Project>
       <Name>Rhino.ETL2</Name>
     </ProjectReference>

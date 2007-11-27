@@ -1,37 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.Tests", "Rhino.ETL.Tests\Rhino.ETL.Tests.csproj", "{3F71149F-9107-4CC3-8684-96FD22372CFF}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL", "Rhino.ETL\Rhino.ETL.csproj", "{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.UI", "Rhino.ETL.UI\Rhino.ETL.UI.csproj", "{34273260-13C8-4E3F-836B-651BEDA01DC1}"
-	ProjectSection(WebsiteProperties) = preProject
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.Debug = "False"
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.Cmd", "Rhino.Etl.Cmd\Rhino.ETL.Cmd.csproj", "{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL2", "Rhino.ETL2\Rhino.ETL2.csproj", "{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL", "Rhino.ETL\Rhino.ETL.csproj", "{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL2.Tests", "Rhino.ETL2.Tests\Rhino.ETL2.Tests.csproj", "{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.ETL.Tests", "Rhino.ETL.Tests\Rhino.ETL.Tests.csproj", "{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -46,15 +28,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3F71149F-9107-4CC3-8684-96FD22372CFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4019C9D-36FE-4E4E-879D-2F9EC8437EB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34273260-13C8-4E3F-836B-651BEDA01DC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84F9C4C0-65FE-4E65-9BE2-6342383CC20C}.Release|Any CPU.ActiveCfg = Release|Any CPU

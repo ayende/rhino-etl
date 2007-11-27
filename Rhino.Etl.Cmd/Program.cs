@@ -2,12 +2,15 @@ namespace Rhino.ETL.Cmd
 {
 	using System;
 	using System.Xml;
+	using Boo.Lang.Compiler;
 	using CommandLine;
 	using Engine;
 	using Impl;
+	using log4net;
 	using log4net.Appender;
 	using log4net.Config;
 	using log4net.Core;
+	using log4net.Layout;
 
 	internal class Program
 	{
@@ -17,17 +20,20 @@ namespace Rhino.ETL.Cmd
 
 			if (Parser.ParseArgumentsWithUsage(args, options) == false)
 				Environment.Exit(2);
-
 			if (options.Verbose)
 			{
 				ColoredConsoleAppender appender = new ColoredConsoleAppender();
+				appender.Layout = new PatternLayout(@"%timestamp [%thread] %level %logger - %message %exception %newline");
 				AddColorMapping(appender, Level.Error, ColoredConsoleAppender.Colors.Red);
 				AddColorMapping(appender, Level.Warn, ColoredConsoleAppender.Colors.Yellow);
-				AddColorMapping(appender, Level.Info, ColoredConsoleAppender.Colors.Green | ColoredConsoleAppender.Colors.HighIntensity);
+				AddColorMapping(appender, Level.Info, ColoredConsoleAppender.Colors.Green);
 				AddColorMapping(appender, Level.Debug, ColoredConsoleAppender.Colors.Green);
+				appender.ActivateOptions();
 				BasicConfigurator.Configure(appender);
 			}
+			ILog logger = LogManager.GetLogger(typeof(Program));
 
+			logger.Debug("Starting...");
 			BulidConfiguration(options);
 
 			try
@@ -42,6 +48,12 @@ namespace Rhino.ETL.Cmd
 
 				Console.WriteLine("Execution completed in {0}", DateTime.Now - start);
 			}
+			catch (CompilerError err)
+			{
+				Console.WriteLine("Compiler error(s) when evaluating package:");
+				Console.Write(err);
+				Environment.Exit(1);
+			}
 			catch (Exception e)
 			{
 				Console.WriteLine("A fatal error occured, this is a bug:");
@@ -55,7 +67,7 @@ namespace Rhino.ETL.Cmd
 			switch (executionResult.Status)
 			{
 				case ExecutionStatus.Success:
-					using(UseConsoleColor(ConsoleColor.Green))
+					using (UseConsoleColor(ConsoleColor.Green))
 					{
 						Console.WriteLine("Execution completed successfully");
 					}
@@ -75,6 +87,11 @@ namespace Rhino.ETL.Cmd
 					using (UseConsoleColor(ConsoleColor.Yellow))
 					{
 						Console.WriteLine("Invalid package");
+						foreach (Exception exception in executionResult.Exceptions)
+						{
+							Console.WriteLine("---------------");
+							Console.WriteLine(exception);
+						}
 					}
 					break;
 				default:

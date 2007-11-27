@@ -52,15 +52,7 @@ namespace Rhino.ETL.Commands
 				BeforeExecutingCommands(context);
 				foreach (ICommand command in commands)
 				{
-					command.Completed += delegate
-					{
-						int remaining = latch.Set();
-						if (remaining == 0)
-						{
-							RaiseCompleted();
-							context.Stop();
-						}
-					};
+					command.Completed += OnCommandCompleted(context);
 					try
 					{
 						RegisterForExecution(command, contextFactory, context);
@@ -77,6 +69,19 @@ namespace Rhino.ETL.Commands
 			{
 				context.Stop();
 			}
+		}
+
+		private Action<ICommand> OnCommandCompleted(IThreadController context)
+		{
+			return delegate
+			{
+				int remaining = latch.Set();
+				if (remaining == 0)
+				{
+					RaiseCompleted();
+					context.Stop();
+				}
+			};
 		}
 
 		protected virtual void BeforeExecutingCommands(IProcessContext context)

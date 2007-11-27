@@ -93,19 +93,26 @@ namespace Rhino.ETL.Engine
 
 		private void JoinQueues(IEnumerable<Row> leftRows, IEnumerable<Row> rightRows)
 		{
+			Dictionary<Row, bool> matched = new Dictionary<Row, bool>();
 			foreach (Row leftRow in leftRows)
 			{
 				foreach (Row rightRow in rightRows)
 				{
 					bool shouldAdd = (bool)Condition.Call(new object[] { leftRow, rightRow });
 					if (shouldAdd)
+					{
+						matched[leftRow] = true;
+						matched[rightRow] = true;
 						Apply(leftRow, rightRow);
+					}
 				}
 			}
 			if (HasOuterJoin)
 			{
 				foreach (Row row in leftRows)
 				{
+					if(matched.ContainsKey(row))
+						continue;
 					Row emptyRow = new Row();
 					bool shouldAdd = (bool)Condition.Call(new object[] { row, emptyRow });
 					if (shouldAdd)
@@ -113,6 +120,8 @@ namespace Rhino.ETL.Engine
 				}
 				foreach (Row row in rightRows)
 				{
+					if(matched.ContainsKey(row))
+						continue;
 					Row emptyRow = new Row();
 					bool shouldAdd = (bool)Condition.Call(new object[] { emptyRow, row });
 					if (shouldAdd)
