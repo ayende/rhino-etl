@@ -1,4 +1,0 @@
-source foo:
-	Command:
-		"SELECT * FROM Users"
-		"SELECT * FROM Customers"

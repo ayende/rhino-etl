@@ -1,3 +1,0 @@
-source foo:
-	Command:
-		1+4
