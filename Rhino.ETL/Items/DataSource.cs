@@ -4,6 +4,7 @@ namespace Rhino.ETL
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Threading;
+	using System.Web.Services.Protocols;
 	using Boo.Lang;
 	using Engine;
 	using Interfaces;
@@ -52,9 +53,15 @@ namespace Rhino.ETL
 			}
 			catch (Exception e)
 			{
-				Logger.Error(Name +" threw an exception",e);
+				string message = Name +" threw an exception";
+				SoapException se = e as SoapException;
+				if(se!=null)
+				{
+					message += " " + se.Detail.OuterXml;
+				}
+				Logger.Error(message,e);
 				context.Publish(Messages.Exception, 
-								new InvalidOperationException(Name +" threw an exception", e));
+								new InvalidOperationException(message, e));
 			}
 			finally
 			{

@@ -61,9 +61,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\rhino-commons\rhino.commons\boo\autoreferencefilescompilerstep.cs">
-      <Link>FromRhinoCommons\autoreferencefilescompilerstep.cs</Link>
-    </Compile>
     <Compile Include="..\..\rhino-commons\rhino.commons\delegatedefinations.cs">
       <Link>FromRhinoCommons\delegatedefinations.cs</Link>
     </Compile>
@@ -85,6 +82,9 @@
     <Compile Include="..\..\rhino-commons\rhino.commons\threading\threadpool\workitemstatus.cs">
       <Link>FromRhinoCommons\workitemstatus.cs</Link>
     </Compile>
+    <Compile Include="..\..\rhino-dsl\Rhino.DSL\AutoReferenceFilesCompilerStep.cs">
+      <Link>FromRhinoCommons\AutoReferenceFilesCompilerStep.cs</Link>
+    </Compile>
     <Compile Include="Commands\AbstractCommand.cs" />
     <Compile Include="Commands\ExecuteInParallelCommand.cs" />
     <Compile Include="Commands\ExecuteInParallelTransactionCommand.cs" />
@@ -102,7 +102,9 @@
     <Compile Include="Engine\ExecutionResult.cs" />
     <Compile Include="Engine\ExecutionStatus.cs" />
     <Compile Include="Engine\FluentFileHelper.cs" />
-    <Compile Include="Engine\Messages.cs" />
+    <Compile Include="Engine\Messages.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Engine\ObjectArrayKeys.cs" />
     <Compile Include="Engine\Pipeline.cs" />
     <Compile Include="Engine\PipelineAssociation.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Engine\TransformationBase.cs" />
     <Compile Include="Engine\TransformParameters.cs" />
     <Compile Include="Exceptions\DuplicateKeyException.cs" />
+    <Compile Include="Exceptions\ExecuteCommandException.cs" />
     <Compile Include="Exceptions\ExpectedInterfaceNotfoundException.cs" />
     <Compile Include="Exceptions\InvalidPipelineException.cs" />
     <Compile Include="Exceptions\InvalidTargetException.cs" />

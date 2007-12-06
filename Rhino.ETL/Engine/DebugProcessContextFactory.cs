@@ -3,12 +3,13 @@ namespace Rhino.ETL.Engine
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Text;
 	using Retlang;
 
 	public class DebugProcessContextFactory : IProcessContextFactory
 	{
 		private readonly IProcessContextFactory inner = new ProcessContextFactory();
-		private Dictionary<DebugProcessContext, string> liveProcesses = new Dictionary<DebugProcessContext, string>();
+		private readonly Dictionary<DebugProcessContext, string> liveProcesses = new Dictionary<DebugProcessContext, string>();
 
 		public IProcessContext CreateAndStart()
 		{
@@ -31,7 +32,15 @@ namespace Rhino.ETL.Engine
 		{
 			if(liveProcesses.Count!=0)
 			{
-				throw new InvalidOperationException("Cannot close process factory when it has open processes");
+				StringBuilder sb = new StringBuilder();
+				sb.AppendLine("Cannot close process factory when it has open processes: ");
+				foreach (string value in liveProcesses.Values)
+				{
+					sb.AppendLine(value);
+					sb.AppendLine("----");
+
+				}
+				throw new InvalidOperationException(sb.ToString());
 			}
 			inner.Stop();
 		}

@@ -13,7 +13,7 @@ namespace Rhino.ETL.Engine
 	public abstract class Target : ContextfulObjectBase<Target>
 	{
 		private readonly string name;
-		private TimeSpan timeOut = TimeSpan.FromMinutes(5);
+		private TimeSpan timeOut = TimeSpan.FromHours(2);
 		private ICommandContainer container;
 		private readonly List<Exception> exceptions = new List<Exception>();
 		private IProcessContext listenToContainer;
@@ -141,7 +141,13 @@ namespace Rhino.ETL.Engine
 
 		public void WaitForCompletion()
 		{
-			container.WaitForCompletion(TimeOut);
+			if(container.WaitForCompletion(TimeOut) == false)
+			{
+				string format = string.Format("The time out period for {0} have passed! {1} has passed and the process is still running", Name, TimeOut);
+				TimeoutException e = new TimeoutException(format);
+				AddFault(e);
+				throw e;
+			}
 			listenToContainer.Stop();
 		}
 
@@ -155,6 +161,11 @@ namespace Rhino.ETL.Engine
 		{
 			return new ExecutionResult(exceptions, 
 				IsFaulted ? ExecutionStatus.Failure : ExecutionStatus.Success, configurationContext.Errors);
+		}
+
+		public void ForceEnd()
+		{
+			container.ForceEndOfCompletionWithoutFurtherWait();
 		}
 	}
 }

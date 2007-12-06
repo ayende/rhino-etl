@@ -1,9 +1,9 @@
-using System;
-using System.Transactions;
-using Rhino.ETL.Engine;
-
 namespace Rhino.ETL.Commands
 {
+	using System;
+	using System.Transactions;
+	using Engine;
+	using log4net.Repository.Hierarchy;
 	using Retlang;
 
 	public class ExecuteInParallelTransactionCommand : ExecuteInParallelCommand
@@ -11,11 +11,13 @@ namespace Rhino.ETL.Commands
 		private readonly IsolationLevel level;
 		private TransactionScope scope;
 
-		public ExecuteInParallelTransactionCommand(Target target) : this(target, IsolationLevel.ReadCommitted)
+		public ExecuteInParallelTransactionCommand(Target target)
+			: this(target, IsolationLevel.ReadCommitted)
 		{
 		}
 
-		public ExecuteInParallelTransactionCommand(Target target, IsolationLevel level) : base(target)
+		public ExecuteInParallelTransactionCommand(Target target, IsolationLevel level)
+			: base(target)
 		{
 			this.level = level;
 		}
@@ -26,45 +28,56 @@ namespace Rhino.ETL.Commands
 			TransactionOptions transactionOptions = new TransactionOptions();
 			transactionOptions.IsolationLevel = level;
 			scope = new TransactionScope(TransactionScopeOption.Required,
-				transactionOptions);
+										 transactionOptions);
 
 			context.Subscribe<Exception>(new TopicEquals(Messages.Exception),
-			                             delegate(IMessageHeader header, Exception msg)
-			                             {
+										 delegate(IMessageHeader header, Exception msg)
+										 {
 											 Console.WriteLine(msg);
-			                             });
+										 });
 		}
 
-		protected override void RegisterForExecution(ICommand command,IProcessContextFactory contextFactory, IProcessContext context)
+		protected override void ExecuteCommand(IProcessContextFactory contextFactory, ICommandQueue context, ICommand command)
 		{
-			EtlConfigurationContext current = EtlConfigurationContext.Current;
+			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
 			if (Transaction.Current == null)
 				throw new InvalidOperationException("You are not running in a transaction!");
 			DependentTransaction dependentTransaction = Transaction.Current.DependentClone(DependentCloneOption.BlockCommitUntilComplete);
 			context.Enqueue(delegate
 			{
-				using(current.EnterContext())
-				using(TransactionScope tx = new TransactionScope(dependentTransaction))
+				using (TransactionScope tx = new TransactionScope(dependentTransaction))
 				{
+					IProcessContext reportStatusContext = contextFactory.CreateAndStart();
+					command.Completed += OnCommandCompleted(reportStatusContext);
 					try
 					{
-						command.Execute(contextFactory);
-						tx.Complete();
+						using (configurationContext.EnterContext())
+						{
+							command.Execute(contextFactory);
+							tx.Complete();
+						}
 					}
 					catch (Exception ex)
 					{
 						dependentTransaction.Rollback(ex);
-						throw;
+						reportStatusContext.Publish(Messages.Exception, ex);
+						logger.Error("Failed to execute command " + command, ex);
+					}
+					finally
+					{
+						reportStatusContext.Stop();
 					}
 				}
-			});	
+			});
 		}
 
-		public override void WaitForCompletion(TimeSpan timeOut)
+		public override bool WaitForCompletion(TimeSpan timeOut)
 		{
-			base.WaitForCompletion(timeOut);
+			if (base.WaitForCompletion(timeOut) == false)
+				return false;
 			scope.Complete();
 			scope.Dispose();
+			return true;
 		}
 
 		public override void ForceEndOfCompletionWithoutFurtherWait()

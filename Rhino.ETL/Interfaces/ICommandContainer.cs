@@ -8,10 +8,9 @@ namespace Rhino.ETL
 	public interface ICommandContainer
 	{
 		void Add(ICommand command);
-		void WaitForCompletion(TimeSpan timeOut);
-
-		IList<ICommand> Commands { get; }
+		bool WaitForCompletion(TimeSpan timeOut);
 		void ForceEndOfCompletionWithoutFurtherWait();
+		IList<ICommand> Commands { get; }
 		void Execute(IProcessContextFactory context);
 	}
 }

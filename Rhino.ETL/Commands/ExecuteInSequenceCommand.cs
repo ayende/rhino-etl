@@ -30,10 +30,11 @@ namespace Rhino.ETL.Commands
 			commands.Add(command);
 		}
 
-		public void WaitForCompletion(TimeSpan timeOut)
+		public bool WaitForCompletion(TimeSpan timeOut)
 		{
 			if (!started)
 				throw new InvalidOperationException("Called WaitForCompletion before calling Execute");
+			return true;
 		}
 
 		protected override void DoExecute(IProcessContextFactory contextfFactory)

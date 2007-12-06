@@ -13,7 +13,6 @@ namespace Rhino.ETL
 	using FileHelpers;
 	using Impl;
 	using log4net;
-	using Rhino.Commons.Boo;
 
 	public class EtlContextBuilder
 	{
@@ -75,6 +74,7 @@ namespace Rhino.ETL
 		{
 			BooCompiler compiler = new BooCompiler();
 			compiler.Parameters.Ducky = true;
+			compiler.Parameters.Debug = true;
 			compiler.Parameters.Pipeline = new CompileToFile();
 			compiler.Parameters.OutputType = CompilerOutputType.Library;
 			foreach (ICompilerInput compilerInput in inputs)

@@ -6,7 +6,7 @@ namespace Rhino.ETL.Engine
 
 	public abstract class Configurable
 	{
-		protected static Configuration Configuration = new Configuration();
+		public static Configuration Configuration = new Configuration();
 
 		public static void InitalizeConfiguration(Configuration configuration)
 		{

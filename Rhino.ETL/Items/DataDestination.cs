@@ -4,14 +4,19 @@ namespace Rhino.ETL
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Data;
+	using System.Text;
+	using System.Threading;
 	using Boo.Lang;
 	using Engine;
+	using Exceptions;
 	using Interfaces;
+	using log4net;
 	using Retlang;
 	using Rhino.ETL2.Impl;
 
 	public class DataDestination : BaseDataElement<DataDestination>, IProcess
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(DataDestination));
 		private bool hasCompleted = false;
 		private bool firstCall = true;
 		private ICallable initializeBlock, onRowBlock, cleanUpBlock;
@@ -96,9 +101,17 @@ namespace Rhino.ETL
 				{
 					rows.Add(envelope.Message);
 				}
-				using (configurationContext.EnterContext())
-				using (currentPipeline.EnterContext())
-					ProcessOutput(rows);
+				try
+				{
+					using (configurationContext.EnterContext())
+					using (currentPipeline.EnterContext())
+						ProcessOutput(rows);
+				}
+				catch (Exception ex)
+				{
+					context.Publish(Messages.Exception, ex);
+					context.Stop();
+				}
 			};
 			BatchSubscriber<Row> batchingSubscriber = new BatchSubscriber<Row>(callback, context, BatchSize);
 
@@ -107,7 +120,7 @@ namespace Rhino.ETL
 				batchingSubscriber.Flush();
 				Complete();
 				string topic = Name + Messages.Done;
-				ColoredConsole.WriteLine(ConsoleColor.DarkYellow, string.Format("Finishing transform {0} {1} rows", topic, rowCount));
+				ColoredConsole.WriteLine(ConsoleColor.DarkYellow, string.Format("Finishing destination {0} {1} rows", topic, rowCount));
 				context.Publish(topic, Messages.Done);
 				context.Stop();
 			});
@@ -153,9 +166,49 @@ namespace Rhino.ETL
 						parameter.Value = value;
 						command.Parameters.Add(parameter);
 					}
-					command.ExecuteNonQuery();
+					try
+					{
+						command.ExecuteNonQuery();
+					}
+					catch (Exception ex)
+					{
+						string errorMsg = FormatErrorMessage(connection, command);
+						logger.Error(errorMsg);
+						throw new ExecuteCommandException(errorMsg, ex);
+					}
 				}
 			}
+		}
+
+		private string FormatErrorMessage(IDbConnection connection, IDbCommand command)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Failed to execute SQL Statement in destionation ")
+				.Append(Name)
+				.Append(" against connection: ")
+				.AppendLine(connection.ConnectionString);
+			sb.Append("Command: ").AppendLine(command.CommandText);
+			sb.AppendLine("Parameters:");
+			sb.Append("declare ");
+			foreach (IDataParameter parameter in command.Parameters)
+			{
+				sb.Append("@").Append(parameter.ParameterName).Append(" ")
+					.Append(parameter.DbType)
+					.AppendLine(",")
+					.Append("\t");
+			}
+			if (command.Parameters.Count != 0)
+			{
+				sb.Remove(sb.Length - 4, 4);
+			}
+			foreach (IDataParameter parameter in command.Parameters)
+			{
+				sb.Append("SET @").Append(parameter.ParameterName)
+					.Append(" = '")
+					.Append(parameter.Value == DBNull.Value ? "NULL" : parameter.Value)
+					.AppendLine("'");
+			}
+			return sb.ToString();
 		}
 	}
 }

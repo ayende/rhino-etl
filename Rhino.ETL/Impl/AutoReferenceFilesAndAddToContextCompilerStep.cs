@@ -1,9 +1,8 @@
 namespace Rhino.ETL.Impl
 {
-	using System;
 	using System.IO;
 	using Boo.Lang.Compiler.Ast;
-	using Rhino.Commons.Boo;
+	using DSL;
 
 	public class AutoReferenceFilesAndAddToContextCompilerStep : AutoReferenceFilesCompilerStep
 	{

@@ -4,6 +4,7 @@ namespace Rhino.ETL.Engine
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using Boo.Lang;
+	using Exceptions;
 	using Interfaces;
 	using Retlang;
 	using Rhino.ETL2.Impl;
@@ -84,11 +85,24 @@ namespace Rhino.ETL.Engine
 			if (leftDone == false || rightDone == false)
 				return;
 
-			JoinQueues(left, right);
+			try
+			{
+				JoinQueues(left, right);
+			}
+			catch (Exception ex)
+			{
+				string message = "Failed to process join "+ Name;
+				Logger.Error(message, ex);
+				context.Publish(Messages.Exception, new ScriptEvalException(message, ex));
+				context.Stop();
+				return;
+			}
 			string topic = Name + "." + OutputName + Messages.Done;
 			ColoredConsole.WriteLine(ConsoleColor.DarkMagenta, string.Format("Finishing transform {0} {1} out rows, left {2} right {3}", topic, rowCount, left.Count, right.Count));
 			context.Publish(topic, Messages.Done);
 			context.Stop();
+			left.Clear();
+			right.Clear();
 		}
 
 		private void JoinQueues(IEnumerable<Row> leftRows, IEnumerable<Row> rightRows)

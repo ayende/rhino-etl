@@ -36,11 +36,11 @@ namespace Rhino.ETL.Commands
 			commands.Add(command);
 		}
 
-		public virtual void WaitForCompletion(TimeSpan timeOut)
+		public virtual bool WaitForCompletion(TimeSpan timeOut)
 		{
 			if (latch == null)
 				throw new InvalidOperationException("Called WaitForCompletion before calling Execute");
-			latch.WaitOne(timeOut);
+			return latch.WaitOne(timeOut);
 		}
 
 		protected override void DoExecute(IProcessContextFactory contextFactory)
@@ -52,15 +52,13 @@ namespace Rhino.ETL.Commands
 				BeforeExecutingCommands(context);
 				foreach (ICommand command in commands)
 				{
-					command.Completed += OnCommandCompleted(context);
 					try
 					{
-						RegisterForExecution(command, contextFactory, context);
+						ExecuteCommand(contextFactory, context, command);
 					}
 					catch (Exception ex)
 					{
 						context.Publish(Messages.Exception, ex);
-						context.Stop();
 						throw;
 					}
 				}
@@ -71,7 +69,31 @@ namespace Rhino.ETL.Commands
 			}
 		}
 
-		private Action<ICommand> OnCommandCompleted(IThreadController context)
+		protected virtual void ExecuteCommand(IProcessContextFactory contextFactory, ICommandQueue context, ICommand command)
+		{
+			EtlConfigurationContext configurationContext = EtlConfigurationContext.Current;
+			context.Enqueue(delegate
+			{
+				IProcessContext reportStatusContext = contextFactory.CreateAndStart();
+				command.Completed += OnCommandCompleted(reportStatusContext);
+				try
+				{
+					using (configurationContext.EnterContext())
+						command.Execute(contextFactory);
+				}
+				catch (Exception ex)
+				{
+					reportStatusContext.Publish(Messages.Exception, ex);
+					logger.Error("Failed to execute command " + command, ex);
+				}
+				finally
+				{
+					reportStatusContext.Stop();
+				}
+			});
+		}
+
+		protected Action<ICommand> OnCommandCompleted(IThreadController context)
 		{
 			return delegate
 			{
@@ -86,19 +108,7 @@ namespace Rhino.ETL.Commands
 
 		protected virtual void BeforeExecutingCommands(IProcessContext context)
 		{
-			
-		}
 
-		protected virtual void RegisterForExecution(ICommand command, IProcessContextFactory contextFactory, IProcessContext context)
-		{
-			EtlConfigurationContext current = EtlConfigurationContext.Current;
-			//context.Enqueue(delegate
-			{
-				using(current.EnterContext())
-				{
-					command.Execute(contextFactory);
-				}
-			}//);
 		}
 	}
 }

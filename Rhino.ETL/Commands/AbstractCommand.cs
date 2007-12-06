@@ -6,6 +6,7 @@ using Rhino.ETL.Engine;
 
 namespace Rhino.ETL.Commands
 {
+	using log4net;
 	using Retlang;
 
 	public abstract class AbstractCommand : ICommand
@@ -14,8 +15,11 @@ namespace Rhino.ETL.Commands
 		public bool HasCompleted = false;
 		private readonly List<ICommand> commandsThatMustBeCompletedBeforeThisCommandCanRun = new List<ICommand>();
 		public event Action<ICommand> Completed;
+		protected ILog logger;
+
 		public AbstractCommand(Target target)
 		{
+			logger = LogManager.GetLogger(GetType());
 			this.target = target;
 			Completed += delegate { HasCompleted = true; };
 		}
@@ -60,6 +64,12 @@ namespace Rhino.ETL.Commands
 		protected void RaiseCompleted()
 		{
 			Completed(this);
+		}
+
+
+		public override string ToString()
+		{
+			return "Command for: " + target.Name;
 		}
 	}
 }

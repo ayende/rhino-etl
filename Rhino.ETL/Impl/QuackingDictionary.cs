@@ -10,7 +10,7 @@ namespace Rhino.ETL.Impl
 	using System.Text;
 
 	[Serializable]
-	public class QuackingDictionary : IQuackFu
+	public class QuackingDictionary : IQuackFu, IEnumerable
 	{
 		protected IDictionary items;
 		protected string lastAccess;
@@ -137,6 +137,11 @@ namespace Rhino.ETL.Impl
 			}
 			sb.Append("}");
 			return sb.ToString();
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return new Hashtable(items).GetEnumerator();
 		}
 	}
 }
