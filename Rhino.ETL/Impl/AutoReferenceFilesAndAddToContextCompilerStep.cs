@@ -6,11 +6,6 @@ namespace Rhino.ETL.Impl
 
 	public class AutoReferenceFilesAndAddToContextCompilerStep : AutoReferenceFilesCompilerStep
 	{
-		public AutoReferenceFilesAndAddToContextCompilerStep(string baseDirectory)
-			: base(baseDirectory)
-		{
-		}
-
 		public override void OnImport(Import node)
 		{
 			if (node.Namespace != "file")

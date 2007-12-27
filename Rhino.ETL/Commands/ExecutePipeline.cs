@@ -10,7 +10,6 @@ namespace Rhino.ETL.Commands
 	public class ExecutePipeline : AbstractCommand
 	{
 		private readonly Pipeline pipeline;
-		private static ILog logger = LogManager.GetLogger(typeof(ExecutePipeline));
 
 		public ExecutePipeline(Target target, Pipeline pipeline)
 			: base(target)

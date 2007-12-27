@@ -16,23 +16,7 @@ namespace Rhino.ETL
 
 	public class EtlContextBuilder
 	{
-		private static readonly string[] defaultImports = {
-		                                                  	"System",
-		                                                  	"System.Configuration",
-		                                                  	"System.Data.SqlClient",
-		                                                  	"System.Data.OracleClient",
-		                                                  	"System.Data.Odbc",
-		                                                  	"System.Data.OleDb",
-		                                                  	"Rhino.ETL",
-		                                                  	"FileHelpers",
-		                                                  	"Rhino.ETL.Impl",
-															"Rhino.ETL.Commands",
-															"Rhino.ETL.WebServices",
-		                                                  	"Rhino.ETL.FileHelpersExtensions",
-		                                                  	"System.Transactions",
-		                                                  	"Rhino.ETL.Engine"
-		                                                  };
-
+		
 		private static readonly ILog logger = LogManager.GetLogger(typeof (EtlContextBuilder));
 
 		public static EtlConfigurationContext FromFile(string filename)
@@ -47,7 +31,7 @@ namespace Rhino.ETL
 			EtlConfigurationContext etlConfigurationContext;
 			try
 			{
-				etlConfigurationContext = Compile(rootDir, rootName, inputs);
+				etlConfigurationContext = Compile(rootName, inputs);
 			}
 			catch (Exception e)
 			{
@@ -70,24 +54,14 @@ namespace Rhino.ETL
 			return etlConfigurationContext;
 		}
 
-		private static EtlConfigurationContext Compile(string rootDir, string rootName, params ICompilerInput[] inputs)
+		private static EtlConfigurationContext Compile(string rootName, params ICompilerInput[] inputs)
 		{
 			BooCompiler compiler = new BooCompiler();
-			compiler.Parameters.Ducky = true;
-			compiler.Parameters.Debug = true;
-			compiler.Parameters.Pipeline = new CompileToFile();
-			compiler.Parameters.OutputType = CompilerOutputType.Library;
+			compiler.Parameters.Pipeline = new CompileToRhinoEtl();
 			foreach (ICompilerInput compilerInput in inputs)
 			{
 				compiler.Parameters.Input.Add(compilerInput);
 			}
-			compiler.Parameters.References.Add(Assembly.GetExecutingAssembly());
-			compiler.Parameters.References.Add(typeof (DbType).Assembly);
-			compiler.Parameters.References.Add(typeof (TransactionScope).Assembly);
-			compiler.Parameters.References.Add(typeof (CsvEngine).Assembly);
-			compiler.Parameters.Pipeline.Insert(2, new AutoReferenceFilesAndAddToContextCompilerStep(rootDir));
-			compiler.Parameters.Pipeline.Insert(3, new TransformModuleToContextClass(defaultImports));
-			compiler.Parameters.Pipeline.Insert(11, new TransfromGeneratorExpressionToBlocks());
 			CompilerContext run = compiler.Run();
 			if (run.Errors.Count != 0)
 			{

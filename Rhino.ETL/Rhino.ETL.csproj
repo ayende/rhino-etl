@@ -7,8 +7,8 @@
     <ProjectGuid>{2232C6F5-A82C-4B6A-BEF9-3B8D1C322D84}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rhino.ETL2</RootNamespace>
-    <AssemblyName>Rhino.ETL2</AssemblyName>
+    <RootNamespace>Rhino.ETL</RootNamespace>
+    <AssemblyName>Rhino.ETL</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +92,7 @@
     <Compile Include="Commands\ExecutePipeline.cs" />
     <Compile Include="Engine\AssociationType.cs" />
     <Compile Include="Engine\BaseDataElement.cs" />
+    <Compile Include="Engine\CompileToRhinoEtl.cs" />
     <Compile Include="Engine\Configurable.cs" />
     <Compile Include="Engine\Configuration.cs" />
     <Compile Include="Engine\ContextfulObjectBase.cs" />

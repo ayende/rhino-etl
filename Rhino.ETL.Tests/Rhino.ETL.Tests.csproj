@@ -5,10 +5,12 @@
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D79FE73E-B5EF-40ED-90FC-1A07FDB59AAE}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rhino.ETL2.Tests</RootNamespace>
-    <AssemblyName>Rhino.ETL2.Tests</AssemblyName>
+    <RootNamespace>Rhino.ETL.Tests</RootNamespace>
+    <AssemblyName>Rhino.ETL.Tests</AssemblyName>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
