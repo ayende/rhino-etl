@@ -110,14 +110,4 @@ namespace Rhino.ETL.Engine
 			}
 		}
 	}
-
-	/// <summary>
-	/// this is the easiest way to support both Connection and connection in the DSL :-)
-	/// </summary>
-	public class connection : Connection
-	{
-		public connection(string name) : base(name)
-		{
-		}
-	}
 }
