@@ -1,4 +1,0 @@
-pipeline CopyFromNorthwindToSouthSand:
-	Sources.NorthwindSource					>>	RemoveRowsWithoutRegion(Columns: ['Col1','Col2'])
-	RemoveRowsWithoutRegion					>>	SouthSandDestination
-	RemoveRowsWithoutRegion.RegionlessRows	>>	Transforms.LogRowId.ExplicitInput
