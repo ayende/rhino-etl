@@ -1,0 +1,112 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DC42946E-5972-411C-A061-F2932E49C31F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhino.Etl.Core</RootNamespace>
+    <AssemblyName>Rhino.Etl.Core</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\Rhino.Etl.Core.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Commons, Version=1.5.1072.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Commons\Rhino.Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Commons.Clr, Version=1.5.1072.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Commons\Rhino.Commons.Clr.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ConventionOperations\ConventionSqlBatchOpeartion.cs" />
+    <Compile Include="Enumerables\ThreadSafeEnumerator.cs" />
+    <Compile Include="Operations\BranchingOperation.cs" />
+    <Compile Include="Operations\JoinType.cs" />
+    <Compile Include="Operations\NestedLoopsJoinOperation.cs" />
+    <Compile Include="Pipelines\AbstractPipelineExecuter.cs" />
+    <Compile Include="ConventionOperations\ConventionInputCommandOperation.cs" />
+    <Compile Include="ConventionOperations\ConventionOutputCommandOperation.cs" />
+    <Compile Include="Operations\OperationStatistics.cs" />
+    <Compile Include="EtlProcessBase.cs" />
+    <Compile Include="Files\FluentFile.cs" />
+    <Compile Include="Files\FileEngine.cs" />
+    <Compile Include="IPipelineExecuter.cs" />
+    <Compile Include="Operations\AbstractAggregationOperation.cs" />
+    <Compile Include="Operations\AbstractCommandOperation.cs" />
+    <Compile Include="Operations\AbstractDatabaseOperation.cs" />
+    <Compile Include="DataReaders\Descriptor.cs" />
+    <Compile Include="DataReaders\DictionaryDescriptorAdapter.cs" />
+    <Compile Include="DataReaders\DictionaryEnumeratorDataReader.cs" />
+    <Compile Include="DataReaders\EnumerableDataReader.cs" />
+    <Compile Include="EtlProcess.cs" />
+    <Compile Include="Exceptions\MissingKeyException.cs" />
+    <Compile Include="Exceptions\ParameterCountException.cs" />
+    <Compile Include="ObjectArrayKeys.cs" />
+    <Compile Include="Operations\AbstractOperation.cs" />
+    <Compile Include="Enumerables\CachingEnumerable.cs" />
+    <Compile Include="Enumerables\EventRaisingEnumerator.cs" />
+    <Compile Include="Operations\InputCommandOperation.cs" />
+    <Compile Include="Operations\JoinOperation.cs" />
+    <Compile Include="Operations\OutputCommandOperation.cs" />
+    <Compile Include="Operations\IOperation.cs" />
+    <Compile Include="Operations\PartialProcessOperation.cs" />
+    <Compile Include="Operations\SqlBatchOperation.cs" />
+    <Compile Include="Pipelines\ThreadPoolPipelineExecuter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuackingDictionary.cs" />
+    <Compile Include="Operations\SqlBulkInsertOperation.cs" />
+    <Compile Include="Pipelines\SingleThreadedPipelineExecuter.cs" />
+    <Compile Include="Exceptions\RhinoEtlException.cs" />
+    <Compile Include="Row.cs" />
+    <Compile Include="WithLoggingMixin.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,178 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A1519C4F-3C25-4484-B3D2-2266C133754E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rhino.Etl.Tests</RootNamespace>
+    <AssemblyName>Rhino.Etl.Tests</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="FileHelpers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SharedLibs\NHibernate\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MbUnit.framework, Version=1.0.2700.29885, Culture=neutral, PublicKeyToken=5e72ecd30bc408d5">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\Tools\MbUnit\MbUnit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Commons, Version=1.5.1075.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Commons\Rhino.Commons.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Commons.Clr, Version=1.5.1075.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Commons\Rhino.Commons.Clr.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.DSL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Commons\Rhino.DSL.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.3.0.1075, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Build\Rhino.Mocks\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregation\AggregationFixture.cs" />
+    <Compile Include="Aggregation\BaseAggregationFixture.cs" />
+    <Compile Include="Aggregation\BaseDslTest.cs" />
+    <Compile Include="Aggregation\CostPerProductAggregation.cs" />
+    <Compile Include="Aggregation\RowCount.cs" />
+    <Compile Include="BaseFibonacciTest.cs" />
+    <None Include="Dsl\Aggregate.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Branches\BranchingProcess.cs" />
+    <Compile Include="Dsl\AggregationFixture.cs" />
+    <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs" />
+    <Compile Include="Dsl\JoinFixture.cs" />
+    <Compile Include="Dsl\ResultsToList.cs" />
+    <Compile Include="Errors\ErrorsFixture.cs" />
+    <Compile Include="Errors\ErrorsProcess.cs" />
+    <Compile Include="Errors\ThrowingOperation.cs" />
+    <Compile Include="Fibonacci\Batch\BatchFibonacci.cs" />
+    <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabase.cs" />
+    <Compile Include="Fibonacci\Bulk\FibonacciBulkInsert.cs" />
+    <Compile Include="Fibonacci\InMemoryFibonacci.cs" />
+    <Compile Include="Fibonacci\FibonacciOperation.cs" />
+    <Compile Include="Fibonacci\Bulk\BulkInsertFibonacciToDatabase.cs" />
+    <Compile Include="Fibonacci\Output\OutputFibonacciToDatabase.cs" />
+    <Compile Include="Fibonacci\Output\FibonacciOutput.cs" />
+    <Compile Include="BaseUserToPeopleTest.cs" />
+    <Compile Include="Fibonacci\Output\Should.cs" />
+    <Compile Include="InformationFixture.cs" />
+    <Compile Include="Integration\DatabaseToDatabaseWithTransformations.cs" />
+    <Compile Include="Integration\ReadUsers.cs" />
+    <Compile Include="Integration\SplitName.cs" />
+    <Compile Include="Integration\UsersToPeople.cs" />
+    <Compile Include="Integration\WritePeople.cs" />
+    <Compile Include="Joins\AddToResults.cs" />
+    <Compile Include="Joins\AllStringsToUpperCase.cs" />
+    <Compile Include="Joins\BaseJoinFixture.cs" />
+    <Compile Include="Joins\BaseJoinUsersToPeople.cs" />
+    <Compile Include="Joins\ComplexUsersToPeopleJoinProcess.cs" />
+    <Compile Include="Joins\FullJoinUsersToPeopleByEmail.cs" />
+    <Compile Include="Joins\GenericEnumerableOperation.cs" />
+    <Compile Include="Joins\InnerJoinUsersToPeopleByEmail.cs" />
+    <Compile Include="Joins\JoinFixture.cs" />
+    <Compile Include="Joins\JoinInProcessFixture.cs" />
+    <Compile Include="Joins\LeftJoinUsersToPeopleByEmail.cs" />
+    <Compile Include="Joins\RightJoinUsersToPeopleByEmail.cs" />
+    <Compile Include="Joins\TrivialUsersToPeopleJoinProcess.cs" />
+    <Compile Include="LoadTest\AccumulateResults.cs" />
+    <Compile Include="LoadTest\BatchUpdateUserNames.cs" />
+    <Compile Include="LoadTest\BulkInsertUsers.cs" />
+    <Compile Include="LoadTest\GenerateRandomIds.cs" />
+    <Compile Include="LoadTest\GenerateUsers.cs" />
+    <Compile Include="LoadTest\JoinUsersAndIds.cs" />
+    <Compile Include="LoadTest\Join_250_000_UsersWithMostlyFallingOut.cs" />
+    <Compile Include="LoadTest\LoadTestFixture.cs" />
+    <Compile Include="LoadTest\LoadTestJoinsFixture.cs" />
+    <Compile Include="LoadTest\PushDataToDatabase.cs" />
+    <Compile Include="LoadTest\ReadUsers.cs" />
+    <Compile Include="LoadTest\UpdateUserNames.cs" />
+    <Compile Include="LoadTest\UpperCaseColumn.cs" />
+    <Compile Include="LoadTest\UpperCaseUserNames.cs" />
+    <Compile Include="OutputCommandFixture.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Branches\MultiplyByThreeOperation.cs" />
+    <Compile Include="Branches\BranchesFixture.cs" />
+    <Compile Include="SqlBatchOperationFixture.cs" />
+    <Compile Include="SqlBulkInsertOperationFixture.cs" />
+    <Compile Include="UsingDAL\ExportUsersToFile.cs" />
+    <Compile Include="UsingDAL\GetAllUsers.cs" />
+    <Compile Include="UsingDAL\ImportUsersFromFile.cs" />
+    <Compile Include="UsingDAL\MySimpleDal.cs" />
+    <Compile Include="UsingDAL\ReadUsersFromFile.cs" />
+    <Compile Include="UsingDAL\SaveToDal.cs" />
+    <Compile Include="UsingDAL\User.cs" />
+    <Compile Include="UsingDAL\UserRecord.cs" />
+    <Compile Include="UsingDAL\UsingDALFixture.cs" />
+    <Compile Include="UsingDAL\WriteUsersToFile.cs" />
+    <Compile Include="Util\DictionaryEnumeratorDataReaderFixture.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rhino.Etl.Core\Rhino.Etl.Core.csproj">
+      <Project>{DC42946E-5972-411C-A061-F2932E49C31F}</Project>
+      <Name>Rhino.Etl.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rhino.Etl.Dsl\Rhino.Etl.Dsl.csproj">
+      <Project>{D087E051-C099-468D-A3E7-4567DBBDFE69}</Project>
+      <Name>Rhino.Etl.Dsl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Dsl\InnerJoin.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Dsl\UsersToPeople.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

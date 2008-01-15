@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Core", "Rhino.Etl.Core\Rhino.Etl.Core.csproj", "{DC42946E-5972-411C-A061-F2932E49C31F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Tests", "Rhino.Etl.Tests\Rhino.Etl.Tests.csproj", "{A1519C4F-3C25-4484-B3D2-2266C133754E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Dsl", "Rhino.Etl.Dsl\Rhino.Etl.Dsl.csproj", "{D087E051-C099-468D-A3E7-4567DBBDFE69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Cmd", "Rhino.Etl.Cmd\Rhino.Etl.Cmd.csproj", "{AAD5286D-943E-472A-A861-8C6F155C8712}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC42946E-5972-411C-A061-F2932E49C31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC42946E-5972-411C-A061-F2932E49C31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC42946E-5972-411C-A061-F2932E49C31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC42946E-5972-411C-A061-F2932E49C31F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1519C4F-3C25-4484-B3D2-2266C133754E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1519C4F-3C25-4484-B3D2-2266C133754E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1519C4F-3C25-4484-B3D2-2266C133754E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1519C4F-3C25-4484-B3D2-2266C133754E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D087E051-C099-468D-A3E7-4567DBBDFE69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D087E051-C099-468D-A3E7-4567DBBDFE69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D087E051-C099-468D-A3E7-4567DBBDFE69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D087E051-C099-468D-A3E7-4567DBBDFE69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD5286D-943E-472A-A861-8C6F155C8712}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD5286D-943E-472A-A861-8C6F155C8712}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD5286D-943E-472A-A861-8C6F155C8712}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD5286D-943E-472A-A861-8C6F155C8712}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
