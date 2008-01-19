@@ -31,6 +31,7 @@ namespace Rhino.Etl.Core.Operations
         public SqlBatchOperation(string connectionStringName)
             : base(connectionStringName)
         {
+			base.paramPrefix = "@";
         }
 
         /// <summary>

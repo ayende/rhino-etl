@@ -12,7 +12,10 @@ namespace Rhino.Etl.Core.Operations
     {
         private readonly string connectionStringName;
     	private static Hashtable supportedTypes;
-
+		///<summary>
+		///The parameter prefix to use when adding parameters
+		///</summary>
+		protected string paramPrefix = "";
     	/// <summary>
         /// Gets the name of the connection string.
         /// </summary>
@@ -90,10 +93,10 @@ namespace Rhino.Etl.Core.Operations
 		/// <param name="command">The command.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="val">The val.</param>
-        protected static void AddParameter(IDbCommand command, string name, object val)
+        protected void AddParameter(IDbCommand command, string name, object val)
         {
             IDbDataParameter parameter = command.CreateParameter();
-            parameter.ParameterName = name;
+            parameter.ParameterName = paramPrefix + name;
             parameter.Value = val ?? DBNull.Value;
             command.Parameters.Add(parameter);
         }
@@ -105,6 +108,8 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="value">The value.</param>
         private static bool CanUseAsParameter(object value)
         {
+			if(value==null)
+				return true;
             return SupportedTypes.ContainsKey(value.GetType());
         }
     }
