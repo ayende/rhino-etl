@@ -5,9 +5,9 @@ namespace Rhino.Etl.Cmd
     using System.Reflection;
     using Boo.Lang.Useful.CommandLine;
     using Core;
-    using Dsl;
     using log4net;
     using log4net.Config;
+    using Dsl;
 
     public class RhinoEtlSetup
     {
@@ -79,7 +79,7 @@ namespace Rhino.Etl.Cmd
         private static Type GetFromDslFile(string filename)
         {
             Type processType;
-            EtlProcess process = EtlDslEngine.Facotry.Create<EtlProcess>(filename);
+            EtlProcess process = EtlDslEngine.Factory.Create<EtlProcess>(filename);
             processType = process.GetType();
             return processType;
         }

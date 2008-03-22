@@ -1,67 +1,23 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<Project
-	xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding='iso-8859-1' ?>
+<project
+	name="rhino-etl"
+	default="build"
+	xmlns="http://nant.sf.net/release/0.85/nant.xsd"
+	>
 
-	<PropertyGroup>
-		<ProjectName>Rhino.ETL</ProjectName>
-		<ShortName>rhino-etl</ShortName>
-		<SolutionFile>Rhino.Etl.sln</SolutionFile>
-		<FlattenZipFile>True</FlattenZipFile>
-		<SectionId>-1</SectionId>
-		<Version>2.0</Version>
-		<ClsCompliant>false</ClsCompliant>
-	</PropertyGroup>
-	
-	<ItemGroup>
-		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Core\Properties\AssemblyInfo.cs</File>
-		</AssemblyInfo>
-		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Dsl\Properties\AssemblyInfo.cs</File>
-		</AssemblyInfo>
-		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Tests\Properties\AssemblyInfo.cs</File>
-		</AssemblyInfo>
-		<AssemblyInfo Include="Item">
-			<File>$(MSBuildProjectDirectory)\Rhino.ETL.Cmd\Properties\AssemblyInfo.cs</File>
-		</AssemblyInfo>
-	</ItemGroup>
+	<property name="root.dir" value=".." />
+	<include buildfile="${root.dir}/common-project.xml" />
 
-	<ItemGroup>
-		<TestAssembly Include="$(OutDir)\Rhino.ETL.Tests.dll"/>
-	</ItemGroup>
+	<fileset id="buildfiles.all">
+		<!-- Files have to be in dependency order -->
+		<include name="Rhino.Etl.Core/default.build" />
+		<include name="Rhino.Etl.Dsl/default.build" />
+		<include name="Rhino.Etl.Cmd/default.build" />
+		<include name="Rhino.Etl.Tests/default.build" if="${common.testrunner.enabled}"/>
+	</fileset>
 
-  <ItemGroup>
-		<ZipFiles Include="$(OutDir)\Rhino.ETL.*.exe"/>
-		<ZipFiles Include="$(OutDir)\Rhino.ETL.*.dll"/>
-		<ZipFiles Include="$(OutDir)\Boo.Lang.dll"/>
-		<ZipFiles Include="$(OutDir)\Boo.Lang.Parser.dll"/>
-		<ZipFiles Include="$(OutDir)\Boo.Lang.Compiler.dll"/>
-		<ZipFiles Include="$(OutDir)\log4net.dll"/>
-		<ZipFiles Include="$(OutDir)\FileHelpers.dll"/>
-	</ItemGroup>
+	<target name="build" depends="common.build" />
 	
-	<Import Project="$(MSBuildProjectDirectory)\..\Common.build.xml"/>
-	
-	
-	<Target Name="BeforeZip">	
-			<ILMerge
-				ToolPath="$(SharedLibsDir)\Tools\"
-				InputAssemblies="$(OutDir)\Rhino.Etl.Cmd.exe;
-				    $(OutDir)\Rhino.Etl.Core.dll;
-				    $(OutDir)\Rhino.Etl.Dsl.dll;
-				    $(OutDir)\log4net.dll;
-				    $(OutDir)\FileHelpers.dll;
-				    $(OutDir)\Boo.Lang.Parser.dll;
-				    $(OutDir)\Boo.Lang.Compiler.dll;
-				    $(OutDir)\Boo.Lang.dll;"
-        ExcludeFile="$(MSBuildProjectDirectory)\ilmerge.exclude"
-        OutputFile="$(OutDir)\Rhino.Etl.exe"
-        LogFile="$(logFile)"
-        DebugInfo="true"
-        XmlDocumentation="true"
-        KeyFile="$(SharedLibsDir)\..\ayende-open-source.snk"
-        />
-	</Target>
-	
-</Project>
+	<target name="generate-assemblyinfo" depends="common.assemblyinfo" />
+
+</project>

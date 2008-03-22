@@ -26,9 +26,9 @@ namespace Rhino.Etl.Dsl
         /// Here we are making the assumption that we will have only a single class
         /// inheriting from EtlProcess in the assembly
         /// </summary>
-        public override Type GetTypeForUrl(Assembly assembly, Uri url)
+        public override Type GetTypeForUrl(Assembly assembly, string url)
         {
-            string moduleName = Path.GetFileNameWithoutExtension(url.AbsolutePath);
+            string moduleName = Path.GetFileNameWithoutExtension(url);
             IList<string> typesInCurrentModule;
             if (moduleNameToContainedTypes.TryGetValue(moduleName, out typesInCurrentModule) == false)
                 throw new InvalidOperationException("DSL Error: Module " + moduleName + " was not processed correctly");
@@ -48,7 +48,7 @@ namespace Rhino.Etl.Dsl
         /// <summary>
         /// Customise the compiler to fit the etl engine
         /// </summary>
-        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, Uri[] urls)
+        protected override void CustomizeCompiler(BooCompiler compiler, CompilerPipeline pipeline, string[] urls)
         {
             compiler.Parameters.References.Add(typeof(EtlDslEngine).Assembly);
             compiler.Parameters.References.Add(typeof(EtlProcess).Assembly);
@@ -67,7 +67,7 @@ namespace Rhino.Etl.Dsl
         /// <summary>
         /// Creates the DSL facotry
         /// </summary>
-        public static DslFactory Facotry
+        public static DslFactory Factory
         {
             get { return factory; }
         }

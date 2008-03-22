@@ -9,7 +9,7 @@ namespace Rhino.Etl.Tests.Aggregation
 	{
 		protected static EtlProcess CreateDslInstance(string url)
 		{
-			return EtlDslEngine.Facotry.Create<EtlProcess>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,url));
+			return EtlDslEngine.Factory.Create<EtlProcess>(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,url));
 		}
 	}
 }
