@@ -17,16 +17,5 @@ namespace Rhino.Etl.Dsl.Macros
             : base("Initialize")
         {
         }
-
-        /// <summary>
-        /// Expands the specified macro
-        /// </summary>
-        /// <param name="macro">The macro.</param>
-        /// <returns></returns>
-        public override Statement Expand(MacroStatement macro)
-        {
-            Statement expand = base.Expand(macro);
-            return expand;
-        }
     }
 }
