@@ -16,16 +16,17 @@ namespace Rhino.Etl.Core.Operations
 		/// <summary>
 		/// The schema of the destination table
 		/// </summary>
-		protected readonly IDictionary<string, Type> Schema = new Dictionary<string, Type>();
+		private IDictionary<string, Type> _schema = new Dictionary<string, Type>();
 
 		/// <summary>
 		/// The mapping of columns from the row to the database schema.
 		/// Important: The column name in the database is case sensitive!
 		/// </summary>
-		protected IDictionary<string, string> Mappings = new Dictionary<string, string>();
+		public IDictionary<string, string> Mappings = new Dictionary<string, string>();
 		private SqlBulkCopy sqlBulkCopy;
-		private readonly string targetTable;
-		private readonly int timeout;
+		private string targetTable;
+		private int timeout;
+		private SqlBulkCopyOptions bulkCopyOptions = SqlBulkCopyOptions.Default;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlBulkInsertOperation"/> class.
@@ -52,13 +53,79 @@ namespace Rhino.Etl.Core.Operations
 			this.timeout = timeout;
 		}
 
+		/// <summary>The timeout value of the bulk insert operation</summary>
+		public virtual int Timeout
+		{
+			get { return timeout; }
+			set { timeout = value; }
+		}
+
+		/// <summary>The table or view to bulk load the data into.</summary>
+		public string TargetTable
+		{
+			get { return targetTable; }
+			set { targetTable = value; }
+		}
+
+		/// <summary><c>true</c> to turn the <see cref="SqlBulkCopyOptions.TableLock"/> option on, otherwise <c>false</c>.</summary>
+		public virtual bool LockTable
+		{
+			get { return IsOptionOn(SqlBulkCopyOptions.TableLock); }
+			set { ToggleOption(SqlBulkCopyOptions.TableLock, value); }
+		}
+
+		/// <summary>Turns a <see cref="bulkCopyOptions"/> on or off depending on the value of <paramref name="on"/></summary>
+		/// <param name="option">The <see cref="SqlBulkCopyOptions"/> to turn on or off.</param>
+		/// <param name="on"><c>true</c> to set the <see cref="SqlBulkCopyOptions"/> <paramref name="option"/> on otherwise <c>false</c> to turn the <paramref name="option"/> off.</param>
+		protected void ToggleOption(SqlBulkCopyOptions option, bool on)
+		{
+			if (on)
+			{
+				TurnOptionOn(option);
+			}
+			else
+			{
+				TurnOptionOff(option);
+			}
+		}
+
+		/// <summary>Returns <c>true</c> if the <paramref name="option"/> is turned on, otherwise <c>false</c></summary>
+		/// <param name="option">The <see cref="SqlBulkCopyOptions"/> option to test for.</param>
+		/// <returns></returns>
+		protected bool IsOptionOn(SqlBulkCopyOptions option)
+		{
+			return (bulkCopyOptions & option) == option;
+		}
+
+		/// <summary>Turns the <paramref name="option"/> on.</summary>
+		/// <param name="option"></param>
+		protected void TurnOptionOn(SqlBulkCopyOptions option)
+		{
+			bulkCopyOptions |= option;
+		}
+
+		/// <summary>Turns the <paramref name="option"/> off.</summary>
+		/// <param name="option"></param>
+		protected void TurnOptionOff(SqlBulkCopyOptions option)
+		{
+			if (IsOptionOn(option))
+				bulkCopyOptions ^= option;
+		}
+
+		/// <summary>The table or view's schema information.</summary>
+		public IDictionary<string, Type> Schema
+		{
+			get { return _schema; }
+			set { _schema = value; }
+		}
+
 		/// <summary>
 		/// Prepares the mapping for use, by default, it uses the schema mapping.
 		/// This is the preferred appraoch
 		/// </summary>
 		public virtual void PrepareMapping()
 		{
-			foreach (KeyValuePair<string, Type> pair in Schema)
+			foreach (KeyValuePair<string, Type> pair in _schema)
 			{
 				Mappings[pair.Key] = pair.Key;
 			}
@@ -76,9 +143,9 @@ namespace Rhino.Etl.Core.Operations
 			using (SqlTransaction transaction = connection.BeginTransaction())
 			{
 				sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);
-				DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(Schema, rows);
+				DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_schema, rows);
 				sqlBulkCopy.WriteToServer(adapter);
-				
+
 				if (PipelineExecuter.HasErrors)
 				{
 					Warn("Rolling back transaction in {0}", Name);
@@ -105,13 +172,13 @@ namespace Rhino.Etl.Core.Operations
 		/// </summary>
 		private SqlBulkCopy CreateSqlBulkCopy(SqlConnection connection, SqlTransaction transaction)
 		{
-			SqlBulkCopy copy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction);
+			SqlBulkCopy copy = new SqlBulkCopy(connection, bulkCopyOptions, transaction);
 			foreach (KeyValuePair<string, string> pair in Mappings)
 			{
 				copy.ColumnMappings.Add(pair.Key, pair.Value);
 			}
-			copy.DestinationTableName = targetTable;
-			copy.BulkCopyTimeout = timeout;
+			copy.DestinationTableName = TargetTable;
+			copy.BulkCopyTimeout = Timeout;
 			return copy;
 		}
 	}

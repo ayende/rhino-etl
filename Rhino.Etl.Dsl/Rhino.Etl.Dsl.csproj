@@ -92,6 +92,7 @@
     <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Macros\ProcessMacro.cs" />
     <Compile Include="Macros\RightMacro.cs" />
+    <Compile Include="Macros\SqlBulkInsertMacro.cs" />
     <Compile Include="Macros\TerminateMacro.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

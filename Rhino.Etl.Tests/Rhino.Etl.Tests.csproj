@@ -98,7 +98,10 @@
     </None>
     <Compile Include="Branches\BranchingProcess.cs" />
     <Compile Include="Dsl\AggregationFixture.cs" />
-    <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs" />
+    <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dsl\SqlBulkInsertFixture.cs" />
     <Compile Include="Dsl\JoinFixture.cs" />
     <Compile Include="Dsl\ResultsToList.cs" />
     <Compile Include="Errors\ErrorsFixture.cs" />
@@ -177,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Dsl\UsersToPeopleBulk.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Dsl\InnerJoin.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
