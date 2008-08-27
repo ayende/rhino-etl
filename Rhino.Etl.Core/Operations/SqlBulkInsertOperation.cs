@@ -74,6 +74,34 @@ namespace Rhino.Etl.Core.Operations
 			set { ToggleOption(SqlBulkCopyOptions.TableLock, value); }
 		}
 
+		/// <summary><c>true</c> to turn the <see cref="SqlBulkCopyOptions.KeepIdentity"/> option on, otherwise <c>false</c>.</summary>
+		public virtual bool KeepIdentity
+		{
+			get { return IsOptionOn(SqlBulkCopyOptions.KeepIdentity); }
+			set { ToggleOption(SqlBulkCopyOptions.KeepIdentity, value); }
+		}
+
+		/// <summary><c>true</c> to turn the <see cref="SqlBulkCopyOptions.KeepNulls"/> option on, otherwise <c>false</c>.</summary>
+		public virtual bool KeepNulls
+		{
+			get { return IsOptionOn(SqlBulkCopyOptions.KeepNulls); }
+			set { ToggleOption(SqlBulkCopyOptions.KeepNulls, value); }
+		}
+
+		/// <summary><c>true</c> to turn the <see cref="SqlBulkCopyOptions.CheckConstraints"/> option on, otherwise <c>false</c>.</summary>
+		public virtual bool CheckConstraints
+		{
+			get { return IsOptionOn(SqlBulkCopyOptions.CheckConstraints); }
+			set { ToggleOption(SqlBulkCopyOptions.CheckConstraints, value); }
+		}
+
+		/// <summary><c>true</c> to turn the <see cref="SqlBulkCopyOptions.FireTriggers"/> option on, otherwise <c>false</c>.</summary>
+		public virtual bool FireTriggers
+		{
+			get { return IsOptionOn(SqlBulkCopyOptions.FireTriggers); }
+			set { ToggleOption(SqlBulkCopyOptions.FireTriggers, value); }
+		}
+
 		/// <summary>Turns a <see cref="bulkCopyOptions"/> on or off depending on the value of <paramref name="on"/></summary>
 		/// <param name="option">The <see cref="SqlBulkCopyOptions"/> to turn on or off.</param>
 		/// <param name="on"><c>true</c> to set the <see cref="SqlBulkCopyOptions"/> <paramref name="option"/> on otherwise <c>false</c> to turn the <paramref name="option"/> off.</param>
