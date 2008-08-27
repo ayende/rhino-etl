@@ -30,24 +30,24 @@ namespace Rhino.Etl.Core.ConventionOperations
 
 		/// <summary>Adds a column to the destination mapping.</summary>
 		/// <param name="destinationColumn">The name of column, this is case sensitive.</param>
-		public virtual void MapColumn(string destinationColumn)
+		public virtual void map(string destinationColumn)
 		{
-			MapColumn(destinationColumn, typeof (string));
+			map(destinationColumn, typeof (string));
 		}
 
 		/// <summary>Adds a column and specified type to the destination mapping.</summary>
 		/// <param name="destinationColumn">The name of the column</param>
 		/// <param name="columnType">The type of the column.</param>
-		public virtual void MapColumn(string destinationColumn, Type columnType)
+		public virtual void map(string destinationColumn, Type columnType)
 		{
-			MapColumn(destinationColumn, destinationColumn, columnType);
+			map(destinationColumn, destinationColumn, columnType);
 		}
 
 		/// <summary>Adds a column and the specified type to the destination mapping with the given sourceColumn mapping.</summary>
 		/// <param name="destinationColumn"></param>
 		/// <param name="columnType"></param>
 		/// <param name="sourceColumn"></param>
-		public virtual void MapColumn(string destinationColumn, string sourceColumn, Type columnType)
+		public virtual void map(string destinationColumn, string sourceColumn, Type columnType)
 		{
 			Schema[destinationColumn] = columnType;
 			Mappings[sourceColumn] = destinationColumn;

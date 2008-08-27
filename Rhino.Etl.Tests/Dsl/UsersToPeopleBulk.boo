@@ -9,8 +9,8 @@ process UsersToPeopleBulk:
 	input "test", Command = "SELECT id, name, email  FROM Users"
 	split_name_bulk()
 	sqlBulkInsert "test", "People", TableLock = true :
-		MapColumn("id", int)
-		MapColumn("firstname")
-		MapColumn("lastname")
-		MapColumn("email")
-		MapColumn("userid", "id", int)
+		map "id", int
+		map "firstname"
+		map "lastname"
+		map "email"
+		map "userid", "id", int
