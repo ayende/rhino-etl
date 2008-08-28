@@ -62,6 +62,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SharedLibs\NHibernate\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=5.2.2.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="Rhino.Commons, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\net-3.5\debug\Rhino.Commons.dll</HintPath>
