@@ -66,7 +66,7 @@ namespace Rhino.Etl.Cmd
 
         private static Type GetFromAssembly(RhinoEtlCommandLineOptions options)
         {
-            Assembly asm = Assembly.ReflectionOnlyLoadFrom(options.File);
+            Assembly asm = Assembly.Load(options.File);
             foreach (Type type in asm.GetTypes())
             {
                 if(typeof(EtlProcess).IsAssignableFrom(type) && type.Name.Equals(options.Process, StringComparison.InvariantCultureIgnoreCase))
