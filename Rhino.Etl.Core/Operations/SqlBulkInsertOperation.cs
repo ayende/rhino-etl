@@ -23,10 +23,13 @@ namespace Rhino.Etl.Core.Operations
 		/// Important: The column name in the database is case sensitive!
 		/// </summary>
 		public IDictionary<string, string> Mappings = new Dictionary<string, string>();
+		private IDictionary<string, Type> _inputSchema = new Dictionary<string, Type>();
+
 		private SqlBulkCopy sqlBulkCopy;
 		private string targetTable;
 		private int timeout;
 		private SqlBulkCopyOptions bulkCopyOptions = SqlBulkCopyOptions.Default;
+		
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlBulkInsertOperation"/> class.
@@ -159,6 +162,17 @@ namespace Rhino.Etl.Core.Operations
 			}
 		}
 
+		/// <summary>Use the destination Schema and Mappings to create the
+		/// operations input schema so it can build the adapter for sending
+		/// to the WriteToServer method.</summary>
+		public virtual void CreateInputSchema()
+		{
+			foreach(KeyValuePair<string, string> pair in Mappings)
+			{
+				_inputSchema.Add(pair.Key, _schema[pair.Value]);
+			}
+		}
+
 		/// <summary>
 		/// Executes this operation
 		/// </summary>
@@ -167,11 +181,12 @@ namespace Rhino.Etl.Core.Operations
 			Guard.Against<ArgumentException>(rows == null, "SqlBulkInsertOperation cannot accept a null enumerator");
 			PrepareSchema();
 			PrepareMapping();
+			CreateInputSchema();
 			using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringName))
 			using (SqlTransaction transaction = connection.BeginTransaction())
 			{
 				sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);
-				DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_schema, rows);
+				DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_inputSchema, rows);
 				sqlBulkCopy.WriteToServer(adapter);
 
 				if (PipelineExecuter.HasErrors)
