@@ -129,7 +129,7 @@ namespace Rhino.Etl.Core
             {
                 get
                 {
-                    List<KeyValuePair> pairs = new List<KeyValuePair>();
+                    System.Collections.Generic.List<KeyValuePair> pairs = new System.Collections.Generic.List<KeyValuePair>();
                     foreach (DictionaryEntry item in items)
                     {
                         pairs.Add(new KeyValuePair(item.Key, item.Value));

@@ -19,9 +19,9 @@ namespace Rhino.Etl.Tests.Integration
                 process.Execute();
             
 
-            List<string[]> names = Use.Transaction<List<string[]>>("test", delegate(IDbCommand cmd)
+            System.Collections.Generic.List<string[]> names = Use.Transaction<System.Collections.Generic.List<string[]>>("test", delegate(IDbCommand cmd)
             {
-                List<string[]> tuples = new List<string[]>();
+                System.Collections.Generic.List<string[]> tuples = new System.Collections.Generic.List<string[]>();
                 cmd.CommandText = "SELECT firstname, lastname from people order by userid";
                 using (IDataReader reader = cmd.ExecuteReader())
                 {

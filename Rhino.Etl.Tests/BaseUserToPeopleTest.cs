@@ -14,17 +14,18 @@ namespace Rhino.Etl.Tests
             Use.Transaction("test", delegate(IDbCommand cmd)
             {
                 cmd.CommandText =
-                    @"
-if object_id('Users') is not null
-    drop table Users;
-create table Users ( id int identity primary key, name nvarchar(255) not null, email nvarchar(255) not null, roles nvarchar(255), testMsg nvarchar(255) );
-
-if object_id('Roles') is not null
-    drop table Roles;
-create table Roles( id int identity, name nvarchar(255) );
-
+					@"
 if object_id('User2Role') is not null
     drop table User2Role;
+if object_id('Roles') is not null
+    drop table Roles;
+if object_id('Users') is not null
+    drop table Users;
+
+create table Users ( id int identity primary key, name nvarchar(255) not null, email nvarchar(255) not null, roles nvarchar(255), testMsg nvarchar(255) );
+create table Roles( id int identity, name nvarchar(255) );
+
+
 create table User2Role( userid int, roleid int);
 
 insert into users (name,email) values('ayende rahien', 'ayende@example.org')

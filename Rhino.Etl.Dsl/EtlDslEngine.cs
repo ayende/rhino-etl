@@ -32,7 +32,7 @@ namespace Rhino.Etl.Dsl
             IList<string> typesInCurrentModule;
             if (moduleNameToContainedTypes.TryGetValue(moduleName, out typesInCurrentModule) == false)
                 throw new InvalidOperationException("DSL Error: Module " + moduleName + " was not processed correctly");
-            List<Type> types = new List<Type>();
+            System.Collections.Generic.List<Type> types = new System.Collections.Generic.List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
                 if (typeof(EtlProcess).IsAssignableFrom(type) && typesInCurrentModule.Contains(type.Name))
