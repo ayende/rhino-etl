@@ -59,7 +59,7 @@ namespace Rhino.Etl.Dsl
                 "Rhino.Etl.Dsl",
                 "Rhino.Etl.Dsl.Macros"));
 
-            pipeline.InsertAfter(typeof(ExpandMacros), new CorrelateTypesToModuleName(moduleNameToContainedTypes));
+            pipeline.InsertAfter(typeof(MacroAndAttributeExpansion), new CorrelateTypesToModuleName(moduleNameToContainedTypes));
 
             pipeline.Add(new SaveAssembly());
         }
