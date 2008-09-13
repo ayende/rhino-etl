@@ -1,10 +1,7 @@
 namespace Rhino.Etl.Tests.LoadTest
 {
-	using System;
-	using System.Collections.Generic;
-	using Core;
+	using System.Diagnostics;
 	using MbUnit.Framework;
-	using Rhino.Etl.Core.Operations;
 
 	[TestFixture]
 	public class LoadTestJoinsFixture
@@ -12,14 +9,14 @@ namespace Rhino.Etl.Tests.LoadTest
 		[Test]
 		public void CanDoLargeJoinsefficently()
 		{
-			DateTime start = DateTime.Now;
-			using(Join_250_000_UsersWithMostlyFallingOut proc = new Join_250_000_UsersWithMostlyFallingOut())
+			var stopwatch = Stopwatch.StartNew();
+			using(var proc = new Join_250_000_UsersWithMostlyFallingOut())
 			{
 				proc.Execute();
 				Assert.AreEqual(15000, proc.operation.count);
 			}
-			TimeSpan span = DateTime.Now-start;
-			Assert.Less(span.TotalSeconds, 1);
+			stopwatch.Stop();
+			Assert.Less(stopwatch.ElapsedMilliseconds, 1000);
 		}
 	}
 }

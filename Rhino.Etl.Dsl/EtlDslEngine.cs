@@ -21,7 +21,34 @@ namespace Rhino.Etl.Dsl
         private static readonly DslFactory factory = CreateFactory();
         private readonly IDictionary<string, IList<string>> moduleNameToContainedTypes = new Dictionary<string, IList<string>>();
 
-        /// <summary>
+		/// <summary>
+		/// Compile the DSL and return the resulting context
+		/// </summary>
+		/// <param name="urls">The files to compile</param>
+		/// <returns>The resulting compiler context</returns>
+		public override CompilerContext Compile(string[] urls)
+		{
+			//disable caching, we always compile from scratch
+			return ForceCompile(urls, GetFileName(urls));
+		}
+
+		/// <summary>
+		/// Gets the name of the file.
+		/// </summary>
+		/// <param name="urls">The urls.</param>
+		/// <returns></returns>
+    	private string GetFileName(string[] urls)
+    	{
+    		string file = Path.GetTempFileName();
+    		foreach (var url in urls)
+    		{
+    			file = url;
+    			break;
+    		}
+			return Path.GetFileNameWithoutExtension(file) + ".dll";
+    	}
+
+    	/// <summary>
         /// Get a type from the assembly according to the URL.
         /// Here we are making the assumption that we will have only a single class
         /// inheriting from EtlProcess in the assembly
@@ -60,8 +87,6 @@ namespace Rhino.Etl.Dsl
                 "Rhino.Etl.Dsl.Macros"));
 
             pipeline.InsertAfter(typeof(MacroAndAttributeExpansion), new CorrelateTypesToModuleName(moduleNameToContainedTypes));
-
-            pipeline.Add(new SaveAssembly());
         }
 
         /// <summary>
