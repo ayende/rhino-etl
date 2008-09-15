@@ -40,7 +40,7 @@ namespace Rhino.Etl.Dsl
     	private string GetFileName(string[] urls)
     	{
     		string file = Path.GetTempFileName();
-    		foreach (var url in urls)
+    		foreach (string url in urls)
     		{
     			file = url;
     			break;

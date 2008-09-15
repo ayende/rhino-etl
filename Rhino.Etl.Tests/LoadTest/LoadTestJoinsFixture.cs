@@ -9,8 +9,8 @@ namespace Rhino.Etl.Tests.LoadTest
 		[Test]
 		public void CanDoLargeJoinsefficently()
 		{
-			var stopwatch = Stopwatch.StartNew();
-			using(var proc = new Join_250_000_UsersWithMostlyFallingOut())
+			Stopwatch stopwatch = Stopwatch.StartNew();
+			using(Join_250_000_UsersWithMostlyFallingOut proc = new Join_250_000_UsersWithMostlyFallingOut())
 			{
 				proc.Execute();
 				Assert.AreEqual(15000, proc.operation.count);
