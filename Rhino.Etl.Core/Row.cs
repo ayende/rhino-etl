@@ -1,3 +1,6 @@
+using Rhino.Commons;
+using System.Linq;
+
 namespace Rhino.Etl.Core
 {
     using System;
@@ -13,7 +16,7 @@ namespace Rhino.Etl.Core
     [DebuggerDisplay("Count = {items.Count}")]
     [DebuggerTypeProxy(typeof(QuackingDictionaryDebugView))]
     [Serializable]
-    public class Row : QuackingDictionary
+    public class Row : QuackingDictionary, IEquatable<Row>
     {
         static readonly Dictionary<Type, List<PropertyInfo>> propertiesCache = new Dictionary<Type, List<PropertyInfo>>();
         static readonly Dictionary<Type, List<FieldInfo>> fieldsCache = new Dictionary<Type, List<FieldInfo>>();
@@ -70,6 +73,27 @@ namespace Rhino.Etl.Core
         {
             Row row = new Row(this);
             return row;
+        }
+
+        /// <summary>
+        /// Indicates whether the current <see cref="Row" /> is equal to another <see cref="Row" />.
+        /// </summary>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        /// </returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Row other)
+        {
+            if(items.Keys.Cast<object>().SequenceEqual(other.Keys.Cast<object>()) == false)
+                return false;
+
+            foreach (var key in items.Keys)
+            {
+                if(items[key].Equals(other.items[key]) == false)
+                    return false;
+            }
+
+            return true;
         }
 
         /// <summary>
