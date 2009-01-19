@@ -7,6 +7,8 @@ namespace Rhino.Etl.Tests.Fibonacci.Output
     {
         private readonly int max;
         private readonly Should should;
+        public readonly ThrowingOperation ThrowingOperation = new ThrowingOperation();
+        public readonly FibonacciOutput OutputOperation = new FibonacciOutput();
 
         public OutputFibonacciToDatabase(int max, Should should)
         {
@@ -21,8 +23,8 @@ namespace Rhino.Etl.Tests.Fibonacci.Output
         {
             Register(new FibonacciOperation(max));
             if (should == Should.Throw)
-                Register(new ThrowingOperation());
-            Register(new FibonacciOutput());
+                Register(ThrowingOperation);
+            Register(OutputOperation);
         }
     }
 }

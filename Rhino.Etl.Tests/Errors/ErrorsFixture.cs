@@ -18,7 +18,7 @@ namespace Rhino.Etl.Tests.Errors
                 process.RegisterLast(new AddToResults(results));
 
                 process.Execute();
-                Assert.AreEqual(2, results.Count);
+                Assert.AreEqual(process.ThrowOperation.RowsAfterWhichToThrow, results.Count);
                 List<Exception> errors = new List<Exception>(process.GetAllErrors());
                 Assert.AreEqual(1, errors.Count);
                 Assert.AreEqual("Failed to execute operation Rhino.Etl.Tests.Errors.ThrowingOperation: problem",

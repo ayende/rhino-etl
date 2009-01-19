@@ -4,9 +4,11 @@ namespace Rhino.Etl.Tests.Errors
 
     public class ErrorsProcess : EtlProcess
     {
+        public readonly ThrowingOperation ThrowOperation = new ThrowingOperation();
+
         protected override void Initialize()
         {
-            Register(new ThrowingOperation());
+            Register(ThrowOperation);
         }
     }
 }

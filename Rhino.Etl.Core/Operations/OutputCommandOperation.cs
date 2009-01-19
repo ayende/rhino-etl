@@ -1,3 +1,5 @@
+using Rhino.Etl.Core.Enumerables;
+
 namespace Rhino.Etl.Core.Operations
 {
     using System.Collections.Generic;
@@ -27,7 +29,7 @@ namespace Rhino.Etl.Core.Operations
             using (IDbConnection connection = Use.Connection(ConnectionStringName))
             using (IDbTransaction transaction = connection.BeginTransaction())
             {
-                foreach (Row row in rows)
+                foreach (Row row in new SingleRowEventRaisingEnumerator(this, rows))
                 {
                     using (IDbCommand cmd = connection.CreateCommand())
                     {
@@ -52,7 +54,6 @@ namespace Rhino.Etl.Core.Operations
             }
             yield break;
         }
-
 
         /// <summary>
         /// Prepares the command for execution, set command text, parameters, etc
