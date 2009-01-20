@@ -89,7 +89,12 @@ namespace Rhino.Etl.Core
 
             foreach (var key in items.Keys)
             {
-                if(items[key].Equals(other.items[key]) == false)
+                if(items[key] == null)
+                {
+                    if (other.items[key] != null)
+                        return false;
+                }
+                else if(items[key].Equals(other.items[key]) == false)
                     return false;
             }
 

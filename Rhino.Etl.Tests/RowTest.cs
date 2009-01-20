@@ -10,6 +10,8 @@ namespace Rhino.Etl.Tests
         [Row(new[] {"a", "b"}, new object[] {1, 2}, new[] {"a", "b"}, new object[] {2, 3})]
         [Row(new[] {"a", "b"}, new object[] {1, 2}, new[] {"x", "y"}, new object[] {1, 2})]
         [Row(new[] {"a"}, new object[] {1}, new[] {"a", "b"}, new object[] {1, 2})]
+        [Row(new[] {"a"}, new object[] {null}, new[] {"a"}, new object[] {1})]
+        [Row(new[] {"a"}, new object[] {1}, new[] {"a"}, new object[] {null})]
         public void Should_be_different_if_different_columns(string[] firstColumns, object[] firstValues,
                                                              string[] secondColumns, object[] secondValues)
         {
@@ -17,6 +19,18 @@ namespace Rhino.Etl.Tests
             Row second = FillRow(secondColumns, secondValues);
 
             Assert.IsFalse(first.Equals(second));
+        }
+
+        [Test]
+        public void Nulls_are_equal()
+        {
+            Row first = new Row();
+            first["a"] = null;
+
+            Row second = new Row();
+            second["a"] = null;
+
+            Assert.IsTrue(first.Equals(second));
         }
 
         [Test]
