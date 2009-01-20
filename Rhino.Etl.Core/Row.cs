@@ -84,7 +84,7 @@ namespace Rhino.Etl.Core
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Row other)
         {
-            if(items.Keys.Cast<object>().SequenceEqual(other.Keys.Cast<object>()) == false)
+            if(Columns.SequenceEqual(other.Columns, StringComparer.InvariantCultureIgnoreCase) == false)
                 return false;
 
             foreach (var key in items.Keys)
