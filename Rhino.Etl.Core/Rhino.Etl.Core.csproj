@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="ConventionOperations\ConventionSqlBatchOpeartion.cs" />
     <Compile Include="ConventionOperations\ConventionSqlBulkInsertOperation.cs" />
+    <Compile Include="Enumerables\OneTimeEnumerable.cs" />
     <Compile Include="Enumerables\SingleRowEventRaisingEnumerator.cs" />
     <Compile Include="Enumerables\ThreadSafeEnumerator.cs" />
     <Compile Include="Operations\BranchingOperation.cs" />
