@@ -158,6 +158,7 @@
     <Compile Include="Branches\MultiplyByThreeOperation.cs" />
     <Compile Include="Branches\BranchesFixture.cs" />
     <Compile Include="RowTest.cs" />
+    <Compile Include="SingleThreadedPipelineExecuterTest.cs" />
     <Compile Include="SqlBatchOperationFixture.cs" />
     <Compile Include="SqlBulkInsertOperationFixture.cs" />
     <Compile Include="UsingDAL\ExportUsersToFile.cs" />

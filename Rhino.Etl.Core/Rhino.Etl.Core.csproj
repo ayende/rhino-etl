@@ -115,6 +115,7 @@
     <Compile Include="Operations\IOperation.cs" />
     <Compile Include="Operations\PartialProcessOperation.cs" />
     <Compile Include="Operations\SqlBatchOperation.cs" />
+    <Compile Include="Enumerables\OneTimeEnumerable.cs" />
     <Compile Include="Pipelines\ThreadPoolPipelineExecuter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuackingDictionary.cs" />
