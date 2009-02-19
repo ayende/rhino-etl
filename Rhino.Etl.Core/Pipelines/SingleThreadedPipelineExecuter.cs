@@ -1,5 +1,6 @@
 namespace Rhino.Etl.Core.Pipelines
 {
+    using System;
     using System.Collections.Generic;
     using Enumerables;
     using Operations;
@@ -16,7 +17,7 @@ namespace Rhino.Etl.Core.Pipelines
         /// <param name="enumerator">The enumerator.</param>
         protected override IEnumerable<Row> DecorateEnumerable(IOperation operation, IEnumerable<Row> enumerator)
         {
-            return new OneTimeEnumerable<Row>(new EventRaisingEnumerator(operation, enumerator));
+            return new EventRaisingEnumerator(operation, enumerator);
         }
     }
 }
