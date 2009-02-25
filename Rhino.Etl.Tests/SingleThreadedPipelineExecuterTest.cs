@@ -1,8 +1,12 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MbUnit.Framework;
 using Rhino.Etl.Core;
 using Rhino.Etl.Core.Operations;
 using Rhino.Etl.Core.Pipelines;
+using Rhino.Etl.Tests.Joins;
 using Rhino.Mocks;
 
 namespace Rhino.Etl.Tests
@@ -13,39 +17,75 @@ namespace Rhino.Etl.Tests
         [Test]
         public void Should_not_execute_operations_twice()
         {
-            var mockery = new MockRepository();
-
-            using (var stubProcess = mockery.Stub<EtlProcess>())
+            var iterations = 0;
+            
+            using (var stubProcess = MockRepository.GenerateStub<EtlProcess>())
             {
                 stubProcess.PipelineExecuter = new SingleThreadedPipelineExecuter();
 
-                var spyOperation = new SpyOperation();
-                stubProcess.Register(spyOperation);
-                stubProcess.Register(new OperationWhichIteratesTwiceItsInput());
+                stubProcess.Register(new InputSpyOperation(() => iterations++));
+                stubProcess.Register(new OutputSpyOperation(2));
 
                 stubProcess.Execute();
-
-                Assert.AreEqual(1, spyOperation.Enumerations);
             }
+
+            Assert.AreEqual(1, iterations);
         }
 
-        class SpyOperation : AbstractOperation
+        [Test]
+        public void Should_cache_operation_output()
         {
+            var accumulator = new ArrayList();
+
+            using (var process = MockRepository.GenerateStub<EtlProcess>())
+            {
+                process.PipelineExecuter = new SingleThreadedPipelineExecuter();
+
+                process.Register(new GenericEnumerableOperation(new[] {Row.FromObject(new {Prop = "Hello"})}));
+                process.Register(new OutputSpyOperation(2, r => accumulator.Add(r["Prop"])));
+
+                process.Execute();
+            }
+
+            CollectionAssert.AreElementsEqual(accumulator, Enumerable.Repeat("Hello", 2));
+        }
+
+        class InputSpyOperation : AbstractOperation
+        {
+            private readonly Action onExecute;
+
+            public InputSpyOperation(Action onExecute)
+            {
+                this.onExecute = onExecute;
+            }
+
             public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
             {
-                Enumerations++;
+                onExecute();
                 yield break;
             }
-
-            public int Enumerations { get; set; }
         }
 
-        class OperationWhichIteratesTwiceItsInput : AbstractOperation
+        class OutputSpyOperation : AbstractOperation
         {
+            private readonly int numberOfIterations;
+            private readonly Action<Row> onRow;
+
+            public OutputSpyOperation(int numberOfIterations) : this(numberOfIterations, r => {})
+            {}
+
+            public OutputSpyOperation(int numberOfIterations, Action<Row> onRow)
+            {
+                this.numberOfIterations = numberOfIterations;
+                this.onRow = onRow;
+            }
+
             public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
             {
-                foreach (var row in rows) ;
-                foreach (var row in rows) ;
+                for (var i = 0; i < numberOfIterations; i++)
+                    foreach (var row in rows)
+                        onRow(row);
+
                 yield break;
             }
         }
