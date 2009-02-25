@@ -15,7 +15,7 @@ namespace Rhino.Etl.Tests
     public class SingleThreadedPipelineExecuterTest
     {
         [Test]
-        public void Should_not_execute_operations_twice()
+        public void OperationsAreExecutedOnce()
         {
             var iterations = 0;
             
@@ -33,7 +33,7 @@ namespace Rhino.Etl.Tests
         }
 
         [Test]
-        public void Should_cache_operation_output()
+        public void MultipleIterationsYieldSameResults()
         {
             var accumulator = new ArrayList();
 
