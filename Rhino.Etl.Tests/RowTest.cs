@@ -1,3 +1,4 @@
+using System;
 using MbUnit.Framework;
 using Rhino.Etl.Core;
 
@@ -34,7 +35,7 @@ namespace Rhino.Etl.Tests
         }
 
         [Test]
-        public void Should_not_take_casing_into_account()
+        public void Should_not_take_casing_into_account_in_column_names()
         {
             Row first = new Row();
             first["A"] = 1;
@@ -45,16 +46,33 @@ namespace Rhino.Etl.Tests
             Assert.IsTrue(first.Equals(second));
         }
 
+        [RowTest]
+        [Row((byte)1, (int)1)]
+        [Row((int)1, (long)1)]
+        [Row((long)1, (float)1)]
+        [Row((float)1, (double)1)]
+        public void Different_numeric_types_should_be_comparable_if_implicit_conversion_exists(object firstValue, object secondValue)
+        {
+            Row first = new Row();
+            first["a"] = firstValue;
+
+            Row second = new Row();
+            second["a"] = secondValue;
+
+            Assert.IsTrue(first.Equals(second));
+        }
+
         [Test]
-        public void Since_values_are_boxed_they_wont_be_equal_even_if_implicit_conversion_exists()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Incompatible_types_throw_invalid_operation_exception()
         {
             Row first = new Row();
             first["a"] = 1;
 
             Row second = new Row();
-            second["a"] = (byte)1;
+            second["a"] = "stringvalue";
 
-            Assert.IsFalse(first.Equals(second));
+            Assert.IsTrue(first.Equals(second));
         }
 
         private static Row FillRow(string[] columns, object[] values)

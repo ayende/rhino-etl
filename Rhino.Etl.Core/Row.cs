@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Rhino.Etl.Core
 {
@@ -88,16 +89,33 @@ namespace Rhino.Etl.Core
 
             foreach (var key in items.Keys)
             {
-                if(items[key] == null)
-                {
-                    if (other.items[key] != null)
-                        return false;
-                }
-                else if(items[key].Equals(other.items[key]) == false)
+                var item = items[key];
+                var otherItem = other.items[key];
+
+                if (item == null | otherItem == null)
+                    return item == null & otherItem == null;
+
+                var equalityComparer = CreateComparer(item.GetType(), otherItem.GetType());
+
+                if(equalityComparer(item, otherItem) == false)
                     return false;
             }
 
             return true;
+        }
+
+        private static Func<object, object, bool> CreateComparer(Type firstType, Type secondType)
+        {
+            if (firstType == secondType)
+                return Equals;
+
+            var firstParameter = Expression.Parameter(typeof (object), "first");
+            var secondParameter = Expression.Parameter(typeof (object), "second");
+
+            var equalExpression = Expression.Equal(Expression.Convert(firstParameter, firstType), 
+                Expression.Convert(Expression.Convert(secondParameter, secondType), firstType));
+
+            return Expression.Lambda<Func<object, object, bool>>(equalExpression, firstParameter, secondParameter).Compile();
         }
 
         /// <summary>
