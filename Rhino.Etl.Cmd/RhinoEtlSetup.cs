@@ -66,7 +66,9 @@ namespace Rhino.Etl.Cmd
 
         private static Type GetFromAssembly(RhinoEtlCommandLineOptions options)
         {
-            Assembly asm = Assembly.Load(options.File);
+            FileInfo _assemblyInfo = new FileInfo(options.File);
+            Assembly asm = Assembly.LoadFile(_assemblyInfo.FullName);
+            //Assembly asm = Assembly.Load(options.File);
             foreach (Type type in asm.GetTypes())
             {
                 if(typeof(EtlProcess).IsAssignableFrom(type) && type.Name.Equals(options.Process, StringComparison.InvariantCultureIgnoreCase))
@@ -88,9 +90,11 @@ namespace Rhino.Etl.Cmd
         {
             try
             {
+                FileInfo _assemblyInfo = new FileInfo(options.File);
                 //we have to run the code in another appdomain, because we want to
                 //setup our own app.config for it
                 AppDomainSetup appDomainSetup = new AppDomainSetup();
+                appDomainSetup.ApplicationBase = _assemblyInfo.DirectoryName;
                 appDomainSetup.ConfigurationFile = options.File + ".config";
                 AppDomain appDomain = AppDomain.CreateDomain("etl.domain", null, appDomainSetup);
                 appDomain.Load(processType.Assembly.GetName());
