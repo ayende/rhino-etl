@@ -29,10 +29,14 @@
 			<include name="Boo.Lang.Parser.dll" />
 			<include name="FileHelpers.dll" />
 		</assemblyfileset>
+		<resourcefileset id="project.resources"
+					  prefix="Rhino.Etl.Cmd">
+			<include name="*.log4net.config" />
+		</resourcefileset>
 	</target>
 
 	<target name="generate-assemblyinfo" depends="init common.generate-assemblyinfo" />
 
-	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-dll" />
+	<target name="build" description="Build ${project::get-name()}" depends="generate-assemblyinfo common.compile-exe" />
 
 </project>
