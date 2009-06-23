@@ -86,6 +86,7 @@
     <Compile Include="Macros\AbstractClassGeneratorMacro.cs" />
     <Compile Include="Macros\AccumulateMacro.cs" />
     <Compile Include="Macros\AggregateMacro.cs" />
+    <Compile Include="Macros\FinishedProcessingMacro.cs" />
     <Compile Include="Macros\GroupByMacro.cs" />
     <Compile Include="Macros\InputMacro.cs" />
     <Compile Include="Macros\JoinMacro.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Macros\OutputMacro.cs" />
     <Compile Include="Macros\ProcessMacro.cs" />
     <Compile Include="Macros\RightMacro.cs" />
+    <Compile Include="Macros\RowProcessedMacro.cs" />
     <Compile Include="Macros\SqlBulkInsertMacro.cs" />
     <Compile Include="Macros\TerminateMacro.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

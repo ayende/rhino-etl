@@ -108,6 +108,7 @@
     <Compile Include="Dsl\SqlBulkInsertFixture.cs" />
     <Compile Include="Dsl\JoinFixture.cs" />
     <Compile Include="Dsl\ResultsToList.cs" />
+    <Compile Include="Dsl\WireEtlProcessEventsFixture.cs" />
     <Compile Include="Errors\ErrorsFixture.cs" />
     <Compile Include="Errors\ErrorsProcess.cs" />
     <Compile Include="Errors\ThrowingOperation.cs" />
@@ -214,6 +215,14 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dsl\WireOnFinishedProcessingEvent.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dsl\WireRowProcessedEvent.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
