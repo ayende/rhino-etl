@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using Rhino.Etl.Core;
+using Rhino.Etl.Core.Operations;
+
 namespace Rhino.Etl.Tests.Fibonacci
 {
-    using System.Collections.Generic;
-    using Core;
-    using Rhino.Etl.Core.Operations;
-
     public class FibonacciOperation : AbstractOperation
     {
         private readonly int max;
@@ -17,7 +17,7 @@ namespace Rhino.Etl.Tests.Fibonacci
         {
             int a = 0;
             int b = 1;
-            Row row = new Row();
+            var row = new Row();
             row["id"] = 1;
             yield return row;
 

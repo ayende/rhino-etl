@@ -2,11 +2,9 @@ namespace Rhino.Etl.Core.Operations
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Data;
 	using System.Data.SqlClient;
 	using DataReaders;
-	using Rhino.Commons;
+	using Commons;
 
 	/// <summary>
 	/// Allows to execute an operation that perform a bulk insert into a sql server database
@@ -23,7 +21,7 @@ namespace Rhino.Etl.Core.Operations
 		/// Important: The column name in the database is case sensitive!
 		/// </summary>
 		public IDictionary<string, string> Mappings = new Dictionary<string, string>();
-		private IDictionary<string, Type> _inputSchema = new Dictionary<string, Type>();
+		private readonly IDictionary<string, Type> _inputSchema = new Dictionary<string, Type>();
 
 		private SqlBulkCopy sqlBulkCopy;
 		private string targetTable;

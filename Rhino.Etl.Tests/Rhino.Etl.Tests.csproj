@@ -100,7 +100,7 @@
     <None Include="Dsl\Aggregate.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Branches\BranchingProcess.cs" />
+    <Compile Include="Branches\FibonacciBranchingProcess.cs" />
     <Compile Include="Dsl\AggregationFixture.cs" />
     <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs">
       <SubType>Code</SubType>
@@ -156,7 +156,6 @@
     <Compile Include="LoadTest\UpperCaseColumn.cs" />
     <Compile Include="LoadTest\UpperCaseUserNames.cs" />
     <Compile Include="OutputCommandFixture.cs" />
-    <Compile Include="Branches\MultiplyByThreeOperation.cs" />
     <Compile Include="Branches\BranchesFixture.cs" />
     <Compile Include="RowTest.cs" />
     <Compile Include="SingleThreadedPipelineExecuterTest.cs" />

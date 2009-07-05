@@ -1,7 +1,7 @@
+using Rhino.Etl.Core.Operations;
+
 namespace Rhino.Etl.Tests.Fibonacci.Bulk
 {
-    using Rhino.Etl.Core.Operations;
-
     public class FibonacciBulkInsert : SqlBulkInsertOperation
     {
         public FibonacciBulkInsert() : base("test", "Fibonacci")

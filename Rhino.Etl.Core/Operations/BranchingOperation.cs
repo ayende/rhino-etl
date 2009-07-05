@@ -1,11 +1,11 @@
+using System.Linq;
+using Rhino.Etl.Core.Enumerables;
+
 namespace Rhino.Etl.Core.Operations
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using Enumerables;
+    using System.Collections.Generic;
 
-	/// <summary>
+    /// <summary>
 	/// Branch the current pipeline flow into all its inputs
 	/// </summary>
 	public class BranchingOperation : AbstractOperation
@@ -44,16 +44,17 @@ namespace Rhino.Etl.Core.Operations
 		/// <returns></returns>
 		public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
 		{
-			List<Row> copiedRows = new List<Row>(rows);
+		    var copiedRows = new CachingEnumerable<Row>(rows);
+
 			foreach (IOperation operation in operations)
 			{
-				List<Row> cloned = copiedRows.ConvertAll<Row>(delegate(Row row)
-				{
-					return row.Clone();
-				});
+                var cloned = copiedRows.Select(r => r.Clone());
+
 				IEnumerable<Row> enumerable = operation.Execute(cloned);
+
 				if(enumerable==null)
 					continue;
+
 				IEnumerator<Row> enumerator = enumerable.GetEnumerator();
 #pragma warning disable 642
 				while (enumerator.MoveNext()) ;

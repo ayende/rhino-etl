@@ -1,11 +1,9 @@
+using System.Data;
+using MbUnit.Framework;
+using Rhino.Commons;
+
 namespace Rhino.Etl.Tests
 {
-    using System.Data;
-    using System.Xml.Schema;
-    using MbUnit.Framework;
-    using Rhino.Commons;
-    using System;
-
     public class BaseFibonacciTest
     {
         [SetUp]
@@ -13,7 +11,8 @@ namespace Rhino.Etl.Tests
         {
             Use.Transaction("test", delegate(IDbCommand cmd)
             {
-                cmd.CommandText = @"
+                cmd.CommandText =
+                    @"
 if object_id('Fibonacci') is not null
     drop table Fibonacci
 create table Fibonacci ( id int );
@@ -24,20 +23,20 @@ create table Fibonacci ( id int );
 
         protected static void Assert25ThFibonacci()
         {
-            int max = Use.Transaction<int>("test", delegate(IDbCommand cmd)
+            int max = Use.Transaction("test", delegate(IDbCommand cmd)
             {
                 cmd.CommandText = "SELECT MAX(id) FROM Fibonacci";
-                return (int)cmd.ExecuteScalar();
+                return (int) cmd.ExecuteScalar();
             });
             Assert.AreEqual(75025, max);
         }
 
         protected static void AssertFibonacciTableEmpty()
         {
-            int count = Use.Transaction<int>("test", delegate(IDbCommand cmd)
+            int count = Use.Transaction("test", delegate(IDbCommand cmd)
             {
                 cmd.CommandText = "SELECT count(id) FROM Fibonacci";
-                return (int)cmd.ExecuteScalar();
+                return (int) cmd.ExecuteScalar();
             });
             Assert.AreEqual(0, count);
         }

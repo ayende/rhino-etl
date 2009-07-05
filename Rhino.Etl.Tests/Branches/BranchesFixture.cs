@@ -1,29 +1,44 @@
+using System;
+using System.Data;
+using MbUnit.Framework;
+using Rhino.Commons;
+
 namespace Rhino.Etl.Tests.Branches
 {
-	using System.Data;
-	using Commons;
-	using MbUnit.Framework;
+    [TestFixture]
+    public class BranchesFixture : BaseFibonacciTest
+    {
+        [Test]
+        public void CanBranchThePipeline()
+        {
+            using (var process = new FibonacciBranchingProcess(30, 2))
+                process.Execute();
 
-	[TestFixture]
-	public class BranchesFixture : BaseFibonacciTest
-	{
-		[Test]
-		public void CanBranchThePipeline()
-		{
-			using (BranchingProcess process = new BranchingProcess())
-				process.Execute();
+            AssertCountForFibonacci(60);
+        }
 
-			AssertCountForFibonacci();
-		}
+        [Test] 
+        public void CanBranchThePipelineEfficiently()
+        {
+            var initialMemory = GC.GetTotalMemory(true);
 
-		protected static void AssertCountForFibonacci()
-		{
-			int max = Use.Transaction<int>("test", delegate(IDbCommand cmd)
-			{
-				cmd.CommandText = "SELECT count(*) FROM Fibonacci";
-				return (int)cmd.ExecuteScalar();
-			});
-			Assert.AreEqual(60, max);
-		}
-	}
+            using (var process = new FibonacciBranchingProcess(30000, 10))
+                process.Execute();
+
+            var finalMemory = GC.GetTotalMemory(false);
+
+            Assert.Less(finalMemory - initialMemory, 10 * 1000 * 1000, "Consuming too much memory");
+            AssertCountForFibonacci(300000);
+        }
+
+        protected static void AssertCountForFibonacci(int numberOfRows)
+        {
+            int max = Use.Transaction("test", delegate(IDbCommand cmd)
+            {
+                cmd.CommandText = "SELECT count(*) FROM Fibonacci";
+                return (int) cmd.ExecuteScalar();
+            });
+            Assert.AreEqual(numberOfRows, max);
+        }
+    }
 }
