@@ -26,12 +26,12 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        event Proc<AbstractOperation, Row> OnRowProcessed;
+        event Proc<IOperation, Row> OnRowProcessed;
 
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        event Proc<AbstractOperation> OnFinishedProcessing;
+        event Proc<IOperation> OnFinishedProcessing;
 
         /// <summary>
         /// Initializes the current instance

@@ -44,12 +44,12 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        public virtual event Proc<AbstractOperation, Row> OnRowProcessed = delegate { };
+        public virtual event Proc<IOperation, Row> OnRowProcessed = delegate { };
 
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        public virtual event Proc<AbstractOperation> OnFinishedProcessing = delegate { };
+        public virtual event Proc<IOperation> OnFinishedProcessing = delegate { };
 
         /// <summary>
         /// Initializes this instance

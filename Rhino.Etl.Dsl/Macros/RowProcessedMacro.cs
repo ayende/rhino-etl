@@ -29,7 +29,7 @@ namespace Rhino.Etl.Dsl.Macros
         {
             Method rowProcessed = new Method("OnRowProcessed");
             rowProcessed.Modifiers = TypeMemberModifiers.Override;
-            rowProcessed.Parameters.Add(new ParameterDeclaration("op", CodeBuilder.CreateTypeReference(typeof(AbstractOperation))));
+            rowProcessed.Parameters.Add(new ParameterDeclaration("op", CodeBuilder.CreateTypeReference(typeof(IOperation))));
             rowProcessed.Parameters.Add(new ParameterDeclaration("row", CodeBuilder.CreateTypeReference(typeof(Row))));
 
             rowProcessed.Body = macro.Block;

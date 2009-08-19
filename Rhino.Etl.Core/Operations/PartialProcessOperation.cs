@@ -17,7 +17,7 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        public event Proc<AbstractOperation> OnFinishedProcessing
+        public event Proc<IOperation> OnFinishedProcessing
         {
             add
             {
@@ -57,7 +57,7 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        public event Proc<AbstractOperation, Row> OnRowProcessed
+        public event Proc<IOperation, Row> OnRowProcessed
         {
             add
             {

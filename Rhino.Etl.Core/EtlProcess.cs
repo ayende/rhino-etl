@@ -86,7 +86,7 @@ namespace Rhino.Etl.Core
         /// Called when this process has finished processing.
         /// </summary>
         /// <param name="op">The op.</param>
-        protected virtual void OnFinishedProcessing(AbstractOperation op)
+        protected virtual void OnFinishedProcessing(IOperation op)
         {
             Notice("Finished {0}: {1}", op.Name, op.Statistics);
         }
@@ -103,7 +103,7 @@ namespace Rhino.Etl.Core
         /// </summary>
         /// <param name="op">The operation.</param>
         /// <param name="dictionary">The dictionary.</param>
-        protected virtual void OnRowProcessed(AbstractOperation op, Row dictionary)
+        protected virtual void OnRowProcessed(IOperation op, Row dictionary)
         {
             if (op.Statistics.OutputtedRows % 1000 == 0)
                 Info("Processed {0} rows in {1}", op.Statistics.OutputtedRows, op.Name);
