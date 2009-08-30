@@ -1,12 +1,12 @@
 using Rhino.Etl.Core.Enumerables;
+using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core.Operations
 {
     using System.Collections.Generic;
     using System.Data;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// Generic output command operation
     /// </summary>
     public abstract class OutputCommandOperation : AbstractCommandOperation

@@ -17,7 +17,7 @@ aggregate join_product_names:
 process WireEventOnFinishedProcessingProcess:
   
 	finishedProcessing:
-		using System.IO.File.Create("OnFinishedProcessing.wired")
+		System.IO.File.Create("OnFinishedProcessing.wired").Close()
 		
 	# we get the products from the unit test
 	distinct_product_names()

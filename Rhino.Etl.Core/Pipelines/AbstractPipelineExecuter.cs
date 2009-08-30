@@ -17,11 +17,14 @@ namespace Rhino.Etl.Core.Pipelines
         /// </summary>
         /// <param name="pipelineName">The name.</param>
         /// <param name="pipeline">The pipeline.</param>
-        public void Execute(string pipelineName, ICollection<IOperation> pipeline)
+        /// <param name="translateRows">Translate the rows into another representation</param>
+        public void Execute(string pipelineName,
+                            ICollection<IOperation> pipeline,
+                            Func<IEnumerable<Row>, IEnumerable<Row>> translateRows)
         {
             try
             {
-                IEnumerable<Row> enumerablePipeline = PipelineToEnumerable(pipeline, new List<Row>());
+                IEnumerable<Row> enumerablePipeline = PipelineToEnumerable(pipeline, new List<Row>(), translateRows);
                 try
                 {
                     DateTime start = DateTime.Now;
@@ -41,24 +44,29 @@ namespace Rhino.Etl.Core.Pipelines
             DisposeAllOperations(pipeline);
         }
 
-		/// <summary>
+    	/// <summary>
 		/// Transform the pipeline to an enumerable
 		/// </summary>
 		/// <param name="pipeline">The pipeline.</param>
 		/// <param name="rows">The rows</param>
+		/// <param name="translateEnumerable">Translate the rows from one representation to another</param>
 		/// <returns></returns>
-        public virtual IEnumerable<Row> PipelineToEnumerable(ICollection<IOperation> pipeline, IEnumerable<Row> rows)
+        public virtual IEnumerable<Row> PipelineToEnumerable(
+			ICollection<IOperation> pipeline, 
+			IEnumerable<Row> rows,
+			Func<IEnumerable<Row>, IEnumerable<Row>> translateEnumerable)
         {
-        	foreach (IOperation operation in pipeline)
+        	foreach (var operation in pipeline)
             {
                 operation.PrepareForExecution(this);
-                IEnumerable<Row> enumerator = operation.Execute(rows);
-                rows = DecorateEnumerable(operation, enumerator);
+                var enumerator = operation.Execute(rows);
+            	enumerator = translateEnumerable(enumerator);
+                rows = DecorateEnumerableForExecution(operation, enumerator);
             }
             return rows;
         }
 
-        /// <summary>
+    	/// <summary>
         /// Gets all errors that occured under this executer
         /// </summary>
         /// <returns></returns>
@@ -87,7 +95,7 @@ namespace Rhino.Etl.Core.Pipelines
         /// </summary>
         protected virtual void ExecutePipeline(IEnumerable<Row> pipeline)
         {
-            IEnumerator<Row> enumerator = pipeline.GetEnumerator();
+            var enumerator = pipeline.GetEnumerator();
             try
             {
 #pragma warning disable 642
@@ -124,6 +132,6 @@ namespace Rhino.Etl.Core.Pipelines
         /// </summary>
         /// <param name="operation">The operation.</param>
         /// <param name="enumerator">The enumerator.</param>
-        protected abstract IEnumerable<Row> DecorateEnumerable(IOperation operation, IEnumerable<Row> enumerator);
+        protected abstract IEnumerable<Row> DecorateEnumerableForExecution(IOperation operation, IEnumerable<Row> enumerator);
     }
 }

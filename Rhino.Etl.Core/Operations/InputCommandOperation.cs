@@ -1,10 +1,11 @@
+using Rhino.Etl.Core.Infrastructure;
+
 namespace Rhino.Etl.Core.Operations
 {
     using System.Collections.Generic;
     using System.Data;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// Generic input command operation
     /// </summary>
     public abstract class InputCommandOperation : AbstractCommandOperation

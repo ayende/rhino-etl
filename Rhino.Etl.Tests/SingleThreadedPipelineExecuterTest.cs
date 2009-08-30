@@ -21,6 +21,9 @@ namespace Rhino.Etl.Tests
             
             using (var stubProcess = MockRepository.GenerateStub<EtlProcess>())
             {
+            	stubProcess.Stub(x => x.TranslateRows(null)).IgnoreArguments()
+            		.WhenCalled(x => x.ReturnValue = x.Arguments[0]);
+
                 stubProcess.PipelineExecuter = new SingleThreadedPipelineExecuter();
 
                 stubProcess.Register(new InputSpyOperation(() => iterations++));
@@ -39,6 +42,9 @@ namespace Rhino.Etl.Tests
 
             using (var process = MockRepository.GenerateStub<EtlProcess>())
             {
+				process.Stub(x => x.TranslateRows(null)).IgnoreArguments()
+					.WhenCalled(x => x.ReturnValue = x.Arguments[0]);
+
                 process.PipelineExecuter = new SingleThreadedPipelineExecuter();
 
                 process.Register(new GenericEnumerableOperation(new[] {Row.FromObject(new {Prop = "Hello"})}));

@@ -15,15 +15,22 @@ namespace Rhino.Etl.Core
         /// </summary>
         /// <param name="pipelineName">The name.</param>
         /// <param name="pipeline">The pipeline.</param>
-        void Execute(string pipelineName, ICollection<IOperation> pipeline);
+        /// <param name="translateRows">Translate the rows into another representation</param>
+        void Execute(string pipelineName,
+                     ICollection<IOperation> pipeline,
+                     Func<IEnumerable<Row>, IEnumerable<Row>> translateRows);
 
 		/// <summary>
 		/// Transform the pipeline to an enumerable
 		/// </summary>
 		/// <param name="pipeline">The pipeline.</param>
 		/// <param name="rows">The rows.</param>
+		/// <param name="translateEnumerable">Translate the rows from one representation to another</param>
 		/// <returns></returns>
-        IEnumerable<Row> PipelineToEnumerable(ICollection<IOperation> pipeline, IEnumerable<Row> rows);
+        IEnumerable<Row> PipelineToEnumerable(
+			ICollection<IOperation> pipeline, 
+			IEnumerable<Row> rows,
+			Func<IEnumerable<Row>, IEnumerable<Row>> translateEnumerable);
 
         /// <summary>
         /// Gets all errors that occured under this executer

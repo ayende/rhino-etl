@@ -4,9 +4,8 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections;
     using System.Collections.Generic;
     using System.Threading;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// Represent a single operation that can occure during the ETL process
     /// </summary>
     public abstract class AbstractOperation : WithLoggingMixin, IOperation
@@ -44,12 +43,12 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        public virtual event Proc<IOperation, Row> OnRowProcessed = delegate { };
+        public virtual event Action<IOperation, Row> OnRowProcessed = delegate { };
 
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        public virtual event Proc<IOperation> OnFinishedProcessing = delegate { };
+        public virtual event Action<IOperation> OnFinishedProcessing = delegate { };
 
         /// <summary>
         /// Initializes this instance

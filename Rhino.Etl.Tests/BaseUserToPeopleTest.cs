@@ -1,9 +1,10 @@
+using Rhino.Etl.Core.Infrastructure;
+
 namespace Rhino.Etl.Tests
 {
     using System.Collections.Generic;
     using System.Data;
     using Aggregation;
-    using Commons;
     using MbUnit.Framework;
 
     public class BaseUserToPeopleTest : BaseDslTest

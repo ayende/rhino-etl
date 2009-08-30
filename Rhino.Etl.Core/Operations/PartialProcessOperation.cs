@@ -4,9 +4,8 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections;
     using System.Collections.Generic;
     using System.Threading;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// A partial process that can take part in another process
     /// </summary>
     public class PartialProcessOperation : EtlProcessBase<PartialProcessOperation>, IOperation
@@ -17,7 +16,7 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        public event Proc<IOperation> OnFinishedProcessing
+        public event Action<IOperation> OnFinishedProcessing
         {
             add
             {
@@ -57,7 +56,7 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        public event Proc<IOperation, Row> OnRowProcessed
+        public event Action<IOperation, Row> OnRowProcessed
         {
             add
             {
@@ -83,7 +82,7 @@ namespace Rhino.Etl.Core.Operations
         public IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
             MergeLastOperationsToOperations();
-            return pipelineExeuter.PipelineToEnumerable(operations, rows);
+            return pipelineExeuter.PipelineToEnumerable(operations, rows, enumerable => enumerable);
         }
 
         ///<summary>

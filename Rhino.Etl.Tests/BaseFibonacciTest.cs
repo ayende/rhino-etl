@@ -1,6 +1,6 @@
 using System.Data;
 using MbUnit.Framework;
-using Rhino.Commons;
+using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Tests
 {

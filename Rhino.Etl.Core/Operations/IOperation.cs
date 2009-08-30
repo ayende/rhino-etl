@@ -3,9 +3,8 @@ namespace Rhino.Etl.Core.Operations
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// A single operation in an etl process
     /// </summary>
     public interface IOperation : IDisposable
@@ -26,12 +25,12 @@ namespace Rhino.Etl.Core.Operations
         /// <summary>
         /// Occurs when a row is processed.
         /// </summary>
-        event Proc<IOperation, Row> OnRowProcessed;
+        event Action<IOperation, Row> OnRowProcessed;
 
         /// <summary>
         /// Occurs when all the rows has finished processing.
         /// </summary>
-        event Proc<IOperation> OnFinishedProcessing;
+        event Action<IOperation> OnFinishedProcessing;
 
         /// <summary>
         /// Initializes the current instance

@@ -14,7 +14,7 @@ namespace Rhino.Etl.Core.Pipelines
         /// </summary>
         /// <param name="operation">The operation.</param>
         /// <param name="enumerator">The enumerator.</param>
-        protected override IEnumerable<Row> DecorateEnumerable(IOperation operation, IEnumerable<Row> enumerator)
+        protected override IEnumerable<Row> DecorateEnumerableForExecution(IOperation operation, IEnumerable<Row> enumerator)
         {
             return new CachingEnumerable<Row>(new EventRaisingEnumerator(operation, enumerator));
         }

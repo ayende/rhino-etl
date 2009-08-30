@@ -3,9 +3,8 @@ namespace Rhino.Etl.Core.Operations
     using System;
     using System.Collections;
     using System.Data;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// Represent an operation that uses the database can occure during the ETL process
     /// </summary>
     public abstract class AbstractDatabaseOperation : AbstractOperation

@@ -1,18 +1,18 @@
+using Boo.Lang;
+
 namespace Rhino.Etl.Core
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Text;
-    using Boo.Lang;
     using Exceptions;
 
     /// <summary>
     /// A dictionary that can be access with a natural syntax from Boo
     /// </summary>
     [Serializable]
-    public class QuackingDictionary : IQuackFu, IDictionary
+    public class QuackingDictionary : IDictionary, IQuackFu
     {
         /// <summary>
         /// The inner items collection
@@ -129,7 +129,7 @@ namespace Rhino.Etl.Core
             {
                 get
                 {
-                    System.Collections.Generic.List<KeyValuePair> pairs = new System.Collections.Generic.List<KeyValuePair>();
+                    var pairs = new System.Collections.Generic.List<KeyValuePair>();
                     foreach (DictionaryEntry item in items)
                     {
                         pairs.Add(new KeyValuePair(item.Key, item.Value));

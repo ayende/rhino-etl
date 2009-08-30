@@ -1,9 +1,10 @@
+using Rhino.Etl.Core.Infrastructure;
+
 namespace Rhino.Etl.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using Commons;
     using Operations;
     using Pipelines;
 
@@ -67,12 +68,20 @@ namespace Rhino.Etl.Core
             MergeLastOperationsToOperations();
             RegisterToOperationsEvents();
 			Notice("Starting to execute {0}", Name);
-            PipelineExecuter.Execute(Name, operations);
+            PipelineExecuter.Execute(Name, operations, TranslateRows);
 
             PostProcessing();
         }
 
-        private void RegisterToOperationsEvents()
+		/// <summary>
+		/// Translate the rows from one representation to another
+		/// </summary>
+		public virtual IEnumerable<Row> TranslateRows(IEnumerable<Row> rows)
+    	{
+    		return rows;
+    	}
+
+    	private void RegisterToOperationsEvents()
         {
             foreach (IOperation operation in operations)
             {

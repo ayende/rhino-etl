@@ -1,19 +1,17 @@
+using Boo.Lang.Compiler;
+using Boo.Lang.Compiler.Steps;
+using Rhino.DSL;
+
 namespace Rhino.Etl.Dsl
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
-    using Boo.Lang;
-    using Boo.Lang.Compiler;
-    using Boo.Lang.Compiler.Pipelines;
-    using Boo.Lang.Compiler.Steps;
-    using Commons;
     using CompilerSteps;
     using Core;
-    using DSL;
 
-    /// <summary>
+	/// <summary>
     /// The Etl DSL engine
     /// </summary>
     public class EtlDslEngine : DslEngine
@@ -26,7 +24,7 @@ namespace Rhino.Etl.Dsl
 		/// </summary>
 		/// <param name="urls">The files to compile</param>
 		/// <returns>The resulting compiler context</returns>
-		public override CompilerContext Compile(string[] urls)
+		public override CompilerContext Compile(params string[] urls)
 		{
 			//disable caching, we always compile from scratch
 			return ForceCompile(urls, GetFileName(urls));
@@ -37,7 +35,7 @@ namespace Rhino.Etl.Dsl
 		/// </summary>
 		/// <param name="urls">The urls.</param>
 		/// <returns></returns>
-    	private string GetFileName(string[] urls)
+    	private static string GetFileName(IEnumerable<string> urls)
     	{
     		string file = Path.GetTempFileName();
     		foreach (string url in urls)
@@ -59,7 +57,7 @@ namespace Rhino.Etl.Dsl
             IList<string> typesInCurrentModule;
             if (moduleNameToContainedTypes.TryGetValue(moduleName, out typesInCurrentModule) == false)
                 throw new InvalidOperationException("DSL Error: Module " + moduleName + " was not processed correctly");
-            System.Collections.Generic.List<Type> types = new System.Collections.Generic.List<Type>();
+            var types = new List<Type>();
             foreach (Type type in assembly.GetTypes())
             {
                 if (typeof(EtlProcess).IsAssignableFrom(type) && typesInCurrentModule.Contains(type.Name))
@@ -86,7 +84,8 @@ namespace Rhino.Etl.Dsl
                 "Rhino.Etl.Dsl",
                 "Rhino.Etl.Dsl.Macros"));
 
-            pipeline.InsertAfter(typeof(MacroAndAttributeExpansion), new CorrelateTypesToModuleName(moduleNameToContainedTypes));
+            pipeline.InsertAfter(typeof(MacroAndAttributeExpansion), 
+				new CorrelateTypesToModuleName(moduleNameToContainedTypes));
         }
 
         /// <summary>

@@ -1,0 +1,719 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rhino.DSL</name>
+    </assembly>
+    <members>
+        <member name="T:Rhino.DSL.AbstractLockable">
+            <summary>
+             Provide local read / writer copy semantics
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.AbstractLockable.WriteLock(Rhino.DSL.CacheAction)">
+            <summary>
+            Execute the action under a write lock
+            </summary>
+            <param name="cacheAction">The cache action.</param>
+        </member>
+        <member name="M:Rhino.DSL.AbstractLockable.ReadLock(Rhino.DSL.CacheAction)">
+            <summary>
+            Execute the action under a read lock
+            </summary>
+            <param name="cacheAction">The cache action.</param>
+        </member>
+        <member name="T:Rhino.DSL.BlockToArgumentsTransformer">
+            <summary>
+            Transforms the contents of macro blocks specified in the ctor to parameters.
+            <example>
+            <code>
+            mymacro:
+            	1
+            	"something"
+            
+            is transformed into
+            
+            mymacro(1, "something")
+            </code>
+            </example>
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.BlockToArgumentsTransformer.#ctor(System.String[])">
+            <summary>
+            Creates an instance of BlockToArgumentsTransformer
+            </summary>
+            <param name="methods">Methods that should have blocks transformed into arguments.</param>
+        </member>
+        <member name="M:Rhino.DSL.BlockToArgumentsTransformer.OnMacroStatement(Boo.Lang.Compiler.Ast.MacroStatement)">
+            <summary>
+            Handles macro statements.
+            </summary>
+            <param name="node">The node.</param>
+        </member>
+        <member name="T:Rhino.DSL.DslCompilerContextCache">
+            <summary>
+            Cache for a CompilerContext instance
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslCompilerContextCache.#ctor(Rhino.DSL.IDslEngineStorage)">
+            <summary>
+            Create a cache based on the script storage method
+            </summary>
+            <param name="storage"></param>
+        </member>
+        <member name="M:Rhino.DSL.DslCompilerContextCache.GetCached(Rhino.DSL.DslEngine,System.String[])">
+            <summary>
+            Returns cached instance if any, or null if none
+            </summary>
+            <param name="engine"></param>
+            <param name="urls"></param>
+            <returns></returns>
+        </member>
+        <member name="E:Rhino.DSL.DslCompilerContextCache.AssemblyLoaded">
+            <summary>
+            Occurs when an assembly is loaded from disk.
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.AssemblyLoadEvent">
+            <summary>
+            The event type for loading assembly from disk
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.ImplicitBaseClassCompilerStep">
+            <summary>
+            Takes all the code that exists in a module's global section and put it in a specificied
+            method of a class. Allow easy handling of the Anonymous Base Class pattern 
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.BaseClassCompilerStep">
+            <summary>
+            Provides a base class for classes that provide DSL via
+            substituting code into one or more members of a class
+            created at runtime inheriting from a BaseClassCompilerStep.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.BaseClassCompilerStep.#ctor(System.Type,System.String[])">
+            <summary>
+            Create new instance of <seealso cref="T:Rhino.DSL.BaseClassCompilerStep"/>
+            </summary>
+            <param name="baseClass">The base class that will be used</param>
+            <param name="namespaces">Namespaces that will be automatically imported into all modules</param>
+        </member>
+        <member name="M:Rhino.DSL.BaseClassCompilerStep.Run">
+            <summary>
+            Run this compiler step
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.BaseClassCompilerStep.ExtendBaseClass(Boo.Lang.Compiler.Ast.Module,Boo.Lang.Compiler.Ast.ClassDefinition)">
+            <summary>
+            Allow a derived class to perform additional operations on the newly created type definition.
+            </summary>
+        </member>
+        <member name="P:Rhino.DSL.BaseClassCompilerStep.BaseClass">
+            <summary>
+            Base class that this BaseClassCompilerStep builds a derived instance of.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.ImplicitBaseClassCompilerStep.#ctor(System.Type,System.String,System.String[])">
+            <summary>
+            Create new instance of <seealso cref="T:Rhino.DSL.ImplicitBaseClassCompilerStep"/>
+            </summary>
+            <param name="baseClass">The base class that will be used</param>
+            <param name="methodName">The name of the method that will get all the code from globals moved to it.</param>
+            <param name="namespaces">Namespaces that would be automatically imported into all modules</param>
+        </member>
+        <member name="M:Rhino.DSL.ImplicitBaseClassCompilerStep.#ctor(System.Type,System.String,Boo.Lang.Compiler.Ast.ParameterDeclarationCollection,System.String[])">
+            <summary>
+            Create new instance of <seealso cref="T:Rhino.DSL.ImplicitBaseClassCompilerStep"/>
+            </summary>
+            <param name="baseClass">The base class that will be used</param>
+            <param name="methodName">The name of the method that will get all the code from globals moved to it.</param>
+            <param name="parameters">The parameters of this method</param>        
+            <param name="namespaces">Namespaces that would be automatically imported into all modules</param>               
+        </member>
+        <member name="M:Rhino.DSL.ImplicitBaseClassCompilerStep.ExtendBaseClass(Boo.Lang.Compiler.Ast.Module,Boo.Lang.Compiler.Ast.ClassDefinition)">
+            <summary>
+            Allow a derived class to perform additional operations on the newly created type definition.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.ImplicitBaseClassCompilerStep.ExtendBaseClass(Boo.Lang.Compiler.Ast.TypeDefinition)">
+            <summary>
+            Allow to extend the base class in additional ways
+            </summary>
+            <param name="definition">The definition.</param>
+        </member>
+        <member name="T:Rhino.DSL.DefaultDslEngineCache">
+            <summary>
+            Provide cache support for a DSL
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.IDslEngineCache">
+            <summary>
+            Cahce interface for the DslEngine
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineCache.Get(System.String)">
+            <summary>
+            Try to get a cached type for this URL.
+            </summary>
+            <param name="url">The url to use as a key for the cache</param>
+            <returns>The compiled DSL or null if not found</returns>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineCache.Set(System.String,System.Type)">
+            <summary>
+            Put the type in the cache, with the url as the key
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineCache.Remove(System.String)">
+            <summary>
+            Removes the url for the from cache.
+            </summary>
+            <param name="url">The URL.</param>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineCache.WriteLock(Rhino.DSL.CacheAction)">
+            <summary>
+            Execute the action under a write lock
+            </summary>
+            <param name="cacheAction">The cache action.</param>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineCache.ReadLock(Rhino.DSL.CacheAction)">
+            <summary>
+            Execute the action under a read lock
+            </summary>
+            <param name="cacheAction">The cache action.</param>
+        </member>
+        <member name="M:Rhino.DSL.DefaultDslEngineCache.Get(System.String)">
+            <summary>
+            Try to get a cached type for this URL.
+            </summary>
+            <param name="url">The url to use as a key for the cache</param>
+            <returns>The compiled DSL or null if not found</returns>
+        </member>
+        <member name="M:Rhino.DSL.DefaultDslEngineCache.Set(System.String,System.Type)">
+            <summary>
+            Put the type in the cache, with the url as the key
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DefaultDslEngineCache.Remove(System.String)">
+            <summary>
+            Removes the url for the from cache.
+            </summary>
+            <param name="url">The URL.</param>
+        </member>
+        <member name="T:Rhino.DSL.FileSystemDslEngineStorage">
+            <summary>
+            Handles the storage requirements for the DSL from a file system.
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.IDslEngineStorage">
+            <summary>
+            Implementors of this class will 
+            handle all the storage requirements for the DSL.
+            Where the scripts are located, when they are refreshed, etc
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.GetMatchingUrlsIn(System.String,System.String@)">
+            <summary>
+            Will retrieve all the _canonised_ urls from the given directory that
+            this Dsl Engine can process.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.NotifyOnChange(System.Collections.Generic.IEnumerable{System.String},System.Action{System.String})">
+            <summary>
+            Will call the action delegate when any of the specified urls are changed.
+            Note that for a single logical change several calls may be made.
+            </summary>
+            <param name="urls">The urls.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.CreateInput(System.String)">
+            <summary>
+            Create a compiler input from the URL.
+            </summary>
+            <param name="url">The url</param>
+            <returns>The compiler input</returns>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.IsUrlIncludeIn(System.String[],System.String,System.String)">
+            <summary>
+            Determines whether the URL is included in the specified urls
+            in the given parent path
+            </summary>
+            <param name="urls">The urls.</param>
+            <param name="parentPath">The parent oath.</param>
+            <param name="url">The URL.</param>
+            <returns>
+            	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.GetTypeNameFromUrl(System.String)">
+            <summary>
+            Gets the type name from URL.
+            </summary>
+            <param name="url">The URL.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.IsValidScriptUrl(System.String)">
+            <summary>
+            Determains whatever the given url is a valid script url.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.IDslEngineStorage.GetChecksumForUrls(System.Type,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Given a set of script URLs return a checksum for them taking into account their location and their contents
+            </summary>
+            <param name="dslEngineType">Type of the DSL base.</param>
+            <param name="urls">The urls.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.CreateInput(System.String)">
+            <summary>
+            Create a compiler input from the URL.
+            </summary>
+            <param name="url">The url</param>
+            <returns>The compiler input</returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.GetMatchingUrlsIn(System.String,System.String@)">
+            <summary>
+            Will retrieve all the _canonised_ urls from the given directory that
+            this Dsl Engine can process.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.CompareUrls(System.String,System.String)">
+            <summary>
+            Compares the two urls
+            </summary>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.NotifyOnChange(System.Collections.Generic.IEnumerable{System.String},System.Action{System.String})">
+            <summary>
+            Will call the action delegate when any of the specified urls are changed.
+            Note that for a single logical change several calls may be made.
+            </summary>
+            <param name="urls">The urls.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.IsUrlIncludeIn(System.String[],System.String,System.String)">
+            <summary>
+            Determines whether the URL is included in the specified urls
+            in the given parent path
+            </summary>
+            <param name="urls">The urls.</param>
+            <param name="parentPath">The parent oath.</param>
+            <param name="url">The URL.</param>
+            <returns>
+            	<c>true</c> if [is URL include in] [the specified urls]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.GetTypeNameFromUrl(System.String)">
+            <summary>
+            Gets the type name from URL.
+            </summary>
+            <param name="url">The URL.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.IsValidScriptUrl(System.String)">
+            <summary>
+            Determains whatever the given url is a valid script url.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.GetChecksumForUrls(System.Type,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Given a set of script URLs return a checksum for them
+            </summary>
+            <param name="dslEngineType">Type of the DSL base.</param>
+            <param name="urls">The urls.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.FileSystemDslEngineStorage.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <filterpriority>2</filterpriority>
+        </member>
+        <member name="P:Rhino.DSL.FileSystemDslEngineStorage.FileNameFormat">
+            <summary>
+            The file name format of this DSL
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.CacheAction">
+            <summary>
+            An action delegate to be executed under a cache lock
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.MethodSubstitutionBaseClassCompilerStep">
+            <summary>
+            Takes all macro statements that exist in the modules global section and puts the bodies of those methods 
+            into corresponding overridable methods on the base class.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.MethodSubstitutionBaseClassCompilerStep.#ctor(System.Type,System.String[])">
+            <summary>
+            Create an instance of MethodSubstitutionBaseClassCompilerStep
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.MethodSubstitutionBaseClassCompilerStep.#ctor(System.Type,Boo.Lang.Compiler.Ast.DepthFirstTransformer[],System.String[])">
+            <summary>
+            Create an instance of MethodSubstitutionBaseClassCompilerStep
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.MethodSubstitutionBaseClassCompilerStep.ExtendBaseClass(Boo.Lang.Compiler.Ast.Module,Boo.Lang.Compiler.Ast.ClassDefinition)">
+            <summary>
+            Extends the base class by placing the blocks of macros into methods on the base class
+            of the same name.
+            </summary>
+            <example>
+            MyMethod:
+            	PerformActions
+            
+            If an overridable method called MyMethod exists on <see cref="P:Rhino.DSL.BaseClassCompilerStep.BaseClass"/>, then 
+            it is overridden as follows:
+            <code>
+            public override void MyMethod() { PerformActions(); }
+            </code>
+            </example>
+        </member>
+        <member name="T:Rhino.DSL.TransformerCompilerStep">
+            <summary>
+            Compiler step to run <see cref="T:Boo.Lang.Compiler.Ast.DepthFirstTransformer"/>s.
+            </summary>
+            <remarks>
+            This is a useful way to apply one or more transformers as a compiler step.
+            </remarks>
+        </member>
+        <member name="M:Rhino.DSL.TransformerCompilerStep.#ctor(Boo.Lang.Compiler.Ast.DepthFirstTransformer[])">
+            <summary>
+            Creates an instance of TransformerCompilerStep.
+            </summary>
+            <param name="transformers">Transformers for this compiler step to run.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="transformers"/> should not be null.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="transformers"/> should have at least one element.</exception>
+        </member>
+        <member name="M:Rhino.DSL.TransformerCompilerStep.Run">
+            <summary>
+            Run the <see cref="T:Rhino.DSL.TransformerCompilerStep"/>.
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep">
+            <summary>
+             Allow to use underscore separated names, which will be translated to pascal case names.
+             pascal_case -> PascalCase.
+             All names that contains an underscores will go through this treatment.
+            </summary>
+             <example>
+             You can  enable this behavior using the following statement
+             <code>
+             compiler.Parameters.Pipeline
+            		.InsertBefore(typeof (ProcessMethodBodiesWithDuckTyping),
+             				 new UnderscoreNamingConventionsToPascalCaseCompilerStep());
+             </code>
+             </example>
+        </member>
+        <member name="M:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep.OnReferenceExpression(Boo.Lang.Compiler.Ast.ReferenceExpression)">
+            <summary>
+            Called when we encounter a reference expression
+            </summary>
+            <param name="node">The node.</param>
+        </member>
+        <member name="M:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep.ShouldTransformNodeName(Boo.Lang.Compiler.Ast.ReferenceExpression)">
+            <summary>
+            Determain if the the name of the node should be transformed.
+            </summary>
+            <param name="node">The node.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep.OnMemberReferenceExpression(Boo.Lang.Compiler.Ast.MemberReferenceExpression)">
+            <summary>
+            Called when we encounters a member reference expression
+            </summary>
+            <param name="node">The node.</param>
+        </member>
+        <member name="M:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep.TransformNodeName(Boo.Lang.Compiler.Ast.ReferenceExpression)">
+            <summary>
+            Sets the node name to pascal case.
+            </summary>
+            <param name="node">The node.</param>
+        </member>
+        <member name="M:Rhino.DSL.UnderscoreNamingConventionsToPascalCaseCompilerStep.Run">
+            <summary>
+            Start visiting the current compile unit
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.UseSymbolsStep">
+            <summary>
+            Translate all @foo reference expression to "foo" string literals.
+            In essense, add symbols to the language
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.UseSymbolsStep.Run">
+            <summary>
+            Runs this instance.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.UseSymbolsStep.OnReferenceExpression(Boo.Lang.Compiler.Ast.ReferenceExpression)">
+            <summary>
+            Called when visting a reference expression.
+            Will turn reference expressions with initial @ to string literals
+            </summary>
+            <param name="node">The node.</param>
+        </member>
+        <member name="T:Rhino.DSL.AutoImportCompilerStep">
+            <summary>
+            Automatically imports all the specified namespaces to all the modules
+            in the compilation unit
+            </summary>
+            <remarks>
+            This probably belongs early in the compilation process
+            </remarks>
+        </member>
+        <member name="M:Rhino.DSL.AutoImportCompilerStep.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rhino.DSL.AutoImportCompilerStep"/> class.
+            </summary>
+            <param name="namespaces">The namespaces.</param>
+        </member>
+        <member name="M:Rhino.DSL.AutoImportCompilerStep.Run">
+            <summary>
+            Runs this instance.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.AutoImportCompilerStep.OnModule(Boo.Lang.Compiler.Ast.Module)">
+            <summary>
+            Add the namespaces to the module
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.UrlResolverDelegate">
+            <summary>
+            This delegate is used to abstract getting the data from a url.
+            This allows us to plug in more smarts when needed (for instance, hooking into the 
+            Castle.Resources system)
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.AutoReferenceFilesCompilerStep">
+            <summary>
+            This compiler step will auotmatically compiler and reference all files specified in import clauses such as:
+            import file from "[file name]"
+            
+            Another option is:
+            import namespaces from "[file name]"
+            
+            In which case all the namespaces defined in that file will be imported into the current file
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.#ctor">
+            <summary>
+            Create a new instance of <seealso cref="T:Rhino.DSL.AutoReferenceFilesCompilerStep"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.#ctor(System.String)">
+            <summary>
+            Create a new instance of <seealso cref="T:Rhino.DSL.AutoReferenceFilesCompilerStep"/>
+            </summary>
+            <param name="baseDirectory">The base directory to resolve files from</param>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.#ctor(Rhino.DSL.UrlResolverDelegate)">
+            <summary>
+            Create a new instance of <seealso cref="T:Rhino.DSL.AutoReferenceFilesCompilerStep"/>
+            </summary>
+            <param name="urlResolver">The url resolver to use</param>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.#ctor(System.String,Rhino.DSL.UrlResolverDelegate)">
+            <summary>
+            Create a new instance of <seealso cref="T:Rhino.DSL.AutoReferenceFilesCompilerStep"/>
+            </summary>
+            <param name="baseDirectory">The base directory to resolve files from</param>
+            <param name="urlResolver">The url resolver to use</param>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.OnImport(Boo.Lang.Compiler.Ast.Import)">
+            <summary>
+            Add the desired import behavior.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.SafeCloneParameters(Boo.Lang.Compiler.CompilerParameters)">
+            <summary>
+            This creates a copy of the passed compiler parameters, without the stuff
+            that make a compilation unique, like input, output assembly, etc
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.Run">
+            <summary>
+            Run the current compiler step
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.DslEngine">
+            <summary>
+            Base class for DSL engines, handles most of the routine tasks that a DSL
+            engine needs to do. Compilation, caching, creation, etc.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rhino.DSL.DslEngine"/> class.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.CreateInstance(System.Type,System.Object[])">
+            <summary>
+            Create a new instance of this DSL type.
+            </summary>
+            <param name="type">The type to create</param>
+            <param name="parametersForConstructor">optional ctor paraemters</param>
+            <returns>The newly created instance</returns>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.Compile(System.String[])">
+            <summary>
+            Compile the DSL and return the resulting context
+            </summary>
+            <param name="urls">The files to compile</param>
+            <returns>The resulting compiler context</returns>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.ForceCompile(System.String[],System.String)">
+            <summary>
+            Force a compile with no caching
+            </summary>
+            <param name="urls">The urls.</param>
+            <param name="cacheFileName">Name of the cache file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.HandleWarnings(Boo.Lang.Compiler.CompilerWarningCollection)">
+            <summary>
+            Allow a derived class to get access to the warnings that occured during 
+            compilation
+            </summary>
+            <param name="warnings">The warnings.</param>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.CreateCompilerException(Boo.Lang.Compiler.CompilerContext)">
+            <summary>
+            Create an exception that would be raised on compilation errors.
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.CustomizeCompiler(Boo.Lang.Compiler.BooCompiler,Boo.Lang.Compiler.CompilerPipeline,System.String[])">
+            <summary>
+            Customise the compiler to fit this DSL engine.
+            This is the most commonly overriden method.
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.GetTypeForUrl(System.Reflection.Assembly,System.String)">
+            <summary>
+            Get a type from the assembly according to the URL.
+            This is used to match a class with its originating file
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslEngine.CanonizeUrl(System.String)">
+            <summary>
+            Canonizes the URL to a consistent form.
+            </summary>
+        </member>
+        <member name="P:Rhino.DSL.DslEngine.Cache">
+            <summary>
+            Gets or sets the cache.
+            </summary>
+            <value>The cache.</value>
+        </member>
+        <member name="P:Rhino.DSL.DslEngine.Storage">
+            <summary>
+            Gets or sets the storage for this DSL
+            </summary>
+            <value>The storage.</value>
+        </member>
+        <member name="P:Rhino.DSL.DslEngine.CompilerContextCache">
+            <summary>
+            Compiler context cache
+            </summary>
+        </member>
+        <member name="P:Rhino.DSL.DslEngine.CompilerOutputType">
+            <summary>
+             The type of assembly compilation should produce
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.DslFactory">
+            <summary>
+            Manage the creation of DSL instances, cache and creates them.
+            </summary>
+        </member>
+        <member name="F:Rhino.DSL.DslFactory.standAloneCompilation">
+            <summary>
+            This is used to mark urls that should be compiled on their own
+            usually this means scripts that has been changed after they were 
+            compiled
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslFactory.Register``1(Rhino.DSL.DslEngine)">
+            <summary>
+             Register a new DSL engine that is tied to a specific base type
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.DslFactory.Create``1(System.String,System.Object[])">
+            <summary>
+            Create a new DSL instance
+            </summary>
+            <typeparam name="TDslBase">The base type of the DSL</typeparam>
+            <param name="url">The url to read the DSL file from</param>
+            <param name="parameters">optional ctor parameters</param>
+            <returns>The dsl instance</returns>
+        </member>
+        <member name="M:Rhino.DSL.DslFactory.TryCreate``1(System.String,System.Object[])">
+            <summary>
+            Create a new DSL instance
+            </summary>
+            <typeparam name="TDslBase">The base type of the DSL</typeparam>
+            <param name="url">The url to read the DSL file from</param>
+            <param name="parameters">optional ctor parameters</param>
+            <returns>The dsl instance</returns>
+        </member>
+        <member name="M:Rhino.DSL.DslFactory.CreateAll``1(System.String,System.Object[])">
+            <summary>
+            Creates instances of all the DSL that are located directly under the parent URL.
+            </summary>
+            <typeparam name="TDslBase">The type of the DSL base.</typeparam>
+            <param name="parentUrl">The parent URL.</param>
+            <param name="parameters">The parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Rhino.DSL.DslFactory.IsRegistered``1">
+            <summary>
+            Check if there was a DSL registered for this base type.
+            </summary>
+        </member>
+        <member name="P:Rhino.DSL.DslFactory.BaseDirectory">
+            <summary>
+            The base directory to read all the relative url from.
+            </summary>
+        </member>
+        <member name="E:Rhino.DSL.DslFactory.Compilation">
+            <summary>
+            Occurs when a compilation is completed
+            Useful to track how many assemblies has been loaded
+            by the DslFactory
+            </summary>
+        </member>
+        <member name="E:Rhino.DSL.DslFactory.Recompilation">
+            <summary>
+            Occurs when recompilation of a script is completed.
+            Useful to track how many assemblies has been loaded by
+            the DslFactory
+            </summary>
+        </member>
+        <member name="T:Rhino.DSL.GeneratePropertyMacro">
+            <summary>
+            This class allows to easily define property generation macros
+            </summary>
+        </member>
+        <member name="M:Rhino.DSL.GeneratePropertyMacro.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Rhino.DSL.GeneratePropertyMacro"/> class.
+            </summary>
+            <param name="propertyName">Name of the property.</param>
+        </member>
+        <member name="M:Rhino.DSL.GeneratePropertyMacro.Expand(Boo.Lang.Compiler.Ast.MacroStatement)">
+            <summary>
+            Expands the specified macro.
+            </summary>
+            <param name="macro">The macro.</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

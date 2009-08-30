@@ -1,13 +1,12 @@
+using Rhino.Etl.Core.Infrastructure;
+
 namespace Rhino.Etl.Core.Operations
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.Diagnostics;
-    using Commons;
 
-    /// <summary>
+	/// <summary>
     /// Perform a batch command against SQL server
     /// </summary>
     public abstract class SqlBatchOperation : AbstractDatabaseOperation
@@ -94,9 +93,11 @@ namespace Rhino.Etl.Core.Operations
         {
             if (commandSet != null)
                 commandSet.Dispose();
-            commandSet = new SqlCommandSet();
-            commandSet.Connection = connection;
-            commandSet.Transaction = transaction;
+            commandSet = new SqlCommandSet
+            {
+            	Connection = connection, 
+				Transaction = transaction
+            };
         }
     }
 }

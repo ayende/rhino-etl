@@ -1,10 +1,11 @@
+using Rhino.Etl.Core.Infrastructure;
+
 namespace Rhino.Etl.Core.Operations
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Data.SqlClient;
 	using DataReaders;
-	using Commons;
 
 	/// <summary>
 	/// Allows to execute an operation that perform a bulk insert into a sql server database

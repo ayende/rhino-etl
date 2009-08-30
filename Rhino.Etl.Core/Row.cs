@@ -33,7 +33,7 @@ namespace Rhino.Etl.Core
         /// Initializes a new instance of the <see cref="Row"/> class.
         /// </summary>
         /// <param name="itemsToClone">The items to clone.</param>
-        private Row(IDictionary itemsToClone)
+        protected Row(IDictionary itemsToClone)
             : base(new Hashtable(itemsToClone, StringComparer.InvariantCultureIgnoreCase))
         {
         }
