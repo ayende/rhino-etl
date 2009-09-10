@@ -7,6 +7,7 @@ namespace Rhino.Etl.Tests.LoadTest
 	public class LoadTestJoinsFixture
 	{
 		[Test]
+        [Ignore("It depends too much of what the machine is doing and how powerful it is")]
 		public void CanDoLargeJoinsefficently()
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
