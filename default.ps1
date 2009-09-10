@@ -5,6 +5,7 @@ properties {
   $buildartifacts_dir = "$build_dir\" 
   $sln_file = "$base_dir\Rhino.Etl.sln" 
   $version = "1.0.0.0"
+  $humanReadableversion = "1.0"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
@@ -81,7 +82,7 @@ task Test -depends Compile {
 }
 
 task Release -depends Test {
-	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.Etl.zip `
+	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.Etl-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
 		$build_dir\Rhino.Etl.Core.dll `
 		$build_dir\Rhino.Etl.Dsl.dll `
 		$build_dir\Rhino.Etl.Cmd.exe `
