@@ -7,6 +7,8 @@ properties {
   $version = "1.0.0.0"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
+  $uploadCategory = "Rhino-ETL"
+  $uploadScript = "C:\Builds\Upload\PublishBuild.build"
 } 
 
 task default -depends Release
@@ -92,4 +94,18 @@ task Release -depends Test {
 	if ($lastExitCode -ne 0) {
         throw "Error: Failed to execute ZIP command"
     }
+}
+
+task Upload -depend Release {
+	if (Test-Path $uploadScript ) {
+		$log = git log -n 1 --oneline		
+		msbuild $uploadScript /p:Category=$uploadCategory "/p:Comment=$log" "/p:File=$release_dir\Rhino.ETL-$humanReadableversion-Build-$env:ccnetnumericlabel.zip"
+		
+		if ($lastExitCode -ne 0) {
+			throw "Error: Failed to publish build"
+		}
+	}
+	else {
+		Write-Host "could not find upload script $uploadScript, skipping upload"
+	}
 }

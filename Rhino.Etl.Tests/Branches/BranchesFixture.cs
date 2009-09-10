@@ -25,7 +25,7 @@ namespace Rhino.Etl.Tests.Branches
             using (var process = new FibonacciBranchingProcess(30000, 10))
                 process.Execute();
 
-            var finalMemory = GC.GetTotalMemory(false);
+            var finalMemory = GC.GetTotalMemory(true);
 
             Assert.Less(finalMemory - initialMemory, 10 * 1000 * 1000, "Consuming too much memory");
             AssertCountForFibonacci(300000);
