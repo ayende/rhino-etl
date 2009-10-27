@@ -31,8 +31,8 @@ namespace Rhino.Etl.Dsl.Macros
             Method rowProcessed = new Method("OnFinishedProcessing");
             rowProcessed.Modifiers = TypeMemberModifiers.Override;
             rowProcessed.Parameters.Add(new ParameterDeclaration("op", CodeBuilder.CreateTypeReference(typeof(IOperation))));
-            
-            rowProcessed.Body = macro.Block;
+
+            rowProcessed.Body = macro.Body;
 
             ParentMethods.Add(rowProcessed);
 

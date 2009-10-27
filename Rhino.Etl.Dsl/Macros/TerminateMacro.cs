@@ -28,7 +28,7 @@ namespace Rhino.Etl.Dsl.Macros
             accumulate.Modifiers = TypeMemberModifiers.Override;
             accumulate.Parameters.Add(new ParameterDeclaration("aggregate", CodeBuilder.CreateTypeReference(typeof(Row))));
 
-            accumulate.Body = macro.Block;
+            accumulate.Body = macro.Body;
 
             ParentMethods.Add(accumulate);
 

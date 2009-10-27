@@ -147,7 +147,7 @@ namespace Rhino.Etl.Dsl.Macros
         {
             MethodInfo methodToOverride = GetMethodToOverride(macro);
 
-            if (macro.Block != null && macro.Block.Statements.Count > 0)
+            if (macro.Body != null && macro.Block.Statements.Count > 0)
             {
                 if (methodToOverride == null)
                 {
@@ -156,7 +156,7 @@ namespace Rhino.Etl.Dsl.Macros
                 }
                 Method method = new Method(blockMethodName);
                 method.Modifiers = TypeMemberModifiers.Override;
-                method.Body = macro.Block;
+                method.Body = macro.Body;
                 classDefinition.Members.Add(method);
                 method.Parameters.Extend(BuildParameters(methodToOverride));
             }
@@ -204,7 +204,7 @@ namespace Rhino.Etl.Dsl.Macros
             isAnonymous = true;
             string name = typeof(T).Name.Replace("Abstract", "").Replace("Operation", "");
             if (macro["anonymous_name_index"] == null)
-                macro["anonymous_name_index"] = Context.AllocIndex();
+                macro["anonymous_name_index"] = Context.GetUniqueName();
             return "Anonymous_" + name + "_" + macro["anonymous_name_index"];
         }
 

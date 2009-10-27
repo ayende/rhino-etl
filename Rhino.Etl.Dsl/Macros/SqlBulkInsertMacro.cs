@@ -24,9 +24,9 @@ namespace Rhino.Etl.Dsl.Macros
         /// <remarks>This prohibits using the builtin map macro!</remarks>
         public override Boo.Lang.Compiler.Ast.Statement Expand(MacroStatement macro)
         {
-            if (macro.Block != null)
+            if (macro.Body != null)
             {
-                foreach(Statement statement in macro.Block.Statements)
+                foreach(Statement statement in macro.Body.Statements)
                 {
                     if (IsMappingStatement(statement))
                     {

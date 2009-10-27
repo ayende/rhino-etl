@@ -48,7 +48,7 @@ namespace Rhino.Etl.Dsl.Macros
                                          AstUtil.CreateReferenceExpression(typeof(Row).FullName))
                     )
                 );
-            mergeRowsMethod.Body.Add(macro.Block);
+            mergeRowsMethod.Body.Add(macro.Body);
             mergeRowsMethod.Body.Add(new ReturnStatement(new ReferenceExpression("row")));
 
             ParentMethods.Add(mergeRowsMethod);

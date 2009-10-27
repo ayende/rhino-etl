@@ -27,7 +27,7 @@ namespace Rhino.Etl.Dsl.Macros
         {
             List<string> columns = new List<string>();
 
-            if(macro.Block.HasStatements)
+            if(!macro.Body.IsEmpty)
             {
                 Errors.Add(CompilerErrorFactory.CustomError(macro.LexicalInfo, "GroupBy cannot contain statements"));
                 return null;
