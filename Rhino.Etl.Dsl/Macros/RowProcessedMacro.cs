@@ -32,7 +32,7 @@ namespace Rhino.Etl.Dsl.Macros
             rowProcessed.Parameters.Add(new ParameterDeclaration("op", CodeBuilder.CreateTypeReference(typeof(IOperation))));
             rowProcessed.Parameters.Add(new ParameterDeclaration("row", CodeBuilder.CreateTypeReference(typeof(Row))));
 
-            rowProcessed.Body = macro.Block;
+            rowProcessed.Body = macro.Body;
 
             ParentMethods.Add(rowProcessed);
 
