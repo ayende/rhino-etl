@@ -9,7 +9,7 @@ properties {
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
-  $uploadScript = "C:\Builds\Upload\PublishBuild.build"
+  $uploadScript = "C:\Builds\Uploader\PublishBuild.build"
 } 
 
 task default -depends Release
