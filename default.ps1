@@ -9,7 +9,7 @@ properties {
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
-  $uploadScript = "C:\Builds\Upload\PublishBuild.build"
+  $uploadScript = "C:\Builds\Uploader\PublishBuild.build"
 } 
 
 task default -depends Release
@@ -68,7 +68,10 @@ task Init -depends Clean {
 } 
 
 task Compile -depends Init { 
-  exec msbuild "/p:OutDir=""$buildartifacts_dir "" $sln_file"
+   & msbuild "$sln_file" "/p:OutDir=$build_dir\\" /p:Configuration=Release
+  if ($lastExitCode -ne 0) {
+        throw "Error: Failed to execute msbuild"
+  }
 } 
 
 task Test -depends Compile {
@@ -86,8 +89,8 @@ task Release -depends Test {
 		$build_dir\Rhino.Etl.Core.dll `
 		$build_dir\Rhino.Etl.Dsl.dll `
 		$build_dir\Rhino.Etl.Cmd.exe `
-		$build_dir\Rhino.Etl.Core.xml `
-		$build_dir\Rhino.Etl.Dsl.xml `
+		Rhino.Etl.Core\bin\debug\Rhino.Etl.Core.xml `
+		Rhino.Etl.Dsl\bin\debug\Rhino.Etl.Dsl.xml `
 		$build_dir\Boo.* `
 		$build_dir\FileHelpers.dll `
 		license.txt `
