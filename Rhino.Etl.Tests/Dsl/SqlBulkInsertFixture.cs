@@ -5,19 +5,19 @@ namespace Rhino.Etl.Tests.Dsl
 	using System.Collections.Generic;
 	using System.Data;
 	using Core;
-	using MbUnit.Framework;
+	using Xunit;
 
-	[TestFixture]
+	
 	public class SqlBulkInsertFixture : BaseUserToPeopleTest
 	{
-		[Test]
+		[Fact]
 		public void CanCompile()
 		{
 			using (EtlProcess process = CreateDslInstance("Dsl/UsersToPeopleBulk.boo"))
-				Assert.IsNotNull(process);
+				Assert.NotNull(process);
 		}
 
-		[Test]
+		[Fact]
 		public void CanCopyTableWithTransform()
 		{
 			using (EtlProcess process = CreateDslInstance("Dsl/UsersToPeopleBulk.boo"))

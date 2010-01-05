@@ -4,23 +4,20 @@ namespace Rhino.Etl.Tests.LoadTest
 {
     using System.Data;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Core.Operations;
 
     /// <summary>
     /// This fixture is here to verify that we can handle large amount of data
     /// without consuming too much memory or crashing
     /// </summary>
-    [TestFixture(TimeOut = 120)]
     public class LoadTestFixture : BaseUserToPeopleTest
     {
         private const int expectedCount = 5000;
         private int currentUserCount;
 
-        [SetUp]
-        public override void SetUp()
+        public LoadTestFixture()
         {
-            base.SetUp();
             currentUserCount = GetUserCount("1 = 1");
             using (PushDataToDatabase push = new PushDataToDatabase(expectedCount))
                 push.Execute();
@@ -28,7 +25,7 @@ namespace Rhino.Etl.Tests.LoadTest
 
         public void AssertUpdatedAllRows()
         {
-            Assert.AreEqual(expectedCount + currentUserCount, GetUserCount("testMsg is not null"));
+            Assert.Equal(expectedCount + currentUserCount, GetUserCount("testMsg is not null"));
 
         }
 
@@ -41,7 +38,7 @@ namespace Rhino.Etl.Tests.LoadTest
             });
         }
 
-        [Test]
+        [Fact]
         public void CanUpdateAllUsersToUpperCase()
         {
             using (UpperCaseUserNames update = new UpperCaseUserNames())
@@ -52,7 +49,7 @@ namespace Rhino.Etl.Tests.LoadTest
             AssertUpdatedAllRows();
         }
 
-        [Test]
+        [Fact]
         public void CanBatchUpdateAllUsersToUpperCase()
         {
             using (UpperCaseUserNames update = new UpperCaseUserNames())
@@ -64,11 +61,11 @@ namespace Rhino.Etl.Tests.LoadTest
             AssertUpdatedAllRows();
         }
 
-        [Test]
+        [Fact]
         public void BulkInsertUpdatedRows()
         {
             if(expectedCount != GetUserCount("1 = 1"))
-                Assert.Ignore("That is _really_ strange");
+                return;//ignoring test
 
             using (UpperCaseUserNames update = new UpperCaseUserNames())
             {

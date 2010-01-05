@@ -4,12 +4,12 @@ namespace Rhino.Etl.Tests.Errors
     using System.Collections.Generic;
     using Core;
     using Joins;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
+    
     public class ErrorsFixture : BaseFibonacciTest
     {
-        [Test]
+        [Fact]
         public void WillReportErrorsWhenThrown()
         {
             using (ErrorsProcess process = new ErrorsProcess())
@@ -18,15 +18,15 @@ namespace Rhino.Etl.Tests.Errors
                 process.RegisterLast(new AddToResults(results));
 
                 process.Execute();
-                Assert.AreEqual(process.ThrowOperation.RowsAfterWhichToThrow, results.Count);
+                Assert.Equal(process.ThrowOperation.RowsAfterWhichToThrow, results.Count);
                 List<Exception> errors = new List<Exception>(process.GetAllErrors());
-                Assert.AreEqual(1, errors.Count);
-                Assert.AreEqual("Failed to execute operation Rhino.Etl.Tests.Errors.ThrowingOperation: problem",
+                Assert.Equal(1, errors.Count);
+                Assert.Equal("Failed to execute operation Rhino.Etl.Tests.Errors.ThrowingOperation: problem",
                                 errors[0].Message);
             }
         }
 
-        [Test]
+        [Fact]
         public void OutputCommandWillRollbackTransactionOnError()
         {
             using (ErrorsProcess process = new ErrorsProcess())

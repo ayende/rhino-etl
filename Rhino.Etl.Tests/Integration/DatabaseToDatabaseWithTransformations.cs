@@ -7,13 +7,13 @@ namespace Rhino.Etl.Tests.Integration
     using System.Data;
     using Boo.Lang;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Core.Operations;
 
-    [TestFixture]
+    
     public class DatabaseToDatabaseWithTransformations : BaseUserToPeopleTest
     {
-        [Test]
+        [Fact]
         public void CanCopyTableWithTransform()
         {
             using(UsersToPeople process = new UsersToPeople())

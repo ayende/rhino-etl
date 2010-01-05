@@ -1,13 +1,12 @@
 using System.Data;
-using MbUnit.Framework;
+using Xunit;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Tests
 {
     public class BaseFibonacciTest
     {
-        [SetUp]
-        public void SetUp()
+        public BaseFibonacciTest()
         {
             Use.Transaction("test", delegate(IDbCommand cmd)
             {
@@ -28,7 +27,7 @@ create table Fibonacci ( id int );
                 cmd.CommandText = "SELECT MAX(id) FROM Fibonacci";
                 return (int) cmd.ExecuteScalar();
             });
-            Assert.AreEqual(75025, max);
+            Assert.Equal(75025, max);
         }
 
         protected static void AssertFibonacciTableEmpty()
@@ -38,7 +37,7 @@ create table Fibonacci ( id int );
                 cmd.CommandText = "SELECT count(id) FROM Fibonacci";
                 return (int) cmd.ExecuteScalar();
             });
-            Assert.AreEqual(0, count);
+            Assert.Equal(0, count);
         }
     }
 }

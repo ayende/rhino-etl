@@ -2,13 +2,13 @@ namespace Rhino.Etl.Tests
 {
     using System;
     using System.Collections.Generic;
-    using MbUnit.Framework;
+    using Xunit;
     using Fibonacci.Output;
 
-    [TestFixture]
+    
     public class OutputCommandFixture : BaseFibonacciTest
     {
-        [Test]
+        [Fact]
         public void CanInsertToDatabaseFromInMemoryCollection()
         {
             OutputFibonacciToDatabase fibonaci = new OutputFibonacciToDatabase(25, Should.WorkFine);
@@ -17,7 +17,7 @@ namespace Rhino.Etl.Tests
             Assert25ThFibonacci();
         }
 
-        [Test]
+        [Fact]
         public void WillRaiseRowProcessedEvent()
         {
             int rowsProcessed = 0;
@@ -28,10 +28,10 @@ namespace Rhino.Etl.Tests
                 fibonaci.Execute();
             }
 
-            Assert.AreEqual(1, rowsProcessed);
+            Assert.Equal(1, rowsProcessed);
         }
 
-        [Test]
+        [Fact]
         public void WillRaiseRowProcessedEventUntilItThrows()
         {
             int rowsProcessed = 0;
@@ -41,11 +41,11 @@ namespace Rhino.Etl.Tests
                 fibonaci.OutputOperation.OnRowProcessed += delegate { rowsProcessed++; };
                 fibonaci.Execute();
 
-                Assert.AreEqual(fibonaci.ThrowingOperation.RowsAfterWhichToThrow, rowsProcessed);
+                Assert.Equal(fibonaci.ThrowingOperation.RowsAfterWhichToThrow, rowsProcessed);
             }
         }
 
-        [Test]
+        [Fact]
         public void WillRaiseFinishedProcessingEventOnce()
         {
             int finished = 0;
@@ -56,15 +56,15 @@ namespace Rhino.Etl.Tests
                 fibonaci.Execute();
             }
 
-            Assert.AreEqual(1, finished);
+            Assert.Equal(1, finished);
         }
 
-        [Test]
+        [Fact]
         public void WhenErrorIsThrownWillRollbackTransaction()
         {
             OutputFibonacciToDatabase fibonaci = new OutputFibonacciToDatabase(25, Should.Throw);
             fibonaci.Execute();
-            Assert.AreEqual(1, new List<Exception>(fibonaci.GetAllErrors()).Count);
+            Assert.Equal(1, new List<Exception>(fibonaci.GetAllErrors()).Count);
             AssertFibonacciTableEmpty();
         }
     }

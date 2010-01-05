@@ -1,14 +1,14 @@
 using System;
 using System.Data;
-using MbUnit.Framework;
+using Xunit;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Tests.Branches
 {
-    [TestFixture]
+    
     public class BranchesFixture : BaseFibonacciTest
     {
-        [Test]
+        [Fact]
         public void CanBranchThePipeline()
         {
             using (var process = new FibonacciBranchingProcess(30, 2))
@@ -17,7 +17,7 @@ namespace Rhino.Etl.Tests.Branches
             AssertCountForFibonacci(60);
         }
 
-        [Test] 
+        [Fact] 
         public void CanBranchThePipelineEfficiently()
         {
             var initialMemory = GC.GetTotalMemory(true);
@@ -27,7 +27,7 @@ namespace Rhino.Etl.Tests.Branches
 
             var finalMemory = GC.GetTotalMemory(true);
 
-            Assert.Less(finalMemory - initialMemory, 10 * 1000 * 1000, "Consuming too much memory");
+            Assert.True(finalMemory - initialMemory < 10 * 1000 * 1000, "Consuming too much memory");
             AssertCountForFibonacci(300000);
         }
 
@@ -38,7 +38,7 @@ namespace Rhino.Etl.Tests.Branches
                 cmd.CommandText = "SELECT count(*) FROM Fibonacci";
                 return (int) cmd.ExecuteScalar();
             });
-            Assert.AreEqual(numberOfRows, max);
+            Assert.Equal(numberOfRows, max);
         }
     }
 }

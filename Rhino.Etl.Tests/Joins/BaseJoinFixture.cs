@@ -2,15 +2,14 @@ namespace Rhino.Etl.Tests.Joins
 {
     using System.Collections.Generic;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
 
     public class BaseJoinFixture
     {
         protected List<Row> left;
         protected List<Row> right;
 
-        [SetUp]
-        public void SetUp()
+        public BaseJoinFixture()
         {
             left = new List<Row>();
             right = new List<Row>();

@@ -2,14 +2,14 @@ namespace Rhino.Etl.Tests
 {
     using System;
     using System.Collections.Generic;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Tests.Fibonacci.Batch;
     using Rhino.Etl.Tests.Fibonacci.Output;
 
-    [TestFixture]
+    
     public class SqlBatchOperationFixture : BaseFibonacciTest
     {
-        [Test]
+        [Fact]
         public void CanInsertToDatabaseFromInMemoryCollection()
         {
             BatchFibonacci fibonaci = new BatchFibonacci(25,Should.WorkFine);
@@ -18,12 +18,12 @@ namespace Rhino.Etl.Tests
             Assert25ThFibonacci();
         }
 
-        [Test]
+        [Fact]
         public void WhenErrorIsThrownWillRollbackTransaction()
         {
             BatchFibonacci fibonaci = new BatchFibonacci(25, Should.Throw);
             fibonaci.Execute();
-            Assert.AreEqual(1, new List<Exception>(fibonaci.GetAllErrors()).Count);
+            Assert.Equal(1, new List<Exception>(fibonaci.GetAllErrors()).Count);
             AssertFibonacciTableEmpty();
         }
     }

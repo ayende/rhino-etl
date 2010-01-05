@@ -1,20 +1,20 @@
 namespace Rhino.Etl.Tests
 {
     using Fibonacci;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
+    
     public class InformationFixture 
     {
-        [Test]
+        [Fact]
         public void WillReportRowProcessedUsage()
         {
             InMemoryFibonacci fibonacci = new InMemoryFibonacci();
             fibonacci.Execute();
-            Assert.AreEqual(25, fibonacci.FibonacciOperation.Statistics.OutputtedRows);
+            Assert.Equal(25, fibonacci.FibonacciOperation.Statistics.OutputtedRows);
         }
 
-        [Test]
+        [Fact]
         public void WillReportWhenOpeartionEnded()
         {
             bool finished = false;
@@ -24,7 +24,7 @@ namespace Rhino.Etl.Tests
                 finished = true;
             };
             fibonacci.Execute();
-            Assert.IsTrue(finished);
+            Assert.True(finished);
         }
     }
 }

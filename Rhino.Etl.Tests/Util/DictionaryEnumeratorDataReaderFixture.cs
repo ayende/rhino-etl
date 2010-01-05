@@ -3,14 +3,14 @@ namespace Rhino.Etl.Tests.Util
     using System;
     using System.Collections.Generic;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
     using Mocks;
     using Rhino.Etl.Core.DataReaders;
 
-    [TestFixture]
+    
     public class DictionaryEnumeratorDataReaderFixture
     {
-        [Test]
+        [Fact]
         public void WillDisposeInternalEnumeratorAndEnumerableWhenDisposed()
         {
             MockRepository mocks = new MockRepository();

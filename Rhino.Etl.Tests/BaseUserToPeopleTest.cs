@@ -5,12 +5,11 @@ namespace Rhino.Etl.Tests
     using System.Collections.Generic;
     using System.Data;
     using Aggregation;
-    using MbUnit.Framework;
+    using Xunit;
 
     public class BaseUserToPeopleTest : BaseDslTest
     {
-        [SetUp]
-        public virtual void SetUp()
+        public BaseUserToPeopleTest()
         {
             Use.Transaction("test", delegate(IDbCommand cmd)
             {
@@ -58,14 +57,14 @@ create table People ( id int identity, userid int not null, firstname nvarchar(2
 
         protected static void AssertNames(IList<string[]> names)
         {
-            Assert.AreEqual("ayende", names[0][0]);
-            Assert.AreEqual("rahien", names[0][1]);
-            Assert.AreEqual("foo", names[1][0]);
-            Assert.AreEqual("bar", names[1][1]);
-            Assert.AreEqual("nice", names[2][0]);
-            Assert.AreEqual("naughty", names[2][1]);
-            Assert.AreEqual("gold", names[3][0]);
-            Assert.AreEqual("silver", names[3][1]);
+            Assert.Equal("ayende", names[0][0]);
+            Assert.Equal("rahien", names[0][1]);
+            Assert.Equal("foo", names[1][0]);
+            Assert.Equal("bar", names[1][1]);
+            Assert.Equal("nice", names[2][0]);
+            Assert.Equal("naughty", names[2][1]);
+            Assert.Equal("gold", names[3][0]);
+            Assert.Equal("silver", names[3][1]);
         }
     }
 }

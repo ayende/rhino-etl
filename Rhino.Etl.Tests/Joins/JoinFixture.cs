@@ -2,14 +2,14 @@ namespace Rhino.Etl.Tests.Joins
 {
     using System.Collections.Generic;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Core.Pipelines;
 
-    [TestFixture]
+    
     public class JoinFixture : BaseJoinFixture
     {
       
-        [Test]
+        [Fact]
         public void InnerJoin()
         {
             using (InnerJoinUsersToPeopleByEmail join = new InnerJoinUsersToPeopleByEmail())
@@ -20,12 +20,12 @@ namespace Rhino.Etl.Tests.Joins
                 IEnumerable<Row> result = join.Execute(null);
                 List<Row> items = new List<Row>(result);
 
-                Assert.AreEqual(1, items.Count);
-                Assert.AreEqual(3, items[0]["person_id"]);
+                Assert.Equal(1, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
             }
         }
 
-        [Test]
+        [Fact]
         public void RightJoin()
         {
             using (RightJoinUsersToPeopleByEmail join = new RightJoinUsersToPeopleByEmail())
@@ -36,14 +36,14 @@ namespace Rhino.Etl.Tests.Joins
                 IEnumerable<Row> result = join.Execute(null);
                 List<Row> items = new List<Row>(result);
 
-                Assert.AreEqual(2, items.Count);
-                Assert.AreEqual(3, items[0]["person_id"]);
-                Assert.IsNull(items[1]["name"]);
-                Assert.AreEqual(5, items[1]["person_id"]);
+                Assert.Equal(2, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
+                Assert.Null(items[1]["name"]);
+                Assert.Equal(5, items[1]["person_id"]);
             }
         }
 
-        [Test]
+        [Fact]
         public void LeftJoin()
         {
             using (LeftJoinUsersToPeopleByEmail join = new LeftJoinUsersToPeopleByEmail())
@@ -54,14 +54,14 @@ namespace Rhino.Etl.Tests.Joins
                 IEnumerable<Row> result = join.Execute(null);
                 List<Row> items = new List<Row>(result);
 
-                Assert.AreEqual(2, items.Count);
-                Assert.AreEqual(3, items[0]["person_id"]);
-                Assert.IsNull(items[1]["person_id"]);
-                Assert.AreEqual("bar", items[1]["name"]);
+                Assert.Equal(2, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
+                Assert.Null(items[1]["person_id"]);
+                Assert.Equal("bar", items[1]["name"]);
             }
         }
 
-        [Test]
+        [Fact]
         public void FullJoin()
         {
             using (FullJoinUsersToPeopleByEmail join = new FullJoinUsersToPeopleByEmail())
@@ -72,15 +72,15 @@ namespace Rhino.Etl.Tests.Joins
                 IEnumerable<Row> result = join.Execute(null);
                 List<Row> items = new List<Row>(result);
 
-                Assert.AreEqual(3, items.Count);
+                Assert.Equal(3, items.Count);
 
-                Assert.AreEqual(3, items[0]["person_id"]);
+                Assert.Equal(3, items[0]["person_id"]);
 
-                Assert.IsNull(items[1]["person_id"]);
-                Assert.AreEqual("bar", items[1]["name"]);
+                Assert.Null(items[1]["person_id"]);
+                Assert.Equal("bar", items[1]["name"]);
 
-                Assert.IsNull(items[2]["name"]);
-                Assert.AreEqual(5, items[2]["person_id"]);
+                Assert.Null(items[2]["name"]);
+                Assert.Equal(5, items[2]["person_id"]);
             }
         }
     }

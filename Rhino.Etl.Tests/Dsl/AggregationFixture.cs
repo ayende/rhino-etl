@@ -6,22 +6,22 @@ namespace Rhino.Etl.Tests.Dsl
     using Aggregation;
     using Core;
     using Joins;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Core.Operations;
     using Rhino.Etl.Dsl;
 
-    [TestFixture]
+    
     public class AggregationFixture : BaseAggregationFixture
     {
-        [Test]
+        [Fact]
         public void CanCompile()
         {
             EtlProcess process = CreateDslInstance("Dsl/Aggregate.boo");
-            Assert.IsNotNull(process);
+            Assert.NotNull(process);
         }
 
 
-    	[Test]
+    	[Fact]
         public void CanPerformAggregationFromDsl()
         {
             EtlProcess process = CreateDslInstance("Dsl/Aggregate.boo");
@@ -29,8 +29,8 @@ namespace Rhino.Etl.Tests.Dsl
             ResultsToList operation = new ResultsToList();
             process.RegisterLast(operation);
             process.Execute();
-            Assert.AreEqual(1, operation.Results.Count);
-            Assert.AreEqual("milk, sugar, coffee", operation.Results[0]["result"]);
+            Assert.Equal(1, operation.Results.Count);
+            Assert.Equal("milk, sugar, coffee", operation.Results[0]["result"]);
         }
     }
 }

@@ -6,21 +6,21 @@ namespace Rhino.Etl.Tests.Dsl
     using Aggregation;
     using Core;
     using Joins;
-    using MbUnit.Framework;
+    using Xunit;
     using Rhino.Etl.Core.Operations;
     using Rhino.Etl.Dsl;
 
-    [TestFixture]
+    
     public class WireEtlProcessEventsFixture : BaseAggregationFixture
     {
-        [Test]
+        [Fact]
         public void CanCompileWithRowProcessedEvent()
         {
             using (EtlProcess process = CreateDslInstance("Dsl/WireRowProcessedEvent.boo"))
-                Assert.IsNotNull(process);    
+                Assert.NotNull(process);    
         }
 
-        [Test]
+        [Fact]
         public void CheckIfOnRowProcessedEventWasWired()
         {
             using (var process = CreateDslInstance("Dsl/WireRowProcessedEvent.boo"))
@@ -29,19 +29,19 @@ namespace Rhino.Etl.Tests.Dsl
                 ResultsToList operation = new ResultsToList();
                 process.RegisterLast(operation);
                 process.Execute();
-                Assert.AreEqual(1, operation.Results.Count);
-                Assert.AreEqual("chocolate, sugar, coffee", operation.Results[0]["result"]);
+                Assert.Equal(1, operation.Results.Count);
+                Assert.Equal("chocolate, sugar, coffee", operation.Results[0]["result"]);
             }
         }
 
-        [Test]
+        [Fact]
         public void CanCompileWithFinishedProcessingEvent()
         {
             using (var process = CreateDslInstance("Dsl/WireOnFinishedProcessingEvent.boo"))
-                Assert.IsNotNull(process);
+                Assert.NotNull(process);
         }
 
-        [Test]
+        [Fact]
         public void CheckIfOnFinishedProcessingEventWasWired()
         {
             using (var process = CreateDslInstance("Dsl/WireOnFinishedProcessingEvent.boo"))
@@ -50,8 +50,8 @@ namespace Rhino.Etl.Tests.Dsl
                 ResultsToList operation = new ResultsToList();
                 process.RegisterLast(operation);
                 process.Execute();
-                Assert.AreEqual(1, operation.Results.Count);
-                Assert.IsTrue(File.Exists(@"OnFinishedProcessing.wired"));
+                Assert.Equal(1, operation.Results.Count);
+                Assert.True(File.Exists(@"OnFinishedProcessing.wired"));
 
                 File.Delete(@"OnFinishedProcessing.wired");
             }

@@ -3,9 +3,9 @@ namespace Rhino.Etl.Tests.UsingDAL
     using System.Collections.Generic;
     using System.IO;
     using Core;
-    using MbUnit.Framework;
+    using Xunit;
 
-    [TestFixture]
+    
     public class UsingDALFixture
     {
         private const string expected =
@@ -16,16 +16,16 @@ namespace Rhino.Etl.Tests.UsingDAL
 4	brak	brak@example.org
 5	snar	snar@example.org
 ";
-        [Test]
+        [Fact]
         public void CanWriteToFileFromDAL()
         {
             ExportUsersToFile export = new ExportUsersToFile();
             export.Execute();
             string actual = File.ReadAllText("users.txt");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
-        [Test]
+        [Fact]
         public void CanReadFromFileToDAL()
         {
             MySimpleDal.Users = new List<User>();
@@ -34,7 +34,7 @@ namespace Rhino.Etl.Tests.UsingDAL
             ImportUsersFromFile import = new ImportUsersFromFile();
             import.Execute();
 
-            Assert.AreEqual(5, MySimpleDal.Users.Count);
+            Assert.Equal(5, MySimpleDal.Users.Count);
         }
     }
 }

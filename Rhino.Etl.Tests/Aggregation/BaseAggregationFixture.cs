@@ -4,15 +4,14 @@ namespace Rhino.Etl.Tests.Aggregation
 	using System.Collections.Generic;
 	using System.IO;
 	using Core;
-    using MbUnit.Framework;
+    using Xunit;
 	using Rhino.Etl.Dsl;
 
 	public class BaseAggregationFixture : BaseDslTest
     {
         protected List<Row> rows;
 
-        [SetUp]
-        public void SetUp()
+        public BaseAggregationFixture()
         {
             rows = new List<Row>();
             AddRow("milk", 15);

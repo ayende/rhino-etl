@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using MbUnit.Framework;
+using Xunit;
 using Rhino.Etl.Core;
 using Rhino.Etl.Core.Operations;
 using Rhino.Etl.Core.Pipelines;
@@ -11,10 +11,10 @@ using Rhino.Mocks;
 
 namespace Rhino.Etl.Tests
 {
-    [TestFixture]
+    
     public class SingleThreadedPipelineExecuterTest
     {
-        [Test]
+        [Fact]
         public void OperationsAreExecutedOnce()
         {
             var iterations = 0;
@@ -32,10 +32,10 @@ namespace Rhino.Etl.Tests
                 stubProcess.Execute();
             }
 
-            Assert.AreEqual(1, iterations);
+            Assert.Equal(1, iterations);
         }
 
-        [Test]
+        [Fact]
         public void MultipleIterationsYieldSameResults()
         {
             var accumulator = new ArrayList();
@@ -53,7 +53,7 @@ namespace Rhino.Etl.Tests
                 process.Execute();
             }
 
-            CollectionAssert.AreElementsEqual(accumulator, Enumerable.Repeat("Hello", 2));
+            Assert.Equal(accumulator.Cast<string>().ToArray(), Enumerable.Repeat("Hello", 2).ToArray());
         }
 
         class InputSpyOperation : AbstractOperation
