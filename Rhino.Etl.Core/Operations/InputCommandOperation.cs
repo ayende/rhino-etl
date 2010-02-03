@@ -17,6 +17,16 @@ namespace Rhino.Etl.Core.Operations
         public InputCommandOperation(string connectionStringName)
             : base(connectionStringName)
         {
+            UseTransaction = true;
+        }
+
+        ///<summary>
+        /// True, if the input operation should be run in a transaction. Otherwise,false.
+        ///</summary>
+        public bool UseTransaction
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -27,7 +37,7 @@ namespace Rhino.Etl.Core.Operations
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
             using (IDbConnection connection = Use.Connection(ConnectionStringName))
-            using (IDbTransaction transaction = connection.BeginTransaction())
+            using (IDbTransaction transaction = BeginTransaction(connection))
             {
                 using (currentCommand = connection.CreateCommand())
                 {
@@ -41,8 +51,20 @@ namespace Rhino.Etl.Core.Operations
                         }
                     }
                 }
-                transaction.Commit();
+                if (transaction != null)
+                {
+                    transaction.Commit();
+                }
             }
+        }
+
+        IDbTransaction BeginTransaction(IDbConnection connection)
+        {
+            if (UseTransaction)
+            {
+                return connection.BeginTransaction();
+            }
+            return null;
         }
 
         /// <summary>
