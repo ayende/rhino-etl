@@ -123,7 +123,7 @@ namespace Rhino.Etl.Core
         /// </summary>
         public ObjectArrayKeys CreateKey()
         {
-            return CreateKey(null);
+            return CreateKey(Columns.ToArray());
         }
 
         /// <summary>
