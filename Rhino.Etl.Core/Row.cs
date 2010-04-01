@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Rhino.Etl.Core
 {
@@ -188,7 +189,10 @@ namespace Rhino.Etl.Core
             fields = new List<FieldInfo>();
             foreach (FieldInfo fieldInfo in obj.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic))
             {
-                fields.Add(fieldInfo);
+                if (Attribute.IsDefined(fieldInfo, typeof(CompilerGeneratedAttribute)) == false)
+                {
+                    fields.Add(fieldInfo);
+                }
             }
             fieldsCache[obj.GetType()] = fields;
             return fields;
