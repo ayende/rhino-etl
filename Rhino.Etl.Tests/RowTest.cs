@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using Rhino.Etl.Core;
 using Xunit.Extensions;
+using System.Linq;
 
 namespace Rhino.Etl.Tests
 {
@@ -83,6 +84,28 @@ namespace Rhino.Etl.Tests
                 row[columns[i]] = values[i];
 
             return row;
+        }
+        
+        [Fact]
+        public void Can_generate_ObjectArrayKeys_without_specifying_column_names()
+        {
+            Row row = new Row();
+
+            row["a"] = 1;
+            
+            Assert.DoesNotThrow(() => row.CreateKey());
+        }
+
+        [Fact]
+        public void Does_not_generate_column_for_CompilerGeneratedAttribute_tagged_items()
+        {
+            Row row = Row.FromObject(new DummyRow { Dummy = "Dummy" });
+            Assert.Equal(1, row.Columns.Count());
+        }
+        
+        private class DummyRow
+        {
+            public string Dummy { get; set; }
         }
     }
 }
