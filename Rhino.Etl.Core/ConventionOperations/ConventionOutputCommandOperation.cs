@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Core.ConventionOperations
 {
 	using System;
@@ -19,9 +21,18 @@ namespace Rhino.Etl.Core.ConventionOperations
 		/// </summary>
 		/// <param name="connectionStringName">Name of the connection string.</param>
 		public ConventionOutputCommandOperation(string connectionStringName)
-			: base(connectionStringName)
+			: this(ConfigurationManager.ConnectionStrings[connectionStringName])
 		{
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConventionOutputCommandOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Connection string settings to use.</param>
+        public ConventionOutputCommandOperation(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
+        {
+        }
 
 		/// <summary>
 		/// Gets or sets the command to execute against the database

@@ -1,3 +1,4 @@
+using System.Configuration;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core.Operations
@@ -28,9 +29,18 @@ namespace Rhino.Etl.Core.Operations
         /// </summary>
         /// <param name="connectionStringName">Name of the connection string.</param>
         public SqlBatchOperation(string connectionStringName)
-            : base(connectionStringName)
+            : this(ConfigurationManager.ConnectionStrings[connectionStringName])
+        {			
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlBatchOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">The connection string settings to use.</param>
+        public SqlBatchOperation(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
         {
-			base.paramPrefix = "@";
+            base.paramPrefix = "@";
         }
 
         /// <summary>
@@ -41,7 +51,7 @@ namespace Rhino.Etl.Core.Operations
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
             Guard.Against<ArgumentException>(rows == null, "SqlBatchOperation cannot accept a null enumerator");
-            using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringName))
+            using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringSettings))
             using (SqlTransaction transaction = connection.BeginTransaction())
             {
                 SqlCommandSet commandSet = null;

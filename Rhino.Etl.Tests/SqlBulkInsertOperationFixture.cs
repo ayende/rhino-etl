@@ -18,6 +18,14 @@ namespace Rhino.Etl.Tests
             Assert25ThFibonacci();
         }
 
+        [Fact]
+        public void CanInsertToDatabaseFromConnectionStringSettingsAndInMemoryCollection()
+        {
+            BulkInsertFibonacciToDatabaseFromConnectionStringSettings fibonacci = new BulkInsertFibonacciToDatabaseFromConnectionStringSettings(25, Should.WorkFine);
+            fibonacci.Execute();
+
+            Assert25ThFibonacci();
+        }
 
         [Fact]
         public void WhenErrorIsThrownWillRollbackTransaction()

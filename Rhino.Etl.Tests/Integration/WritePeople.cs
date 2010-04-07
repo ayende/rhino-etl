@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Tests.Integration
 {
     using System.Data;
@@ -7,6 +9,10 @@ namespace Rhino.Etl.Tests.Integration
     public class WritePeople : OutputCommandOperation
     {
         public WritePeople() : base("test")
+        {
+        }
+
+        public WritePeople(ConnectionStringSettings connectionStringSettings) : base(connectionStringSettings)
         {
         }
 

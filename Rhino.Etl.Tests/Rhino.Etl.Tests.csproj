@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A1519C4F-3C25-4484-B3D2-2266C133754E}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -81,6 +81,7 @@
       <HintPath>..\SharedLibs\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -119,15 +120,23 @@
     <Compile Include="Errors\ThrowingOperation.cs" />
     <Compile Include="Fibonacci\Batch\BatchFibonacci.cs" />
     <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabase.cs" />
+    <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabaseFromConnectionStringSettings.cs" />
+    <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabaseBase.cs" />
+    <Compile Include="Fibonacci\Batch\BatchFibonacciFromConnectionStringSettings.cs" />
+    <Compile Include="Fibonacci\Bulk\BulkInsertFibonacciToDatabaseFromConnectionStringSettings.cs" />
+    <Compile Include="Fibonacci\Bulk\FibonacciBulkInsertBase.cs" />
+    <Compile Include="Fibonacci\Bulk\FibonacciBulkInsertFromConnectionStringSettings.cs" />
     <Compile Include="Fibonacci\Bulk\FibonacciBulkInsert.cs" />
     <Compile Include="Fibonacci\InMemoryFibonacci.cs" />
     <Compile Include="Fibonacci\FibonacciOperation.cs" />
     <Compile Include="Fibonacci\Bulk\BulkInsertFibonacciToDatabase.cs" />
+    <Compile Include="Fibonacci\Output\OutputFibonacciToDatabaseFromConnectionStringSettings.cs" />
     <Compile Include="Fibonacci\Output\OutputFibonacciToDatabase.cs" />
     <Compile Include="Fibonacci\Output\FibonacciOutput.cs" />
     <Compile Include="BaseUserToPeopleTest.cs" />
     <Compile Include="Fibonacci\Output\Should.cs" />
     <Compile Include="InformationFixture.cs" />
+    <Compile Include="Integration\UsersToPeopleFromConnectionStringSettings.cs" />
     <Compile Include="Integration\DatabaseToDatabaseWithTransformations.cs" />
     <Compile Include="Integration\ReadUsers.cs" />
     <Compile Include="Integration\SplitName.cs" />

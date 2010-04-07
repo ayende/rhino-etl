@@ -19,6 +19,15 @@ namespace Rhino.Etl.Tests
         }
 
         [Fact]
+        public void CanInsertToDatabaseFromConnectionStringSettingsAndInMemoryCollection()
+        {
+            BatchFibonacciFromConnectionStringSettings fibonaci = new BatchFibonacciFromConnectionStringSettings(25, Should.WorkFine);
+            fibonaci.Execute();
+
+            Assert25ThFibonacci();
+        }
+
+        [Fact]
         public void WhenErrorIsThrownWillRollbackTransaction()
         {
             BatchFibonacci fibonaci = new BatchFibonacci(25, Should.Throw);

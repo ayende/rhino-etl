@@ -1,3 +1,4 @@
+using System.Configuration;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core
@@ -129,7 +130,19 @@ namespace Rhino.Etl.Core
         /// <returns></returns>
         protected static T ExecuteScalar<T>(string connectionName, string commandText)
         {
-            return Use.Transaction<T>(connectionName, delegate(IDbCommand cmd)
+            return ExecuteScalar<T>(ConfigurationManager.ConnectionStrings[connectionName], commandText);
+        }
+
+        /// <summary>
+        /// Executes the command and return a scalar
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionStringSettings">The connection string settings node to use</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns></returns>
+        protected static T ExecuteScalar<T>(ConnectionStringSettings connectionStringSettings, string commandText)
+        {
+            return Use.Transaction<T>(connectionStringSettings, delegate(IDbCommand cmd)
             {
                 cmd.CommandText = commandText;
                 object scalar = cmd.ExecuteScalar();

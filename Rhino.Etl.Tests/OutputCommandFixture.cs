@@ -18,6 +18,15 @@ namespace Rhino.Etl.Tests
         }
 
         [Fact]
+        public void CanInsertToDatabaseFromConnectionStringSettingsAndInMemoryCollection()
+        {
+            OutputFibonacciToDatabaseFromConnectionStringSettings fibonaci = new OutputFibonacciToDatabaseFromConnectionStringSettings(25, Should.WorkFine);
+            fibonaci.Execute();
+
+            Assert25ThFibonacci();
+        }
+
+        [Fact]
         public void WillRaiseRowProcessedEvent()
         {
             int rowsProcessed = 0;

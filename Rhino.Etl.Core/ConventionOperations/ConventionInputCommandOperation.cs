@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Core.ConventionOperations
 {
     using System.Data;
@@ -24,7 +26,16 @@ namespace Rhino.Etl.Core.ConventionOperations
         /// Initializes a new instance of the <see cref="ConventionInputCommandOperation"/> class.
         /// </summary>
         /// <param name="connectionStringName">Name of the connection string.</param>
-        public ConventionInputCommandOperation(string connectionStringName) : base(connectionStringName)
+        public ConventionInputCommandOperation(string connectionStringName) : this(ConfigurationManager.ConnectionStrings[connectionStringName])
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConventionInputCommandOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Name of the connection string.</param>
+        public ConventionInputCommandOperation(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
         {
         }
 

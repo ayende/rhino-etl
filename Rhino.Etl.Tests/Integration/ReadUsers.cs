@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Tests.Integration
 {
     using System.Data;
@@ -7,6 +9,11 @@ namespace Rhino.Etl.Tests.Integration
     public class ReadUsers : InputCommandOperation
     {
         public ReadUsers() : base("test")
+        {
+        }
+
+        public ReadUsers(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
         {
         }
 

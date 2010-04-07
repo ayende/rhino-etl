@@ -7,7 +7,22 @@ namespace Rhino.Etl.Tests.Fibonacci.Batch
     public class BatchFibonacci : EtlProcess
     {
         private readonly int max;
+        protected int Max
+        {
+            get
+            {
+                return max;
+            }
+        }
+
         private readonly Should should;
+        protected Should Should
+        {
+            get
+            {
+                return should;
+            }
+        }
 
         public BatchFibonacci(int max, Should should)
         {

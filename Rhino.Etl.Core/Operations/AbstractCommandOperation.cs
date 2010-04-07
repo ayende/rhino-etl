@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Core.Operations
 {
     using System;
@@ -15,7 +17,17 @@ namespace Rhino.Etl.Core.Operations
         /// Initializes a new instance of the <see cref="AbstractDatabaseOperation"/> class.
         /// </summary>
         /// <param name="connectionStringName">Name of the connection string.</param>
-        protected AbstractCommandOperation(string connectionStringName) : base(connectionStringName)
+        protected AbstractCommandOperation(string connectionStringName)
+            : this(ConfigurationManager.ConnectionStrings[connectionStringName])
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractDatabaseOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">The connection string settings to use.</param>
+        protected AbstractCommandOperation(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
         {
         }
 
