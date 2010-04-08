@@ -1,3 +1,4 @@
+using System.Configuration;
 using Rhino.Etl.Core.Enumerables;
 using Rhino.Etl.Core.Infrastructure;
 
@@ -15,7 +16,16 @@ namespace Rhino.Etl.Core.Operations
         /// Initializes a new instance of the <see cref="OutputCommandOperation"/> class.
         /// </summary>
         /// <param name="connectionStringName">Name of the connection string.</param>
-        public OutputCommandOperation(string connectionStringName) : base(connectionStringName)
+        public OutputCommandOperation(string connectionStringName) : this(ConfigurationManager.ConnectionStrings[connectionStringName])
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OutputCommandOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Connection string settings to use.</param>
+        public OutputCommandOperation(ConnectionStringSettings connectionStringSettings)
+            : base(connectionStringSettings)
         {
         }
 
@@ -26,7 +36,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
-            using (IDbConnection connection = Use.Connection(ConnectionStringName))
+            using (IDbConnection connection = Use.Connection(ConnectionStringSettings))
             using (IDbTransaction transaction = connection.BeginTransaction())
             {
                 foreach (Row row in new SingleRowEventRaisingEnumerator(this, rows))

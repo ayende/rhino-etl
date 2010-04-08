@@ -2,18 +2,10 @@ using Rhino.Etl.Core.Operations;
 
 namespace Rhino.Etl.Tests.Fibonacci.Bulk
 {
-    public class FibonacciBulkInsert : SqlBulkInsertOperation
+    public class FibonacciBulkInsert : FibonacciBulkInsertBase
     {
-        public FibonacciBulkInsert() : base("test", "Fibonacci")
+        public FibonacciBulkInsert() : base("test")
         {
-        }
-
-        /// <summary>
-        /// Prepares the schema of the target table
-        /// </summary>
-        protected override void PrepareSchema()
-        {
-            Schema["id"] = typeof (int);
         }
     }
 }

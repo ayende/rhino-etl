@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using Rhino.Etl.Core.Operations;
 
 namespace Rhino.Etl.Core.ConventionOperations
@@ -9,9 +10,17 @@ namespace Rhino.Etl.Core.ConventionOperations
 		/// <summary>Creates a new <see cref="ConventionSqlBulkInsertOperation"/></summary>
 		/// <param name="connectionStringName"></param>
 		/// <param name="targetTable"></param>
-		public ConventionSqlBulkInsertOperation(string connectionStringName, string targetTable) : base(connectionStringName, targetTable)
+		public ConventionSqlBulkInsertOperation(string connectionStringName, string targetTable) : this(ConfigurationManager.ConnectionStrings[connectionStringName], targetTable)
 		{
 		}
+
+        /// <summary>Creates a new <see cref="ConventionSqlBulkInsertOperation"/></summary>
+        /// <param name="connectionStringSettings">Connection string settings to use.</param>
+        /// <param name="targetTable"></param>
+        public ConventionSqlBulkInsertOperation(ConnectionStringSettings connectionStringSettings, string targetTable)
+            : base(connectionStringSettings, targetTable)
+        {
+        }
 
 		/// <summary>
 		/// Prepares the schema of the target table

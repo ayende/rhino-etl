@@ -61,19 +61,53 @@ namespace Rhino.Etl.Core.Infrastructure
 		public static T Transaction<T>(string connectionStringName, Func<T> actionToExecute)
 		{
 			T result = default(T);
-			Transaction(connectionStringName, delegate(IDbCommand command) { result = actionToExecute(command); });
+
+		    ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings == null)
+                throw new InvalidOperationException("Could not find connnection string: " + connectionStringName);
+
+            Transaction(connectionStringSettings, delegate(IDbCommand command) { result = actionToExecute(command); });
 			return result;
 		}
 
-		/// <summary>
-		/// Execute the specified delegate inside a transaction
-		/// </summary>
-		/// <param name="connectionStringName">Name of the connection string.</param>
-		/// <param name="actionToExecute">The action to execute.</param>
-		public static void Transaction(string connectionStringName, Proc actionToExecute)
-		{
-			Transaction(connectionStringName, IsolationLevel.Unspecified, actionToExecute);
-		}
+        /// <summary>
+        /// Execute the specified delegate inside a transaction and return 
+        /// the result of the delegate.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionStringSettings">The connection string settings to use for the connection</param>
+        /// <param name="actionToExecute">The action to execute</param>
+        /// <returns></returns>
+        public static T Transaction<T>(ConnectionStringSettings connectionStringSettings, Func<T> actionToExecute)
+        {
+            T result = default(T);
+            Transaction(connectionStringSettings, delegate(IDbCommand command) { result = actionToExecute(command); });
+            return result;
+        }
+
+        /// <summary>
+        /// Execute the specified delegate inside a transaction
+        /// </summary>
+        /// <param name="connectionStringName">Name of the connection string.</param>
+        /// <param name="actionToExecute">The action to execute.</param>
+        public static void Transaction(string connectionStringName, Proc actionToExecute)
+        {
+            ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings == null)
+                throw new InvalidOperationException("Could not find connnection string: " + connectionStringName);
+
+            Transaction(connectionStringSettings, IsolationLevel.Unspecified, actionToExecute);
+        }
+
+        /// <summary>
+        /// Execute the specified delegate inside a transaction
+        /// </summary>
+        /// <param name="connectionStringSettings">The connection string settings to use for the connection</param>
+        /// <param name="actionToExecute">The action to execute.</param>
+        public static void Transaction(ConnectionStringSettings connectionStringSettings, Proc actionToExecute)
+        {
+            Transaction(connectionStringSettings, IsolationLevel.Unspecified, actionToExecute);
+        }
 
 		/// <summary>
 		/// Execute the specified delegate inside a transaction with the specific
@@ -84,26 +118,42 @@ namespace Rhino.Etl.Core.Infrastructure
 		/// <param name="actionToExecute">The action to execute.</param>
 		public static void Transaction(string connectionStringName, IsolationLevel isolationLevel, Proc actionToExecute)
 		{
-			StartTransaction(connectionStringName, isolationLevel);
-			try
-			{
-				using (IDbCommand command = ActiveConnection.CreateCommand())
-				{
-					command.Transaction = ActiveTransaction;
-					actionToExecute(command);
-				}
-				CommitTransaction();
-			}
-			catch
-			{
-				RollbackTransaction();
-				throw;
-			}
-			finally
-			{
-				DisposeTransaction();
-			}
+            ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings == null)
+                throw new InvalidOperationException("Could not find connnection string: " + connectionStringName);
+
+            Transaction(connectionStringSettings, isolationLevel, actionToExecute);
 		}
+
+        /// <summary>
+        /// Execute the specified delegate inside a transaction with the specific
+        /// isolation level 
+        /// </summary>
+        /// <param name="connectionStringSettings">Connection string settings node to use for the connection</param>
+        /// <param name="isolationLevel">The isolation level.</param>
+        /// <param name="actionToExecute">The action to execute.</param>
+        public static void Transaction(ConnectionStringSettings connectionStringSettings, IsolationLevel isolationLevel, Proc actionToExecute)
+        {
+            StartTransaction(connectionStringSettings, isolationLevel);
+            try
+            {
+                using (IDbCommand command = ActiveConnection.CreateCommand())
+                {
+                    command.Transaction = ActiveTransaction;
+                    actionToExecute(command);
+                }
+                CommitTransaction();
+            }
+            catch
+            {
+                RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                DisposeTransaction();
+            }
+        }
 
 		/// <summary>
 		/// Disposes the transaction.
@@ -145,14 +195,14 @@ namespace Rhino.Etl.Core.Infrastructure
 		/// <summary>
 		/// Starts the transaction.
 		/// </summary>
-		/// <param name="name">The name.</param>
+        /// <param name="connectionStringSettings">The connection string settings to use for the transaction</param>
 		/// <param name="isolation">The isolation.</param>
-		private static void StartTransaction(string name, IsolationLevel isolation)
+		private static void StartTransaction(ConnectionStringSettings connectionStringSettings, IsolationLevel isolation)
 		{
 			if (TransactionCounter <= 0)
 			{
 				TransactionCounter = 0;
-				ActiveConnection = Connection(name);
+                ActiveConnection = Connection(connectionStringSettings);
 				ActiveTransaction = ActiveConnection.BeginTransaction(isolation);
 			}
 			TransactionCounter++;
@@ -166,17 +216,31 @@ namespace Rhino.Etl.Core.Infrastructure
 		/// <returns>The open connection</returns>
 		public static IDbConnection Connection(string name)
 		{
-			ConnectionStringSettings connectionString = ConfigurationManager.ConnectionStrings[name];
-			if (connectionString == null)
-				throw new InvalidOperationException("Could not find connnection string: " + name);
-			Type type = Type.GetType(connectionString.ProviderName);
-			if (type == null)
-				throw new InvalidOperationException("The type name '" + connectionString.ProviderName +
-				                                    "' could not be found for connection string: " + name);
-			IDbConnection connection = (IDbConnection) Activator.CreateInstance(type);
-			connection.ConnectionString = connectionString.ConnectionString;
-			connection.Open();
-			return connection;
+            ConnectionStringSettings connectionString = ConfigurationManager.ConnectionStrings[name];
+            if (connectionString == null)
+                throw new InvalidOperationException("Could not find connnection string: " + name);
+
+            return Connection(connectionString);
 		}
+
+        /// <summary>
+        /// Creates an open connection for a given connection string setting, using the provider
+        /// name of select the proper implementation
+        /// </summary>
+        /// <param name="connectionString">ConnectionStringSetting node</param>
+        /// <returns>The open connection</returns>
+        public static IDbConnection Connection(ConnectionStringSettings connectionString)
+        {
+            if (connectionString == null)
+                throw new InvalidOperationException("Null ConnectionStringSettings specified");
+            Type type = Type.GetType(connectionString.ProviderName);
+            if (type == null)
+                throw new InvalidOperationException("The type name '" + connectionString.ProviderName +
+                                                    "' could not be found for connection string: " + connectionString.Name);
+            IDbConnection connection = (IDbConnection)Activator.CreateInstance(type);
+            connection.ConnectionString = connectionString.ConnectionString;
+            connection.Open();
+            return connection;            
+        }
 	}
 }

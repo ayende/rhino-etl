@@ -1,3 +1,5 @@
+using System.Configuration;
+
 namespace Rhino.Etl.Core.Operations
 {
     using System;
@@ -9,19 +11,29 @@ namespace Rhino.Etl.Core.Operations
     /// </summary>
     public abstract class AbstractDatabaseOperation : AbstractOperation
     {
-        private readonly string connectionStringName;
+        private readonly ConnectionStringSettings connectionStringSettings;
     	private static Hashtable supportedTypes;
 		///<summary>
 		///The parameter prefix to use when adding parameters
 		///</summary>
 		protected string paramPrefix = "";
+
     	/// <summary>
+        /// Gets the connection string settings.
+        /// </summary>
+        /// <value>The connection string settings.</value>
+        public ConnectionStringSettings ConnectionStringSettings
+        {
+            get { return connectionStringSettings; }
+        }
+
+        /// <summary>
         /// Gets the name of the connection string.
         /// </summary>
         /// <value>The name of the connection string.</value>
         public string ConnectionStringName
         {
-            get { return connectionStringName; }
+            get { return connectionStringSettings.Name; }
         }
 
         /// <summary>
@@ -31,8 +43,24 @@ namespace Rhino.Etl.Core.Operations
         protected AbstractDatabaseOperation(string connectionStringName)
         {
             Guard.Against<ArgumentException>(string.IsNullOrEmpty(connectionStringName),
-                                             "Connection string name must have a value");
-            this.connectionStringName = connectionStringName;
+                                             "Connection string name must have a value");            
+
+            Guard.Against<ArgumentException>(ConfigurationManager.ConnectionStrings[connectionStringName] == null,
+                                             "Cannot resolve connection strings with name: " + connectionStringName);
+
+            connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractDatabaseOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Name of the connection string.</param>
+        protected AbstractDatabaseOperation(ConnectionStringSettings connectionStringSettings)
+        {
+            Guard.Against<ArgumentException>(connectionStringSettings == null,
+                                             "connectionStringSettings must resolve to a value");
+                        
+            this.connectionStringSettings = connectionStringSettings;
         }
 
 		 private static void InitializeSupportedTypes()

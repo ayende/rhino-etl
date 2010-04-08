@@ -1,3 +1,5 @@
+using System;
+
 namespace Rhino.Etl.Tests.UsingDAL
 {
     using System.Collections.Generic;
@@ -22,7 +24,7 @@ namespace Rhino.Etl.Tests.UsingDAL
             ExportUsersToFile export = new ExportUsersToFile();
             export.Execute();
             string actual = File.ReadAllText("users.txt");
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected.Replace("\r\n","\n").Replace("\n",Environment.NewLine), actual);
         }
 
         [Fact]
@@ -43,6 +45,20 @@ namespace Rhino.Etl.Tests.UsingDAL
             File.WriteAllText("users.txt", expected);
 
             var import = new ImportUsersFromFileDynamic();  
+            import.Execute();
+
+            Assert.Equal(5, MySimpleDal.Users.Count);
+        }
+    }
+        }
+
+        [Fact]
+        public void CanReadFromFileToDAL()
+        {
+            MySimpleDal.Users = new List<User>();
+            File.WriteAllText("users.txt", expected);
+
+            ImportUsersFromFile import = new ImportUsersFromFile();
             import.Execute();
 
             Assert.Equal(5, MySimpleDal.Users.Count);

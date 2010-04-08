@@ -1,3 +1,4 @@
+using System.Configuration;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core.Operations
@@ -36,10 +37,21 @@ namespace Rhino.Etl.Core.Operations
 		/// <param name="connectionStringName">Name of the connection string.</param>
 		/// <param name="targetTable">The target table.</param>
 		protected SqlBulkInsertOperation(string connectionStringName, string targetTable)
-			: this(connectionStringName, targetTable, 600)
+            : this(ConfigurationManager.ConnectionStrings[connectionStringName], targetTable)
 		{
 
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlBulkInsertOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Connection string settings to use.</param>
+        /// <param name="targetTable">The target table.</param>
+        protected SqlBulkInsertOperation(ConnectionStringSettings connectionStringSettings, string targetTable)
+            : this(connectionStringSettings, targetTable, 600)
+        {
+
+        }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SqlBulkInsertOperation"/> class.
@@ -48,12 +60,26 @@ namespace Rhino.Etl.Core.Operations
 		/// <param name="targetTable">The target table.</param>
 		/// <param name="timeout">The timeout.</param>
 		protected SqlBulkInsertOperation(string connectionStringName, string targetTable, int timeout)
-			: base(connectionStringName)
+            : this(ConfigurationManager.ConnectionStrings[connectionStringName], targetTable, timeout)
 		{
 			Guard.Against(string.IsNullOrEmpty(targetTable), "TargetTable was not set, but it is mandatory");
 			this.targetTable = targetTable;
 			this.timeout = timeout;
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SqlBulkInsertOperation"/> class.
+        /// </summary>
+        /// <param name="connectionStringSettings">Connection string settings to use.</param>
+        /// <param name="targetTable">The target table.</param>
+        /// <param name="timeout">The timeout.</param>
+        protected SqlBulkInsertOperation(ConnectionStringSettings connectionStringSettings, string targetTable, int timeout)
+            : base(connectionStringSettings)
+        {
+            Guard.Against(string.IsNullOrEmpty(targetTable), "TargetTable was not set, but it is mandatory");
+            this.targetTable = targetTable;
+            this.timeout = timeout;
+        }
 
 		/// <summary>The timeout value of the bulk insert operation</summary>
 		public virtual int Timeout
@@ -181,7 +207,7 @@ namespace Rhino.Etl.Core.Operations
 			PrepareSchema();
 			PrepareMapping();
 			CreateInputSchema();
-			using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringName))
+			using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringSettings))
 			using (SqlTransaction transaction = connection.BeginTransaction())
 			{
 				sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);

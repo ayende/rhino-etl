@@ -19,7 +19,6 @@ namespace Rhino.Etl.Tests.Integration
             using(UsersToPeople process = new UsersToPeople())
                 process.Execute();
             
-
             System.Collections.Generic.List<string[]> names = Use.Transaction<System.Collections.Generic.List<string[]>>("test", delegate(IDbCommand cmd)
             {
                 System.Collections.Generic.List<string[]> tuples = new System.Collections.Generic.List<string[]>();
@@ -35,5 +34,27 @@ namespace Rhino.Etl.Tests.Integration
             });
             AssertNames(names);
         }
+
+        [Fact]
+        public void CanCopyTableWithTransformFromConnectionStringSettings()
+        {
+            using (UsersToPeopleFromConnectionStringSettings process = new UsersToPeopleFromConnectionStringSettings())
+                process.Execute();
+
+            System.Collections.Generic.List<string[]> names = Use.Transaction<System.Collections.Generic.List<string[]>>("test", delegate(IDbCommand cmd)
+            {
+                System.Collections.Generic.List<string[]> tuples = new System.Collections.Generic.List<string[]>();
+                cmd.CommandText = "SELECT firstname, lastname from people order by userid";
+                using (IDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        tuples.Add(new string[] { reader.GetString(0), reader.GetString(1) });
+                    }
+                }
+                return tuples;
+            });
+            AssertNames(names);
+        }       
     }
 }
