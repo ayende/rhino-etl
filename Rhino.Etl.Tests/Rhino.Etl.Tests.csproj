@@ -64,7 +64,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Boo.Lang.Parser.dll</HintPath>
     </Reference>
-    <Reference Include="FileHelpers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+    <Reference Include="FileHelpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\FileHelpers.dll</HintPath>
     </Reference>
@@ -167,6 +167,8 @@
     <Compile Include="SingleThreadedPipelineExecuterTest.cs" />
     <Compile Include="SqlBatchOperationFixture.cs" />
     <Compile Include="SqlBulkInsertOperationFixture.cs" />
+    <Compile Include="UsingDAL\ImportUsersFromFileDynamic.cs" />
+    <Compile Include="UsingDAL\ReadUsersFromFileDynamic.cs" />
     <Compile Include="UsingDAL\ExportUsersToFile.cs" />
     <Compile Include="UsingDAL\GetAllUsers.cs" />
     <Compile Include="UsingDAL\ImportUsersFromFile.cs" />

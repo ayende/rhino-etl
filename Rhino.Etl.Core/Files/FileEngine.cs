@@ -36,7 +36,7 @@ namespace Rhino.Etl.Core.Files
         /// <param name="errorMode">The error mode.</param>
         public FileEngine OnError(ErrorMode errorMode)
         {
-            engine.ErrorMode = errorMode;
+            engine.ErrorManager.ErrorMode = errorMode;
             return this;
         }
 

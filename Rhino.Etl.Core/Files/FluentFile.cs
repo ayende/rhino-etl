@@ -75,15 +75,15 @@ namespace Rhino.Etl.Core.Files
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
         }
 
-        /// <summary>
-        /// Gets or sets the options.
-        /// </summary>
-        /// <value>The options.</value>
-        public RecordOptions Options
-        {
-            get { return engine.Options; }
-            set { engine.Options = value; }
-        }
+        ///// <summary>
+        ///// Gets or sets the options.
+        ///// </summary>
+        ///// <value>The options.</value>
+        //public RecordOptions Options
+        //{
+        //    get { return engine.RecordType.; }
+        //    set { engine.Options = value; }
+        //}
 
         /// <summary>
         /// Gets or sets the footer text.
