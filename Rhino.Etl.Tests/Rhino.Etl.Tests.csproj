@@ -178,7 +178,7 @@
     <Compile Include="SqlBulkInsertOperationFixture.cs" />
     <Compile Include="UsingDAL\ImportUsersFromFileDynamic.cs" />
     <Compile Include="UsingDAL\ReadUsersFromFileDynamic.cs" />
-	<Compile Include="UsingDAL\ExportUsersToFile.cs" />
+    <Compile Include="UsingDAL\ExportUsersToFile.cs" />
     <Compile Include="UsingDAL\GetAllUsers.cs" />
     <Compile Include="UsingDAL\ImportUsersFromFile.cs" />
     <Compile Include="UsingDAL\MySimpleDal.cs" />

@@ -50,18 +50,4 @@ namespace Rhino.Etl.Tests.UsingDAL
             Assert.Equal(5, MySimpleDal.Users.Count);
         }
     }
-        }
-
-        [Fact]
-        public void CanReadFromFileToDAL()
-        {
-            MySimpleDal.Users = new List<User>();
-            File.WriteAllText("users.txt", expected);
-
-            ImportUsersFromFile import = new ImportUsersFromFile();
-            import.Execute();
-
-            Assert.Equal(5, MySimpleDal.Users.Count);
-        }
-    }
 }
