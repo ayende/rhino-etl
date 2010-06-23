@@ -84,7 +84,11 @@ task Test -depends Compile {
   cd $old
 }
 
-task Release -depends Test {
+task Release -depends Test,DoRelease {
+
+}
+
+task DoRelease -depends Compile {
 	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.Etl-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
 		$build_dir\Rhino.Etl.Core.dll `
 		$build_dir\Rhino.Etl.Dsl.dll `
@@ -100,7 +104,7 @@ task Release -depends Test {
     }
 }
 
-task Upload -depends Release {
+task Upload -depends DoRelease {
 	Write-Host "Starting upload"
 	if (Test-Path $uploader) {
 		$log = $env:push_msg 
