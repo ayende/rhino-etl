@@ -10,7 +10,7 @@ namespace Rhino.Etl.Cmd
         public string File;
         [Option("Process name", ShortForm = "p", MinOccurs = 0, MaxOccurs = 1)]
         public string Process;
-        [Option("Verbse logging", ShortForm = "v", MaxOccurs = 1)]
+        [Option("Verbose logging", ShortForm = "v", MaxOccurs = 1)]
         public bool Verbose = false;
     }
 }
