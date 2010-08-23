@@ -29,16 +29,7 @@ namespace Rhino.Etl.Core.Operations
         {
             UseTransaction = true;
         }
-
-        ///<summary>
-        /// True, if the input operation should be run in a transaction. Otherwise,false.
-        ///</summary>
-        public bool UseTransaction
-        {
-            get;
-            set;
-        }
-
+       
         /// <summary>
         /// Executes this operation
         /// </summary>
@@ -61,20 +52,9 @@ namespace Rhino.Etl.Core.Operations
                         }
                     }
                 }
-                if (transaction != null)
-                {
-                    transaction.Commit();
-                }
-            }
-        }
 
-        IDbTransaction BeginTransaction(IDbConnection connection)
-        {
-            if (UseTransaction)
-            {
-                return connection.BeginTransaction();
+                if (transaction != null) transaction.Commit();
             }
-            return null;
         }
 
         /// <summary>

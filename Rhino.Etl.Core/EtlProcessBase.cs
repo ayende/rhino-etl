@@ -11,6 +11,10 @@ namespace Rhino.Etl.Core
     public class EtlProcessBase<TDerived> : WithLoggingMixin 
         where TDerived : EtlProcessBase<TDerived>
     {
+        /// <summary>
+        /// Internal field to indicate if a transaction is used. Defaulting to true.
+        /// </summary>
+        private bool useTransaction = true;
 
         /// <summary>
         /// Ordered list of the operations in this process that will be added to the
@@ -33,11 +37,22 @@ namespace Rhino.Etl.Core
         }
 
         /// <summary>
+        /// Gets or sets whether we are using a transaction
+        /// </summary>
+        /// <value>True or value.</value>
+        public bool UseTransaction
+        {
+            get { return useTransaction; }
+            set { useTransaction = value; }
+        }
+
+        /// <summary>
         /// Registers the specified operation.
         /// </summary>
         /// <param name="operation">The operation.</param>
         public TDerived Register(IOperation operation)
         {
+            operation.UseTransaction = UseTransaction;
             operations.Add(operation);
             Debug("Register {0} in {1}", operation.Name, Name);
             return (TDerived) this;

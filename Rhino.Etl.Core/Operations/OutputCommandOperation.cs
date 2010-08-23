@@ -37,7 +37,7 @@ namespace Rhino.Etl.Core.Operations
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
             using (IDbConnection connection = Use.Connection(ConnectionStringSettings))
-            using (IDbTransaction transaction = connection.BeginTransaction())
+            using (IDbTransaction transaction = BeginTransaction(connection))
             {
                 foreach (Row row in new SingleRowEventRaisingEnumerator(this, rows))
                 {
@@ -58,7 +58,7 @@ namespace Rhino.Etl.Core.Operations
                 else
                 {
                     Debug("Committing {0}", Name);
-                    transaction.Commit();
+                    if (transaction != null) transaction.Commit();
                     Debug("Committed {0}", Name);
                 }
             }

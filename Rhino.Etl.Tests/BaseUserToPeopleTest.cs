@@ -66,5 +66,13 @@ create table People ( id int identity, userid int not null, firstname nvarchar(2
             Assert.Equal("gold", names[3][0]);
             Assert.Equal("silver", names[3][1]);
         }
+
+        protected static void AssertFullNames(IList<string> names)
+        {
+            Assert.Equal("ayende rahien", names[0]);
+            Assert.Equal("foo bar", names[1]);
+            Assert.Equal("nice naughty", names[2]);
+            Assert.Equal("gold silver", names[3]);
+        }
     }
 }

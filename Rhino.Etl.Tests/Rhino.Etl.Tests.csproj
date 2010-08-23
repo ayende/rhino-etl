@@ -111,6 +111,7 @@
     <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dsl\InputTimeoutFixture.cs" />
     <Compile Include="Dsl\SqlBulkInsertFixture.cs" />
     <Compile Include="Dsl\JoinFixture.cs" />
     <Compile Include="Dsl\ResultsToList.cs" />
@@ -233,6 +234,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Dsl\InputTimeout.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Dsl\WireOnFinishedProcessingEvent.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

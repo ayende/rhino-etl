@@ -1,13 +1,13 @@
+using System.Collections.Generic;
+using Rhino.Etl.Core.Enumerables;
+using Rhino.Etl.Core.Operations;
+
 namespace Rhino.Etl.Core.Pipelines
 {
-    using System.Collections.Generic;
-    using Enumerables;
-    using Operations;
-
     /// <summary>
-    /// Executes the pipeline on a single thread
+    /// Execute all the actions syncronously without caching
     /// </summary>
-    public class SingleThreadedPipelineExecuter : AbstractPipelineExecuter
+    public class SingleThreadedNonCachedPipelineExecuter : AbstractPipelineExecuter
     {
         /// <summary>
         /// Add a decorator to the enumerable for additional processing
@@ -16,7 +16,10 @@ namespace Rhino.Etl.Core.Pipelines
         /// <param name="enumerator">The enumerator.</param>
         protected override IEnumerable<Row> DecorateEnumerableForExecution(IOperation operation, IEnumerable<Row> enumerator)
         {
-            return new CachingEnumerable<Row>(new EventRaisingEnumerator(operation, enumerator));
+            foreach (Row row in new EventRaisingEnumerator(operation, enumerator))
+            {
+                yield return row;
+            }
         }
     }
 }

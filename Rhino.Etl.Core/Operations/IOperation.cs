@@ -8,13 +8,18 @@ namespace Rhino.Etl.Core.Operations
     /// A single operation in an etl process
     /// </summary>
     public interface IOperation : IDisposable
-    {
-         
+    {         
         /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
         string Name { get; }
+
+        /// <summary>
+        /// Sets the transaction.
+        /// </summary>
+        /// <value>True or false.</value>
+        bool UseTransaction { get; set; }
 
         /// <summary>
         /// Gets the statistics for this operation

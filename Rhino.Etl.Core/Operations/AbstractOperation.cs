@@ -11,6 +11,7 @@ namespace Rhino.Etl.Core.Operations
     public abstract class AbstractOperation : WithLoggingMixin, IOperation
     {
         private readonly OperationStatistics statistics = new OperationStatistics();
+        private bool useTransaction = true;
         private IPipelineExecuter pipelineExecuter;
 
         /// <summary>
@@ -31,7 +32,17 @@ namespace Rhino.Etl.Core.Operations
             get { return GetType().Name; }
         }
 
-        /// <summary>
+	    /// <summary>
+	    /// Gets or sets whether we are using a transaction
+	    /// </summary>
+	    /// <value>True or false.</value>
+	    public bool UseTransaction
+	    {
+            get { return useTransaction; }
+            set { useTransaction = value; }
+	    }
+
+	    /// <summary>
         /// Gets the statistics for this operation
         /// </summary>
         /// <value>The statistics.</value>

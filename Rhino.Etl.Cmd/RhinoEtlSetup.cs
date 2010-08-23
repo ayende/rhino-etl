@@ -94,8 +94,9 @@ namespace Rhino.Etl.Cmd
                 //we have to run the code in another appdomain, because we want to
                 //setup our own app.config for it
                 AppDomainSetup appDomainSetup = new AppDomainSetup();
-                appDomainSetup.ApplicationBase = _assemblyInfo.DirectoryName;
-                appDomainSetup.ConfigurationFile = options.File + ".config";
+                //setting this to the current executing directory because that's where the dsl's dll gets created.
+                appDomainSetup.ApplicationBase = Path.GetDirectoryName(Uri.UnescapeDataString(new UriBuilder(Assembly.GetExecutingAssembly().CodeBase).Path));
+                appDomainSetup.ConfigurationFile = string.IsNullOrEmpty(options.Configuration) ? options.File + ".config" : options.Configuration;
                 AppDomain appDomain = AppDomain.CreateDomain("etl.domain", null, appDomainSetup);
                 appDomain.Load(processType.Assembly.GetName());
                 RhinoEtlRunner runner = (RhinoEtlRunner)appDomain.CreateInstanceAndUnwrap(typeof (RhinoEtlRunner).Assembly.GetName().FullName,
@@ -108,5 +109,7 @@ namespace Rhino.Etl.Cmd
                 log.Error(e.Message);
             }
         }
+
     }
 }
+

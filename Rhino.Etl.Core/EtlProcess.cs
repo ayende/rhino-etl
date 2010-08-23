@@ -23,7 +23,11 @@ namespace Rhino.Etl.Core
         public IPipelineExecuter PipelineExecuter
         {
             get { return pipelineExecuter; }
-			set { pipelineExecuter = value; }
+			set
+			{
+			    Info("Setting PipelineExecutor to {0}", value.GetType().ToString());
+			    pipelineExecuter = value;
+			}
         }
 
 

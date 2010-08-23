@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Data;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core.Operations
@@ -28,6 +29,7 @@ namespace Rhino.Etl.Core.Operations
 		private SqlBulkCopy sqlBulkCopy;
 		private string targetTable;
 		private int timeout;
+        private int batchSize;
 		private SqlBulkCopyOptions bulkCopyOptions = SqlBulkCopyOptions.Default;
 		
 
@@ -87,6 +89,13 @@ namespace Rhino.Etl.Core.Operations
 			get { return timeout; }
 			set { timeout = value; }
 		}
+
+        /// <summary>The batch size value of the bulk insert operation</summary>
+        public virtual int BatchSize
+        {
+            get { return batchSize; }
+            set { batchSize = value; }
+        }
 
 		/// <summary>The table or view to bulk load the data into.</summary>
 		public string TargetTable
@@ -208,7 +217,7 @@ namespace Rhino.Etl.Core.Operations
 			PrepareMapping();
 			CreateInputSchema();
 			using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringSettings))
-			using (SqlTransaction transaction = connection.BeginTransaction())
+			using (SqlTransaction transaction = BeginTransaction(connection))
 			{
 				sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);
 				DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_inputSchema, rows);
@@ -217,18 +226,27 @@ namespace Rhino.Etl.Core.Operations
 				if (PipelineExecuter.HasErrors)
 				{
 					Warn("Rolling back transaction in {0}", Name);
-					transaction.Rollback();
+					if (transaction != null) transaction.Rollback();
 					Warn("Rolled back transaction in {0}", Name);
 				}
 				else
 				{
 					Debug("Committing {0}", Name);
-					transaction.Commit();
+                    if (transaction != null) transaction.Commit();
 					Debug("Committed {0}", Name);
 				}
 			}
 			yield break;
 		}
+
+        SqlTransaction BeginTransaction(SqlConnection connection)
+        {
+            if (UseTransaction)
+            {
+                return connection.BeginTransaction();
+            }
+            return null;
+        }
 
 		/// <summary>
 		/// Prepares the schema of the target table
@@ -241,6 +259,7 @@ namespace Rhino.Etl.Core.Operations
 		private SqlBulkCopy CreateSqlBulkCopy(SqlConnection connection, SqlTransaction transaction)
 		{
 			SqlBulkCopy copy = new SqlBulkCopy(connection, bulkCopyOptions, transaction);
+		    copy.BatchSize = batchSize;
 			foreach (KeyValuePair<string, string> pair in Mappings)
 			{
 				copy.ColumnMappings.Add(pair.Key, pair.Value);
