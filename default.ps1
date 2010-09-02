@@ -94,6 +94,7 @@ task DoRelease -depends Compile {
 		$build_dir\Rhino.Etl.Dsl.dll `
 		$build_dir\Rhino.Etl.Cmd.exe `
 		$build_dir\Rhino.DSL.dll `
+		$build_dir\log4net.dll `
 		Rhino.Etl.Core\Rhino.Etl.Core.xml `
 		Rhino.Etl.Dsl\Rhino.Etl.Dsl.xml `
 		$build_dir\Boo.* `
