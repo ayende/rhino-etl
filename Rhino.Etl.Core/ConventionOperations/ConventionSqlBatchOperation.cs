@@ -6,7 +6,7 @@ namespace Rhino.Etl.Core.ConventionOperations
 	/// <summary>
 	/// Convention class for sql batching.
 	/// </summary>
-	public class ConventionSqlBatchOpeartion : SqlBatchOperation
+	public class ConventionSqlBatchOperation : SqlBatchOperation
 	{
 		private string command;
 
@@ -21,10 +21,10 @@ namespace Rhino.Etl.Core.ConventionOperations
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ConventionSqlBatchOpeartion"/> class.
+		/// Initializes a new instance of the <see cref="ConventionSqlBatchOperation"/> class.
 		/// </summary>
 		/// <param name="connectionStringName">Name of the connection string.</param>
-		public ConventionSqlBatchOpeartion(string connectionStringName) : base(connectionStringName)
+		public ConventionSqlBatchOperation(string connectionStringName) : base(connectionStringName)
 		{
 		}
 
