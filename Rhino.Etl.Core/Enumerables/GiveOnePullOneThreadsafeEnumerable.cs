@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Rhino.Etl.Core.Operations
+namespace Rhino.Etl.Core.Enumerables
 {
 	internal class GiveOnePullOneThreadsafeEnumerable<T> : IEnumerable<T>, IEnumerator<T>
 	{

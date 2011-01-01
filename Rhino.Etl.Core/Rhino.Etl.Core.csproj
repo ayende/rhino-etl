@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="ConventionOperations\ConventionSqlBatchOperation.cs" />
     <Compile Include="ConventionOperations\ConventionSqlBulkInsertOperation.cs" />
+    <Compile Include="Enumerables\GiveOnePullOneThreadsafeEnumerable.cs" />
     <Compile Include="Enumerables\SingleRowEventRaisingEnumerator.cs" />
     <Compile Include="Enumerables\ThreadSafeEnumerator.cs" />
     <Compile Include="Guard.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Infrastructure\Use.cs" />
     <Compile Include="Operations\AbstractBranchingOperation.cs" />
     <Compile Include="Operations\BranchingOperation.cs" />
-    <Compile Include="Operations\GiveOnePullOneThreadsafeEnumerable.cs" />
     <Compile Include="Operations\JoinType.cs" />
     <Compile Include="Operations\MultiThreadedBranchingOperation.cs" />
     <Compile Include="Operations\NestedLoopsJoinOperation.cs" />
