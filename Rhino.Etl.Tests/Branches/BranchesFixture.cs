@@ -1,28 +1,30 @@
 using System;
 using System.Data;
+using Rhino.Etl.Core;
 using Xunit;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Tests.Branches
 {
-    
-    public class BranchesFixture : BaseFibonacciTest
+    public abstract class BranchesFixture : BaseFibonacciTest
     {
         [Fact]
         public void CanBranchThePipeline()
         {
-            using (var process = new FibonacciBranchingProcess(30, 2))
+            using (var process = CreateBranchingProcess(30, 2))
                 process.Execute();
 
             AssertCountForFibonacci(60);
         }
 
-        [Fact] 
+		protected abstract EtlProcess CreateBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations);
+
+    	[Fact] 
         public void CanBranchThePipelineEfficiently()
         {
             var initialMemory = GC.GetTotalMemory(true);
 
-            using (var process = new FibonacciBranchingProcess(30000, 10))
+            using (var process = CreateBranchingProcess(30000, 10))
                 process.Execute();
 
             var finalMemory = GC.GetTotalMemory(true);

@@ -81,8 +81,11 @@
     <Compile Include="Guard.cs" />
     <Compile Include="Infrastructure\SqlCommandSet.cs" />
     <Compile Include="Infrastructure\Use.cs" />
+    <Compile Include="Operations\AbstractBranchingOperation.cs" />
     <Compile Include="Operations\BranchingOperation.cs" />
+    <Compile Include="Operations\GiveOnePullOneThreadsafeEnumerable.cs" />
     <Compile Include="Operations\JoinType.cs" />
+    <Compile Include="Operations\MultiThreadedBranchingOperation.cs" />
     <Compile Include="Operations\NestedLoopsJoinOperation.cs" />
     <Compile Include="Pipelines\AbstractPipelineExecuter.cs" />
     <Compile Include="ConventionOperations\ConventionInputCommandOperation.cs" />

@@ -8,35 +8,9 @@ namespace Rhino.Etl.Core.Operations
     /// <summary>
 	/// Branch the current pipeline flow into all its inputs
 	/// </summary>
-	public class BranchingOperation : AbstractOperation
+	public class BranchingOperation : AbstractBranchingOperation
 	{
-		private readonly List<IOperation> operations = new List<IOperation>();
-
-		/// <summary>
-		/// Adds the specified operation to this branching operation
-		/// </summary>
-		/// <param name="operation">The operation.</param>
-		/// <returns></returns>
-		public BranchingOperation Add(IOperation operation)
-		{
-			operations.Add(operation);
-			return this;
-		}
-
-		/// <summary>
-		/// Initializes this instance
-		/// </summary>
-		/// <param name="pipelineExecuter">The current pipeline executer.</param>
-		public override void PrepareForExecution(IPipelineExecuter pipelineExecuter)
-		{
-			base.PrepareForExecution(pipelineExecuter);
-			foreach (IOperation operation in operations)
-			{
-				operation.PrepareForExecution(pipelineExecuter);
-			}
-		}
-
-		/// <summary>
+    	/// <summary>
 		/// Executes this operation, sending the input of this operation
 		/// to all its child operations
 		/// </summary>
@@ -46,7 +20,7 @@ namespace Rhino.Etl.Core.Operations
 		{
 		    var copiedRows = new CachingEnumerable<Row>(rows);
 
-			foreach (IOperation operation in operations)
+			foreach (IOperation operation in Operations)
 			{
                 var cloned = copiedRows.Select(r => r.Clone());
 
