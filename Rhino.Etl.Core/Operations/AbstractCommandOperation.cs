@@ -2,9 +2,7 @@ using System.Configuration;
 
 namespace Rhino.Etl.Core.Operations
 {
-    using System;
-    using System.Collections;
-    using System.Data;
+	using System.Data;
 
     /// <summary>
     /// Base class for operations that directly manipulate ADO.Net

@@ -4,9 +4,9 @@ using Rhino.Etl.Core.Pipelines;
 
 namespace Rhino.Etl.Tests.Branches
 {
-	public class MultiThreadedFibonacciBranchingProcess : AbstractFibonacciBranchingProcess
+	public class MultiThreadedWithMultiThreadPipelineFibonacciBranchingProcess : AbstractFibonacciBranchingProcess
 	{
-		public MultiThreadedFibonacciBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations)
+		public MultiThreadedWithMultiThreadPipelineFibonacciBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations)
 			: base(numberOfFibonacciIterations, numberOfChildOperations)
 		{
 		}

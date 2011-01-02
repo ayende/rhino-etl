@@ -86,8 +86,7 @@ namespace Rhino.Etl.Core.Operations
             supportedTypes[typeof (String)] = typeof (String);
         }
 
-
-		    private static Hashtable SupportedTypes
+		private static Hashtable SupportedTypes
         {
             get
             {

@@ -2,7 +2,7 @@ namespace Rhino.Etl.Tests.LoadTest
 {
 	using System.Collections.Generic;
 	using Core;
-	using Rhino.Etl.Core.Operations;
+	using Core.Operations;
 
 	public class AccumulateResults : AbstractOperation
 	{

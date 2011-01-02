@@ -1,9 +1,7 @@
 namespace Rhino.Etl.Core.Operations
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Threading;
 
 	/// <summary>
     /// Represent a single operation that can occure during the ETL process

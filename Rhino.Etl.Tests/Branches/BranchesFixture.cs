@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using Rhino.Etl.Core;
 using Xunit;
 using Rhino.Etl.Core.Infrastructure;
@@ -14,33 +13,62 @@ namespace Rhino.Etl.Tests.Branches
             using (var process = CreateBranchingProcess(30, 2))
                 process.Execute();
 
-            AssertCountForFibonacci(60);
+            AssertFibonacci(30, 2);
         }
-
-		protected abstract EtlProcess CreateBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations);
 
     	[Fact] 
         public void CanBranchThePipelineEfficiently()
         {
-            var initialMemory = GC.GetTotalMemory(true);
+    		const int iterations = 30000;
+    		const int childOperations = 10;
 
-            using (var process = CreateBranchingProcess(30000, 10))
+    		var initialMemory = GC.GetTotalMemory(true);
+
+    		using (var process = CreateBranchingProcess(iterations, childOperations))
                 process.Execute();
 
             var finalMemory = GC.GetTotalMemory(true);
 
-            Assert.True(finalMemory - initialMemory < 10 * 1000 * 1000, "Consuming too much memory");
-            AssertCountForFibonacci(300000);
+            Assert.True(finalMemory - initialMemory < Math.Pow(2, 20), "Consuming too much memory");
+            AssertFibonacci(iterations, childOperations);
         }
 
-        protected static void AssertCountForFibonacci(int numberOfRows)
+    	protected abstract EtlProcess CreateBranchingProcess(int iterations, int childOperations);
+
+    	protected static void AssertFibonacci(int iterations, int repetitionsPerIteration)
         {
-            int max = Use.Transaction("test", delegate(IDbCommand cmd)
-            {
-                cmd.CommandText = "SELECT count(*) FROM Fibonacci";
-                return (int) cmd.ExecuteScalar();
-            });
-            Assert.Equal(numberOfRows, max);
+            AssertTotalItems(iterations * repetitionsPerIteration);
+
+    		AssertRepetitions(repetitionsPerIteration);
         }
+
+    	private static void AssertRepetitions(int repetitionsPerIteration)
+    	{
+			int wrongRepetitions = Use.Transaction("test", cmd =>
+			{
+				cmd.CommandText =
+string.Format(@"	SELECT count(*) 
+	FROM (
+		SELECT id, count(*) as count
+		FROM Fibonacci
+		GROUP BY id
+		HAVING count(*) <> {0}
+	) as ignored", repetitionsPerIteration);
+				return (int)cmd.ExecuteScalar();
+			});
+
+			Assert.Equal(1 /* 1 is repetated twice the others */, wrongRepetitions);
+    	}
+
+    	private static void AssertTotalItems(int expectedCount)
+    	{
+    		int totalCount = Use.Transaction("test", cmd =>
+    		                                         {
+    		                                         	cmd.CommandText = "SELECT count(*) FROM Fibonacci";
+    		                                         	return (int) cmd.ExecuteScalar();
+    		                                         });
+            
+    		Assert.Equal(expectedCount, totalCount);
+    	}
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Rhino.Etl.Core.Enumerables;
@@ -18,12 +17,9 @@ namespace Rhino.Etl.Core.Operations
 		/// <returns></returns>
 		public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
 		{
-			if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
-				throw new NotSupportedException(string.Format("Cannot use {0} in a single threaded apartment state", GetType().Name));
+			var input = new GatedThreadSafeEnumerator<Row>(Operations.Count, rows);
 
-			var handles = new List<WaitHandle>(Operations.Count);
-
-			var input = new GiveOnePullOneThreadsafeEnumerable<Row>(Operations.Count, rows);
+			var sync = new object();
 
 			foreach (var operation in Operations)
 			{
@@ -31,12 +27,12 @@ namespace Rhino.Etl.Core.Operations
 				var result = operation.Execute(clone);
 
 				if (result == null)
+				{
+					input.Dispose();
 					continue;
+				}
 
 				var enumerator = result.GetEnumerator();
-				var handle = new ManualResetEvent(false);
-
-				handles.Add(handle);
 
 				ThreadPool.QueueUserWorkItem(delegate
 				                             {
@@ -44,18 +40,20 @@ namespace Rhino.Etl.Core.Operations
 				                             	{
 				                             		while (enumerator.MoveNext()) ;
 				                             	}
-				                             	catch
-				                             	{
-				                             		enumerator.Dispose();
-				                             	}
 				                             	finally
 				                             	{
-				                             		handle.Set();
+				                             		lock (sync)
+				                             		{
+														enumerator.Dispose();
+														Monitor.Pulse(sync);
+				                             		}
 				                             	}
 				                             });
 			}
 
-			WaitHandle.WaitAll(handles.ToArray());
+			lock (sync)
+				while (input.ConsumersLeft > 0)
+					Monitor.Wait(sync);
 
 			yield break;
 		}

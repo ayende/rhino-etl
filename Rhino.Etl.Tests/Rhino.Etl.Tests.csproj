@@ -107,8 +107,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Branches\AbstractFibonacciBranchingProcess.cs" />
-    <Compile Include="Branches\MultiThreadedBranchesFixture.cs" />
-    <Compile Include="Branches\MultiThreadedFibonacciBranchingProcess.cs" />
+    <Compile Include="Branches\MultiThreadedBranchesWithMultiThreadPipeline.cs" />
+    <Compile Include="Branches\MultiThreadedBranchesWithSingleThreadPipeline.cs" />
+    <Compile Include="Branches\MultiThreadedWithMultiThreadPipelineFibonacciBranchingProcess.cs" />
+    <Compile Include="Branches\MultiThreadedWithSingleThreadPipelineFibonacciBranchingProcess.cs" />
     <Compile Include="Branches\SingleThreadedBranchesFixture.cs" />
     <Compile Include="Branches\SingleThreadedFibonacciBranchingProcess.cs" />
     <Compile Include="Dsl\AggregationFixture.cs" />

@@ -4,9 +4,9 @@ namespace Rhino.Etl.Tests.Branches
 {
 	public class SingleThreadedBranchesFixture : BranchesFixture
 	{
-		protected override EtlProcess CreateBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations)
+		protected override EtlProcess CreateBranchingProcess(int iterations, int childOperations)
 		{
-			return new SingleThreadedFibonacciBranchingProcess(numberOfFibonacciIterations, numberOfChildOperations);
+			return new SingleThreadedFibonacciBranchingProcess(iterations, childOperations);
 		}
 	}
 }

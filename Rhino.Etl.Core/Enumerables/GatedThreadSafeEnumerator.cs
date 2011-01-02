@@ -5,7 +5,11 @@ using System.Threading;
 
 namespace Rhino.Etl.Core.Enumerables
 {
-	internal class GiveOnePullOneThreadsafeEnumerable<T> : IEnumerable<T>, IEnumerator<T>
+	/// <summary>
+	/// An iterator to be consumed by concurrent threads only which supplies an element of the decorated enumerable one by one
+	/// </summary>
+	/// <typeparam name="T">The type of the decorated enumerable</typeparam>
+	internal class GatedThreadSafeEnumerator<T> : WithLoggingMixin, IEnumerable<T>, IEnumerator<T>
 	{
 		private readonly int numberOfConsumers;
 		private readonly IEnumerator<T> innerEnumerator;
@@ -13,11 +17,17 @@ namespace Rhino.Etl.Core.Enumerables
 		private readonly object sync = new object();
 		private bool moveNext;
 		private T current;
-		private int callsToDispose;
+		private int consumersLeft;
 
-		public GiveOnePullOneThreadsafeEnumerable(int numberOfConsumers, IEnumerable<T> source)
+		/// <summary>
+		/// Creates a new instance of <see cref="GatedThreadSafeEnumerator{T}"/>
+		/// </summary>
+		/// <param name="numberOfConsumers">The number of consumers that will be consuming this iterator concurrently</param>
+		/// <param name="source">The decorated enumerable that will be iterated and fed one element at a time to all consumers</param>
+		public GatedThreadSafeEnumerator(int numberOfConsumers, IEnumerable<T> source)
 		{
 			this.numberOfConsumers = numberOfConsumers;
+			consumersLeft = numberOfConsumers;
 			innerEnumerator = source.GetEnumerator();
 		}
 
@@ -33,18 +43,23 @@ namespace Rhino.Etl.Core.Enumerables
 
 		public void Dispose()
 		{
-			if(Interlocked.Increment(ref callsToDispose) == numberOfConsumers)
+			if(Interlocked.Decrement(ref consumersLeft) == 0)
+			{
+				Debug("Disposing inner enumerator");
 				innerEnumerator.Dispose();
+			}
 		}
 
 		public bool MoveNext()
 		{
 			lock (sync)
-				if (++callsToMoveNext == numberOfConsumers)
+				if (Interlocked.Increment(ref callsToMoveNext) == numberOfConsumers)
 				{
 					callsToMoveNext = 0;
 					moveNext = innerEnumerator.MoveNext();
 					current = innerEnumerator.Current;
+
+					Debug("Pulsing all waiting threads");
 
 					Monitor.PulseAll(sync);
 				}
@@ -70,5 +85,7 @@ namespace Rhino.Etl.Core.Enumerables
 		{
 			get { return ((IEnumerator<T>)this).Current; }
 		}
+
+		public int ConsumersLeft { get { return consumersLeft; } }
 	}
 }

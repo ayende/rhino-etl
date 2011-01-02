@@ -4,7 +4,6 @@ namespace Rhino.Etl.Core
     using System.Collections.Generic;
     using System.Globalization;
     using log4net;
-    using log4net.Config;
     using log4net.Core;
     using log4net.Util;
 

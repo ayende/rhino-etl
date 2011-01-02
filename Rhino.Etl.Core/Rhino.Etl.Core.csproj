@@ -76,7 +76,7 @@
   <ItemGroup>
     <Compile Include="ConventionOperations\ConventionSqlBatchOperation.cs" />
     <Compile Include="ConventionOperations\ConventionSqlBulkInsertOperation.cs" />
-    <Compile Include="Enumerables\GiveOnePullOneThreadsafeEnumerable.cs" />
+    <Compile Include="Enumerables\GatedThreadSafeEnumerator.cs" />
     <Compile Include="Enumerables\SingleRowEventRaisingEnumerator.cs" />
     <Compile Include="Enumerables\ThreadSafeEnumerator.cs" />
     <Compile Include="Guard.cs" />
