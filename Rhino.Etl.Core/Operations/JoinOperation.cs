@@ -221,6 +221,10 @@ namespace Rhino.Etl.Core.Operations
 		/// <returns></returns>
 		public override IEnumerable<Exception> GetAllErrors()
 		{
+		    foreach (Exception error in Errors)
+		    {
+		        yield return error;
+		    }
 			foreach (Exception error in left.GetAllErrors())
 			{
 				yield return error;
