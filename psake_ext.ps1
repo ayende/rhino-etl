@@ -44,3 +44,54 @@ using System.Runtime.InteropServices;
 	Write-Host "Generating assembly info file: $file"
 	Write-Output $asmInfo > $file
 }
+
+function Generate-Nuget-Spec
+{
+param(
+  [string]$title,
+  [string]$version,
+  [string]$authors,
+  [string]$description,
+  [string]$language,
+  [string]$projectUrl,
+  [string]$licenceUrl,
+  [array]$dependencies,
+  [array]$files,
+  [string]$file = $(throw "file is a required parameter.")
+)
+  $out = "<?xml version=""1.0"" encoding=""utf-8""?>" + [Environment]::NewLine
+  $out = $out + "<package xmlns=""http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"">"  + [Environment]::NewLine
+  $out = $out + "    <metadata>
+        <id>$title</id>
+        <version>$version</version>
+        <authors>$authors</authors>
+        <description>$description</description>
+        <language>$language</language>
+        <projectUrl>$projectUrl</projectUrl>
+        <licenseUrl>$licenceUrl</licenseUrl>
+"
+  $out = $out + "        <dependencies>
+"
+  foreach($dependency in $dependencies) {
+    $out = $out + "            <dependency id=""" + $dependency[0] + """ 
+                        version=""" + $dependency[1] + """ />
+"
+  }
+  $out = $out + "        </dependencies>
+"  
+  $out = $out + "    </metadata>
+"
+  
+  $out = $out + "    <files>
+"  
+  foreach($includedFile in $files) {
+    $out = $out + "        <file src=""" + $includedFile[0] + """
+              target=""" + $includedFile[1] + """ />
+"
+  }
+  $out = $out + "    </files>
+"  
+  $out = $out + "</package>"
+  
+  $out | out-file $file -Encoding utf8
+}

@@ -11,3 +11,5 @@ AssemblyInfo.cs
 *.user
 /Rhino.Etl.Core/Rhino.Etl.Core.XML
 /Rhino.Etl.Dsl/Rhino.Etl.Dsl.XML
+Rhino.Etl.nuspec
+*.nupkg

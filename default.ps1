@@ -68,7 +68,7 @@ task Init -depends Clean {
 } 
 
 task Compile -depends Init { 
-  & msbuild "$sln_file" "/p:OutDir=$build_dir\\" /p:Configuration=Release
+  & msbuild "$sln_file" "/p:OutDir=$build_dir\\" /p:Configuration=Release /v:Minimal
   if ($lastExitCode -ne 0) {
         throw "Error: Failed to execute msbuild"
   }
@@ -88,15 +88,44 @@ task Release -depends Test,DoRelease {
 
 }
 
-task DoRelease -depends Compile {
+task Nuget {
+  . .\psake_ext.ps1
+  Generate-Nuget-Spec `
+    -title "Rhino.Etl" `
+    -version $version `
+    -authors "Ayende Rahien" `
+    -description "Rhino Etl is a developer friendly Extract, transform and load (ETL) library for .NET" `
+    -language "en-GB" `
+    -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
+    -licenceUrl "https://github.com/hibernating-rhinos/rhino-etl/blob/master/license.txt" `
+    -dependencies @( `
+      @("RhinoDSL", "1.0.0"), `
+      @("log4net", "1.2.10"), `
+      @("FileHelpers", "2.0.0.0") `
+     ) `
+    -files @( `
+      @("$build_dir\Rhino.Etl.Core.dll","lib"), `
+      @("$build_dir\Rhino.Etl.Core.xml","lib"), `
+      @("$build_dir\Rhino.Etl.Dsl.dll","lib"), `
+      @("$build_dir\Rhino.Etl.Dsl.xml","lib"), `
+      @("$build_dir\Rhino.Etl.Cmd.exe","lib"), `
+      @("$build_dir\Boo.Lang.Useful.dll","lib"), `
+      @("license.txt","lib"), `
+      @("acknowledgements.txt","lib") `
+    ) `
+    -file "$base_dir\Rhino.Etl.nuspec"
+    .\Tools\NuGet.exe pack .\Rhino.Etl.nuspec
+}
+
+task DoRelease -depends Compile,NuGet {
 	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.Etl-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
 		$build_dir\Rhino.Etl.Core.dll `
+		$build_dir\Rhino.Etl.Core.xml `
 		$build_dir\Rhino.Etl.Dsl.dll `
+		$build_dir\Rhino.Etl.Dsl.xml `
 		$build_dir\Rhino.Etl.Cmd.exe `
 		$build_dir\Rhino.DSL.dll `
 		$build_dir\log4net.dll `
-		Rhino.Etl.Core\Rhino.Etl.Core.xml `
-		Rhino.Etl.Dsl\Rhino.Etl.Dsl.xml `
 		$build_dir\Boo.* `
 		$build_dir\FileHelpers.dll `
 		license.txt `
