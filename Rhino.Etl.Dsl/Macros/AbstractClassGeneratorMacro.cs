@@ -147,7 +147,7 @@ namespace Rhino.Etl.Dsl.Macros
         {
             MethodInfo methodToOverride = GetMethodToOverride(macro);
 
-            if (macro.Body != null && macro.Block.Statements.Count > 0)
+            if (macro.Body != null && macro.Body.Statements.Count > 0)
             {
                 if (methodToOverride == null)
                 {
