@@ -72,7 +72,7 @@ namespace Rhino.Etl.Core
             Initialize();
             MergeLastOperationsToOperations();
             RegisterToOperationsEvents();
-			Notice("Starting to execute {0}", Name);
+			Trace("Starting to execute {0}", Name);
             PipelineExecuter.Execute(Name, operations, TranslateRows);
 
             PostProcessing();
@@ -102,7 +102,7 @@ namespace Rhino.Etl.Core
         /// <param name="op">The op.</param>
         protected virtual void OnFinishedProcessing(IOperation op)
         {
-            Notice("Finished {0}: {1}", op.Name, op.Statistics);
+            Trace("Finished {0}: {1}", op.Name, op.Statistics);
         }
 
         /// <summary>

@@ -1,11 +1,10 @@
+using Common.Logging;
+
 namespace Rhino.Etl.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using log4net;
-    using log4net.Core;
-    using log4net.Util;
 
     /// <summary>
     /// A base class that expose easily logging events
@@ -31,7 +30,7 @@ namespace Rhino.Etl.Core
         /// <param name="args">The args.</param>
         protected void Error(Exception exception, string format, params object[] args)
         {
-            SystemStringFormat message = new SystemStringFormat(CultureInfo.InvariantCulture, format, args);
+            string message = string.Format(CultureInfo.InvariantCulture, format, args);
             string errorMessage;
             if(exception!=null)
                 errorMessage = string.Format("{0}: {1}", message, exception.Message);
@@ -40,7 +39,7 @@ namespace Rhino.Etl.Core
             errors.Add(new RhinoEtlException(errorMessage, exception));
             if (log.IsErrorEnabled)
             {
-                log.Logger.Log(GetType(), Level.Error, message, exception);
+                log.Error(message, exception);
             }
         }
 
@@ -53,7 +52,7 @@ namespace Rhino.Etl.Core
         {
             if (log.IsWarnEnabled)
             {
-                log.Logger.Log(GetType(), Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                log.Warn(string.Format(CultureInfo.InvariantCulture, format, args), null);
             }
         }
 
@@ -66,7 +65,7 @@ namespace Rhino.Etl.Core
         {
             if (log.IsDebugEnabled)
             {
-                log.Logger.Log(GetType(), Level.Debug, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                log.Debug(string.Format(CultureInfo.InvariantCulture, format, args), null);
             }
         }
 
@@ -76,11 +75,11 @@ namespace Rhino.Etl.Core
         /// </summary>
         /// <param name="format">The format.</param>
         /// <param name="args">The args.</param>
-        protected void Notice(string format, params object[] args)
+        protected void Trace(string format, params object[] args)
         {
-            if (log.Logger.IsEnabledFor(Level.Notice))
+            if (log.IsTraceEnabled)
             {
-                log.Logger.Log(GetType(), Level.Notice, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                log.Trace(string.Format(CultureInfo.InvariantCulture, format, args), null);
             }
         }
 
@@ -94,7 +93,7 @@ namespace Rhino.Etl.Core
         {
             if (log.IsInfoEnabled)
             {
-                log.Logger.Log(GetType(), Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+                log.Info(string.Format(CultureInfo.InvariantCulture, format, args), null);
             }
         }
 

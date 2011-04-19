@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <StartArguments>-f:d:\OSS\rhino-tools\rhino-etl2\Rhino.Etl\Rhino.Etl.Tests\Dsl\UsersToPeople.boo</StartArguments>
+    <StartArguments>-f:Test.boo</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>

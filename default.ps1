@@ -100,7 +100,7 @@ task Nuget {
     -licenceUrl "https://github.com/hibernating-rhinos/rhino-etl/blob/master/license.txt" `
     -dependencies @( `
       @("RhinoDSL", "1.0.0"), `
-      @("log4net", "1.2.10"), `
+      @("Common.Logging", "2.0.0"), `
       @("FileHelpers", "2.0.0.0") `
      ) `
     -files @( `

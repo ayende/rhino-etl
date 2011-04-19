@@ -29,7 +29,7 @@ namespace Rhino.Etl.Core.Pipelines
                 {
                     DateTime start = DateTime.Now;
                     ExecutePipeline(enumerablePipeline);
-                    Notice("Completed process {0} in {1}", pipelineName, DateTime.Now - start);
+                    Trace("Completed process {0} in {1}", pipelineName, DateTime.Now - start);
                 }
                 catch (Exception e)
                 {
