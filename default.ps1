@@ -126,6 +126,7 @@ task DoRelease -depends Compile,NuGet {
 		$build_dir\Rhino.Etl.Cmd.exe `
 		$build_dir\Rhino.DSL.dll `
 		$build_dir\log4net.dll `
+		$build_dir\Common.Logging.dll `
 		$build_dir\Boo.* `
 		$build_dir\FileHelpers.dll `
 		license.txt `
