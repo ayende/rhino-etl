@@ -54,21 +54,17 @@
     <DocumentationFile>Rhino.Etl.Dsl.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Boo.Lang.dll</HintPath>
+    <Reference Include="Boo.Lang">
+      <HintPath>..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
     </Reference>
-    <Reference Include="Boo.Lang.Compiler, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Boo.Lang.Compiler.dll</HintPath>
+    <Reference Include="Boo.Lang.Compiler">
+      <HintPath>..\SharedLibs\Boo\Boo.Lang.Compiler.dll</HintPath>
     </Reference>
-    <Reference Include="Boo.Lang.Parser, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Boo.Lang.Parser.dll</HintPath>
+    <Reference Include="Boo.Lang.Parser">
+      <HintPath>..\SharedLibs\Boo\Boo.Lang.Parser.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.DSL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Rhino.DSL.dll</HintPath>
+    <Reference Include="Rhino.DSL">
+      <HintPath>..\SharedLibs\Rhino.Dsl\Rhino.DSL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

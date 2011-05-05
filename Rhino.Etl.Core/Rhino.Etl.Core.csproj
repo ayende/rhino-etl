@@ -54,16 +54,14 @@
     <DocumentationFile>Rhino.Etl.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Boo.Lang, Version=2.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Boo.Lang.dll</HintPath>
+    <Reference Include="Boo.Lang">
+      <HintPath>..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="FileHelpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\FileHelpers.dll</HintPath>
+    <Reference Include="FileHelpers">
+      <HintPath>..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />

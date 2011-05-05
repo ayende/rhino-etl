@@ -1,0 +1,2 @@
+Rhino DSL wouldn't have been possible without the tremendous support of the Boo language community (http://boo.codehaus.org)
+Thank you guys, you have been invaluable

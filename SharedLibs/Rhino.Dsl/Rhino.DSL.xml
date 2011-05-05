@@ -542,6 +542,11 @@
             Run the current compiler step
             </summary>
         </member>
+        <member name="M:Rhino.DSL.AutoReferenceFilesCompilerStep.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
         <member name="T:Rhino.DSL.DslEngine">
             <summary>
             Base class for DSL engines, handles most of the routine tasks that a DSL
