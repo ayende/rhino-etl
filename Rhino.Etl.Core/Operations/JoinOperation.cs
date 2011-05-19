@@ -271,5 +271,43 @@ namespace Rhino.Etl.Core.Operations
 				return this;
 			}
 		}
+
+		///	<summary>
+		///	Occurs when	a row is processed.
+		///	</summary>
+		public override	event Action<IOperation, Row> OnRowProcessed
+		{
+			add
+			{
+				foreach	(IOperation	operation in new[] { left, right })
+					operation.OnRowProcessed +=	value;
+				base.OnRowProcessed	+= value;
+			}
+			remove
+			{
+				foreach	(IOperation	operation in new[] { left, right })
+					operation.OnRowProcessed -=	value;
+				base.OnRowProcessed	-= value;
+			}
+		}
+
+		///	<summary>
+		///	Occurs when	all	the	rows has finished processing.
+		///	</summary>
+		public override	event Action<IOperation> OnFinishedProcessing
+		{
+			add
+			{
+				foreach	(IOperation	operation in new[] { left, right })
+					operation.OnFinishedProcessing += value;
+				base.OnFinishedProcessing += value;
+			}
+			remove
+			{
+				foreach	(IOperation	operation in new[] { left, right })
+					operation.OnFinishedProcessing -= value;
+				base.OnFinishedProcessing -= value;
+			}
+		}
 	}
 }

@@ -40,8 +40,12 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="pipelineExecuter">The current pipeline executer.</param>
         public void PrepareForExecution(IPipelineExecuter pipelineExecuter)
         {
+			this.pipelineExeuter =	pipelineExecuter;
+			foreach	(IOperation	operation in operations)
+			{
+				operation.PrepareForExecution(pipelineExecuter);
+			}
             Statistics.MarkStarted();
-            this.pipelineExeuter = pipelineExecuter;
         }
 
         /// <summary>

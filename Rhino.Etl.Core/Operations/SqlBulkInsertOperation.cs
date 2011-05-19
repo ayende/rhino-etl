@@ -30,6 +30,7 @@ namespace Rhino.Etl.Core.Operations
 		private string targetTable;
 		private int timeout;
         private int batchSize;
+		private	int	notifyBatchSize;
 		private SqlBulkCopyOptions bulkCopyOptions = SqlBulkCopyOptions.Default;
 		
 
@@ -96,6 +97,13 @@ namespace Rhino.Etl.Core.Operations
             get { return batchSize; }
             set { batchSize = value; }
         }
+
+		///	<summary>The batch size	value of the bulk insert operation</summary>
+		public virtual int NotifyBatchSize
+		{
+			get	{ return notifyBatchSize>0 ? notifyBatchSize : batchSize; }
+			set	{ notifyBatchSize =	value; }
+		}
 
 		/// <summary>The table or view to bulk load the data into.</summary>
 		public string TargetTable
@@ -249,6 +257,14 @@ namespace Rhino.Etl.Core.Operations
         }
 
 		/// <summary>
+		///	Handle sql notifications
+		///	</summary>
+		protected virtual void onSqlRowsCopied(object sender, SqlRowsCopiedEventArgs e)
+		{
+			Debug("{0} rows	copied to database", e.RowsCopied);
+		}
+
+		///	<summary>
 		/// Prepares the schema of the target table
 		/// </summary>
 		protected abstract void PrepareSchema();
@@ -264,6 +280,8 @@ namespace Rhino.Etl.Core.Operations
 			{
 				copy.ColumnMappings.Add(pair.Key, pair.Value);
 			}
+			copy.NotifyAfter = notifyBatchSize;
+			copy.SqlRowsCopied += onSqlRowsCopied;
 			copy.DestinationTableName = TargetTable;
 			copy.BulkCopyTimeout = Timeout;
 			return copy;

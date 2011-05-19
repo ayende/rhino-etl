@@ -1,3 +1,8 @@
+using System.Configuration;
+using System.Data.SqlClient;
+using Rhino.Etl.Core.Operations;
+using Rhino.Mocks;
+
 namespace Rhino.Etl.Tests
 {
     using System;
@@ -36,4 +41,26 @@ namespace Rhino.Etl.Tests
             AssertFibonacciTableEmpty();
         }
     }
+
+	public class BulkInsertNotificationTests
+	{
+		[Fact]
+		public void	CheckNotifyBatchSizeTakenFromBatchSize()
+		{
+			FibonacciBulkInsert	fibonacci =	new	FibonacciBulkInsert();
+			fibonacci.BatchSize	= 50;
+
+			Assert.Equal(fibonacci.BatchSize, fibonacci.NotifyBatchSize);
+		}
+
+		[Fact]
+		public void	CheckNotifyBatchSizeNotTakenFromBatchSize()
+		{
+			FibonacciBulkInsert	fibonacci =	new	FibonacciBulkInsert();
+			fibonacci.BatchSize	= 50;
+			fibonacci.NotifyBatchSize =	25;
+
+			Assert.Equal(25, fibonacci.NotifyBatchSize);
+		}
+	}
 }
