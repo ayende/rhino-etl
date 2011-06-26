@@ -2,12 +2,12 @@ using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Tests.Dsl
 {
-	using System.Collections.Generic;
-	using System.Data;
-	using Core;
-	using Xunit;
+    using System.Collections.Generic;
+    using System.Data;
+    using Core;
+    using Xunit;
 
-	
+    
     public class DatabaseToDatabaseWithTransformFixture : BaseUserToPeopleTest
     {
         [Fact]

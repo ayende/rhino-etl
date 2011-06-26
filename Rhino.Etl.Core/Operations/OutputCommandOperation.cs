@@ -7,7 +7,7 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections.Generic;
     using System.Data;
 
-	/// <summary>
+    /// <summary>
     /// Generic output command operation
     /// </summary>
     public abstract class OutputCommandOperation : AbstractCommandOperation

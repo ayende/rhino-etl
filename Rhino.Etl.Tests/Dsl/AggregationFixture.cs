@@ -1,7 +1,7 @@
 namespace Rhino.Etl.Tests.Dsl
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
     using System.IO;
     using Aggregation;
     using Core;
@@ -21,7 +21,7 @@ namespace Rhino.Etl.Tests.Dsl
         }
 
 
-    	[Fact]
+        [Fact]
         public void CanPerformAggregationFromDsl()
         {
             EtlProcess process = CreateDslInstance("Dsl/Aggregate.boo");

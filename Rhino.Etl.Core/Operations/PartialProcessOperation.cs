@@ -5,7 +5,7 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections.Generic;
     using System.Threading;
 
-	/// <summary>
+    /// <summary>
     /// A partial process that can take part in another process
     /// </summary>
     public class PartialProcessOperation : EtlProcessBase<PartialProcessOperation>, IOperation
@@ -40,11 +40,11 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="pipelineExecuter">The current pipeline executer.</param>
         public void PrepareForExecution(IPipelineExecuter pipelineExecuter)
         {
-			this.pipelineExeuter =	pipelineExecuter;
-			foreach	(IOperation	operation in operations)
-			{
-				operation.PrepareForExecution(pipelineExecuter);
-			}
+            this.pipelineExeuter =    pipelineExecuter;
+            foreach    (IOperation    operation in operations)
+            {
+                operation.PrepareForExecution(pipelineExecuter);
+            }
             Statistics.MarkStarted();
         }
 

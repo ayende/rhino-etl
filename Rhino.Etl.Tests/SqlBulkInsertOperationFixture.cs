@@ -42,25 +42,25 @@ namespace Rhino.Etl.Tests
         }
     }
 
-	public class BulkInsertNotificationTests
-	{
-		[Fact]
-		public void	CheckNotifyBatchSizeTakenFromBatchSize()
-		{
-			FibonacciBulkInsert	fibonacci =	new	FibonacciBulkInsert();
-			fibonacci.BatchSize	= 50;
+    public class BulkInsertNotificationTests
+    {
+        [Fact]
+        public void    CheckNotifyBatchSizeTakenFromBatchSize()
+        {
+            FibonacciBulkInsert    fibonacci =    new    FibonacciBulkInsert();
+            fibonacci.BatchSize    = 50;
 
-			Assert.Equal(fibonacci.BatchSize, fibonacci.NotifyBatchSize);
-		}
+            Assert.Equal(fibonacci.BatchSize, fibonacci.NotifyBatchSize);
+        }
 
-		[Fact]
-		public void	CheckNotifyBatchSizeNotTakenFromBatchSize()
-		{
-			FibonacciBulkInsert	fibonacci =	new	FibonacciBulkInsert();
-			fibonacci.BatchSize	= 50;
-			fibonacci.NotifyBatchSize =	25;
+        [Fact]
+        public void    CheckNotifyBatchSizeNotTakenFromBatchSize()
+        {
+            FibonacciBulkInsert    fibonacci =    new    FibonacciBulkInsert();
+            fibonacci.BatchSize    = 50;
+            fibonacci.NotifyBatchSize =    25;
 
-			Assert.Equal(25, fibonacci.NotifyBatchSize);
-		}
-	}
+            Assert.Equal(25, fibonacci.NotifyBatchSize);
+        }
+    }
 }

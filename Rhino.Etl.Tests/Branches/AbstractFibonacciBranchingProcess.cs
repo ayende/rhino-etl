@@ -10,7 +10,7 @@ namespace Rhino.Etl.Tests.Branches
         private readonly int numberOfFibonacciIterations;
         private readonly int numberOfChildOperations;
 
-    	protected AbstractFibonacciBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations)
+        protected AbstractFibonacciBranchingProcess(int numberOfFibonacciIterations, int numberOfChildOperations)
         {
             this.numberOfFibonacciIterations = numberOfFibonacciIterations;
             this.numberOfChildOperations = numberOfChildOperations;
@@ -18,7 +18,7 @@ namespace Rhino.Etl.Tests.Branches
 
         protected override void Initialize()
         {
-        	PipelineExecuter = CreatePipelineExecuter();
+            PipelineExecuter = CreatePipelineExecuter();
 
             Register(new FibonacciOperation(numberOfFibonacciIterations));
 
@@ -30,8 +30,8 @@ namespace Rhino.Etl.Tests.Branches
             Register(split);
         }
 
-    	protected abstract AbstractBranchingOperation CreateBranchingOperation();
+        protected abstract AbstractBranchingOperation CreateBranchingOperation();
 
-    	protected abstract IPipelineExecuter CreatePipelineExecuter();
+        protected abstract IPipelineExecuter CreatePipelineExecuter();
     }
 }

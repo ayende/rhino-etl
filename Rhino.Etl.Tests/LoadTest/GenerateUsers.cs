@@ -23,7 +23,7 @@ namespace Rhino.Etl.Tests.LoadTest
             for (int i = 0; i < expectedCount; i++)
             {
                 Row row = new Row();
-            	row["id"] = i;
+                row["id"] = i;
                 row["name"] = "ayende #" + i;
                 row["email"] = "ayende" + i + "@example.org";
                 yield return row;

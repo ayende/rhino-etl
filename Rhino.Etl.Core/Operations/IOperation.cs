@@ -4,7 +4,7 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections;
     using System.Collections.Generic;
 
-	/// <summary>
+    /// <summary>
     /// A single operation in an etl process
     /// </summary>
     public interface IOperation : IDisposable

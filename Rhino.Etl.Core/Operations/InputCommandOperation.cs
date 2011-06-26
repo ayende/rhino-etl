@@ -6,7 +6,7 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections.Generic;
     using System.Data;
 
-	/// <summary>
+    /// <summary>
     /// Generic input command operation
     /// </summary>
     public abstract class InputCommandOperation : AbstractCommandOperation

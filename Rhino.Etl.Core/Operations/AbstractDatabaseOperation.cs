@@ -6,19 +6,19 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections;
     using System.Data;
 
-	/// <summary>
+    /// <summary>
     /// Represent an operation that uses the database can occure during the ETL process
     /// </summary>
     public abstract class AbstractDatabaseOperation : AbstractOperation
     {
         private readonly ConnectionStringSettings connectionStringSettings;
-    	private static Hashtable supportedTypes;
-		///<summary>
-		///The parameter prefix to use when adding parameters
-		///</summary>
-		protected string paramPrefix = "";
+        private static Hashtable supportedTypes;
+        ///<summary>
+        ///The parameter prefix to use when adding parameters
+        ///</summary>
+        protected string paramPrefix = "";
 
-    	/// <summary>
+        /// <summary>
         /// Gets the connection string settings.
         /// </summary>
         /// <value>The connection string settings.</value>
@@ -63,11 +63,11 @@ namespace Rhino.Etl.Core.Operations
             this.connectionStringSettings = connectionStringSettings;
         }
 
-		 private static void InitializeSupportedTypes()
+         private static void InitializeSupportedTypes()
         {
             supportedTypes = new Hashtable();
             supportedTypes[typeof (byte[])] = typeof (byte[]);
-			supportedTypes[typeof (Guid)] = typeof (Guid);
+            supportedTypes[typeof (Guid)] = typeof (Guid);
             supportedTypes[typeof (Object)] = typeof (Object);
             supportedTypes[typeof (Boolean)] = typeof (Boolean);
             supportedTypes[typeof (SByte)] = typeof (SByte);
@@ -86,7 +86,7 @@ namespace Rhino.Etl.Core.Operations
             supportedTypes[typeof (String)] = typeof (String);
         }
 
-		private static Hashtable SupportedTypes
+        private static Hashtable SupportedTypes
         {
             get
             {
@@ -98,27 +98,27 @@ namespace Rhino.Etl.Core.Operations
             }
         }
 
-		/// <summary>
-		/// Copies the row values to command parameters.
-		/// </summary>
-		/// <param name="command">The command.</param>
-		/// <param name="row">The row.</param>
-    	protected void CopyRowValuesToCommandParameters(IDbCommand command, Row row)
-    	{
-    		foreach (string column in row.Columns)
-    		{
-    			object value = row[column];
-    			if (CanUseAsParameter(value))
-    				AddParameter(command, column, value);
-    		}
-    	}
+        /// <summary>
+        /// Copies the row values to command parameters.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="row">The row.</param>
+        protected void CopyRowValuesToCommandParameters(IDbCommand command, Row row)
+        {
+            foreach (string column in row.Columns)
+            {
+                object value = row[column];
+                if (CanUseAsParameter(value))
+                    AddParameter(command, column, value);
+            }
+        }
 
-		/// <summary>
-		/// Adds the parameter the specifed command
-		/// </summary>
-		/// <param name="command">The command.</param>
-		/// <param name="name">The name.</param>
-		/// <param name="val">The val.</param>
+        /// <summary>
+        /// Adds the parameter the specifed command
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="val">The val.</param>
         protected void AddParameter(IDbCommand command, string name, object val)
         {
             IDbDataParameter parameter = command.CreateParameter();
@@ -127,15 +127,15 @@ namespace Rhino.Etl.Core.Operations
             command.Parameters.Add(parameter);
         }
 
-		/// <summary>
+        /// <summary>
         /// Determines whether this value can be use as a parameter to ADO.Net provider.
         /// This perform a simple heuristic 
         /// </summary>
         /// <param name="value">The value.</param>
         private static bool CanUseAsParameter(object value)
         {
-			if(value==null)
-				return true;
+            if(value==null)
+                return true;
             return SupportedTypes.ContainsKey(value.GetType());
         }
     }

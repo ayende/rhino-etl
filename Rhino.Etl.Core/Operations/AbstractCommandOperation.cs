@@ -2,7 +2,7 @@ using System.Configuration;
 
 namespace Rhino.Etl.Core.Operations
 {
-	using System.Data;
+    using System.Data;
 
     /// <summary>
     /// Base class for operations that directly manipulate ADO.Net
@@ -34,15 +34,15 @@ namespace Rhino.Etl.Core.Operations
         /// </summary>
         protected IDbCommand currentCommand;
 
-		/// <summary>
-		/// Adds the parameter to the current command
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="value">The value.</param>
-		protected void AddParameter(string name, object value)
-		{
-			AddParameter(currentCommand, name, value);
-		}
+        /// <summary>
+        /// Adds the parameter to the current command
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        protected void AddParameter(string name, object value)
+        {
+            AddParameter(currentCommand, name, value);
+        }
 
         /// <summary>
         /// Begins a transaction conditionally based on the UseTransaction property

@@ -7,7 +7,7 @@ namespace Rhino.Etl.Core.Operations
     using System.Collections.Generic;
     using System.Data.SqlClient;
 
-	/// <summary>
+    /// <summary>
     /// Perform a batch command against SQL server
     /// </summary>
     public abstract class SqlBatchOperation : AbstractDatabaseOperation
@@ -30,7 +30,7 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="connectionStringName">Name of the connection string.</param>
         public SqlBatchOperation(string connectionStringName)
             : this(ConfigurationManager.ConnectionStrings[connectionStringName])
-        {			
+        {            
         }
 
         /// <summary>
@@ -105,8 +105,8 @@ namespace Rhino.Etl.Core.Operations
                 commandSet.Dispose();
             commandSet = new SqlCommandSet
             {
-            	Connection = connection, 
-				Transaction = transaction
+                Connection = connection, 
+                Transaction = transaction
             };
         }
     }

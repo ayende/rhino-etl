@@ -23,11 +23,11 @@ namespace Rhino.Etl.Core
         public IPipelineExecuter PipelineExecuter
         {
             get { return pipelineExecuter; }
-			set
-			{
-			    Info("Setting PipelineExecutor to {0}", value.GetType().ToString());
-			    pipelineExecuter = value;
-			}
+            set
+            {
+                Info("Setting PipelineExecutor to {0}", value.GetType().ToString());
+                pipelineExecuter = value;
+            }
         }
 
 
@@ -72,21 +72,21 @@ namespace Rhino.Etl.Core
             Initialize();
             MergeLastOperationsToOperations();
             RegisterToOperationsEvents();
-			Trace("Starting to execute {0}", Name);
+            Trace("Starting to execute {0}", Name);
             PipelineExecuter.Execute(Name, operations, TranslateRows);
 
             PostProcessing();
         }
 
-		/// <summary>
-		/// Translate the rows from one representation to another
-		/// </summary>
-		public virtual IEnumerable<Row> TranslateRows(IEnumerable<Row> rows)
-    	{
-    		return rows;
-    	}
+        /// <summary>
+        /// Translate the rows from one representation to another
+        /// </summary>
+        public virtual IEnumerable<Row> TranslateRows(IEnumerable<Row> rows)
+        {
+            return rows;
+        }
 
-    	private void RegisterToOperationsEvents()
+        private void RegisterToOperationsEvents()
         {
             foreach (IOperation operation in operations)
             {

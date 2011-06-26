@@ -3,7 +3,7 @@ namespace Rhino.Etl.Core.Operations
     using System;
     using System.Collections.Generic;
 
-	/// <summary>
+    /// <summary>
     /// Represent a single operation that can occure during the ETL process
     /// </summary>
     public abstract class AbstractOperation : WithLoggingMixin, IOperation
@@ -30,17 +30,17 @@ namespace Rhino.Etl.Core.Operations
             get { return GetType().Name; }
         }
 
-	    /// <summary>
-	    /// Gets or sets whether we are using a transaction
-	    /// </summary>
-	    /// <value>True or false.</value>
-	    public bool UseTransaction
-	    {
+        /// <summary>
+        /// Gets or sets whether we are using a transaction
+        /// </summary>
+        /// <value>True or false.</value>
+        public bool UseTransaction
+        {
             get { return useTransaction; }
             set { useTransaction = value; }
-	    }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Gets the statistics for this operation
         /// </summary>
         /// <value>The statistics.</value>

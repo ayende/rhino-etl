@@ -14,7 +14,7 @@ namespace Rhino.Etl.Tests
             Use.Transaction("test", delegate(IDbCommand cmd)
             {
                 cmd.CommandText =
-					@"
+                    @"
 if object_id('User2Role') is not null
     drop table User2Role;
 if object_id('Roles') is not null

@@ -7,33 +7,33 @@ using Xunit;
 
 namespace Rhino.Etl.Tests
 {
-	public class PipelineEventsFixture
-	{
+    public class PipelineEventsFixture
+    {
 
-		[Fact]
-		public void	RaiseEventsWhenPipelineExecuted()
-		{
-			//Arrange
-			var	startingCalled = 0;
-			var	completingCalled = 0;
-			var	pipeline = new TestPipelineExecuter();
-			pipeline.NotifyExecutionStarting +=	delegate { startingCalled += 1;	};
-			pipeline.NotifyExecutionCompleting += delegate { completingCalled += 1;	};
+        [Fact]
+        public void    RaiseEventsWhenPipelineExecuted()
+        {
+            //Arrange
+            var    startingCalled = 0;
+            var    completingCalled = 0;
+            var    pipeline = new TestPipelineExecuter();
+            pipeline.NotifyExecutionStarting +=    delegate { startingCalled += 1;    };
+            pipeline.NotifyExecutionCompleting += delegate { completingCalled += 1;    };
 
-			//Act
-			pipeline.Execute("Test", new IOperation[0],	rows =>	rows);
+            //Act
+            pipeline.Execute("Test", new IOperation[0],    rows =>    rows);
 
-			//Assert);
-			Assert.Equal(1,	startingCalled);
-			Assert.Equal(1,	completingCalled);
-		}
-	}
+            //Assert);
+            Assert.Equal(1,    startingCalled);
+            Assert.Equal(1,    completingCalled);
+        }
+    }
 
-	public class TestPipelineExecuter :	AbstractPipelineExecuter
-	{
-		protected override IEnumerable<Row>	DecorateEnumerableForExecution(IOperation operation, IEnumerable<Row> enumerator)
-		{
-			throw new NotImplementedException();
-		}
-	}
+    public class TestPipelineExecuter :    AbstractPipelineExecuter
+    {
+        protected override IEnumerable<Row>    DecorateEnumerableForExecution(IOperation operation, IEnumerable<Row> enumerator)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

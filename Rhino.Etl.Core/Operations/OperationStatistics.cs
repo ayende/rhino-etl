@@ -71,13 +71,13 @@ namespace Rhino.Etl.Core.Operations
             return OutputtedRows + " Rows in " + Duration;
         }
 
-		/// <summary>
-		/// Adds to the count of the output rows.
-		/// </summary>
-		/// <param name="rowProcessed">The row processed.</param>
-    	public void AddOutputRows(long rowProcessed)
-    	{
-    		Interlocked.Increment(ref outputtedRows);
-    	}
+        /// <summary>
+        /// Adds to the count of the output rows.
+        /// </summary>
+        /// <param name="rowProcessed">The row processed.</param>
+        public void AddOutputRows(long rowProcessed)
+        {
+            Interlocked.Increment(ref outputtedRows);
+        }
     }
 }
