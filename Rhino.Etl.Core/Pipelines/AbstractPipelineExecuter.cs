@@ -27,8 +27,10 @@ namespace Rhino.Etl.Core.Pipelines
                 IEnumerable<Row> enumerablePipeline = PipelineToEnumerable(pipeline, new List<Row>(), translateRows);
                 try
                 {
+					raiseNotifyExecutionStarting();
                     DateTime start = DateTime.Now;
                     ExecutePipeline(enumerablePipeline);
+					raiseNotifyExecutionCompleting();
                     Trace("Completed process {0} in {1}", pipelineName, DateTime.Now - start);
                 }
                 catch (Exception e)
@@ -128,7 +130,33 @@ namespace Rhino.Etl.Core.Pipelines
             }
         }
 
-        /// <summary>
+		///	<summary>
+		///	Occurs when	the	pipeline has been successfully created,	but	before it is executed
+		///	</summary>
+		public event Action<IPipelineExecuter> NotifyExecutionStarting = delegate {	};
+
+		///	<summary>
+		///	Raises the ExecutionStarting event
+		///	</summary>
+		private	void raiseNotifyExecutionStarting()
+		{
+			NotifyExecutionStarting(this);
+		}
+
+		///	<summary>
+		///	Occurs when	the	pipeline has been successfully created,	but	before it is disposed
+		///	</summary>
+		public event Action<IPipelineExecuter> NotifyExecutionCompleting = delegate	{ };
+
+		///	<summary>
+		///	Raises the ExecutionCompleting event
+		///	</summary>
+		private	void raiseNotifyExecutionCompleting()
+		{
+			NotifyExecutionCompleting(this);
+		}
+
+		///	<summary>
         /// Add a decorator to the enumerable for additional processing
         /// </summary>
         /// <param name="operation">The operation.</param>
