@@ -13,3 +13,4 @@ AssemblyInfo.cs
 /Rhino.Etl.Dsl/Rhino.Etl.Dsl.XML
 Rhino.Etl.nuspec
 *.nupkg
+/Rhino-Etl-Cmd.nuspec

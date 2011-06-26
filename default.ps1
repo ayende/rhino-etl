@@ -4,8 +4,8 @@ properties {
   $build_dir = "$base_dir\build" 
   $buildartifacts_dir = "$build_dir\" 
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.0.1.0"
-  $humanReadableversion = "1.0"
+  $version = "1.1.0.0"
+  $humanReadableversion = "1.1"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
@@ -119,6 +119,39 @@ task Nuget {
       del ".\Release\Rhino-Etl.$version.nupkg"
     }
     move "Rhino-Etl.$version.nupkg" .\Release
+
+  Generate-Nuget-Spec `
+    -title "Rhino-Etl-Cmd" `
+    -version $version `
+    -authors "Ayende Rahien" `
+    -description "Rhino Etl is a developer friendly Extract, transform and load (ETL) library for .NET" `
+    -language "en-GB" `
+    -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
+    -licenceUrl "https://github.com/hibernating-rhinos/rhino-etl/blob/master/license.txt" `
+    -dependencies @( `
+      @("Boo", "0.9.4"), `
+      @("RhinoDSL", "1.0.0"), `
+      @("Common.Logging", "2.0.0"), `
+      @("Common.Logging.Log4Net", "2.0.0"), `
+      @("log4net", "1.2.10"), `
+      @("FileHelpers", "2.0.0.0") `
+     ) `
+    -files @( `
+      @("$build_dir\Rhino.Etl.Core.dll","lib"), `
+      @("$build_dir\Rhino.Etl.Core.xml","lib"), `
+      @("$build_dir\Rhino.Etl.Dsl.dll","lib"), `
+      @("$build_dir\Rhino.Etl.Dsl.xml","lib"), `
+      @("$build_dir\Rhino.Etl.Cmd.exe","lib"), `
+      @("license.txt",""), `
+      @("acknowledgements.txt","") `
+    ) `
+    -file "$base_dir\Rhino-Etl-Cmd.nuspec"
+    .\Tools\NuGet.exe pack .\Rhino-Etl-Cmd.nuspec
+    if (test-path ".\Release\Rhino-Etl-Cmd.$version.nupkg") {
+      del ".\Release\Rhino-Etl-Cmd.$version.nupkg"
+    }
+    move "Rhino-Etl-Cmd.$version.nupkg" .\Release
+
 }
 
 task DoRelease -depends Compile,NuGet {
