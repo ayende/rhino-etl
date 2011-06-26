@@ -5,7 +5,7 @@ namespace Rhino.Etl.Core.Operations
 	using Enumerables;
 
 	/// <summary>
-	/// Perform a join between two sources
+	/// Perform a join between two sources. The left part of the join is optional and if not specified it will use the current pipeline as input.
 	/// </summary>
 	public abstract class JoinOperation : AbstractOperation
 	{
@@ -16,6 +16,7 @@ namespace Rhino.Etl.Core.Operations
 		private string[] rightColumns;
 		private Dictionary<Row, object> rightRowsWereMatched = new Dictionary<Row, object>();
 		private Dictionary<ObjectArrayKeys, List<Row>> rightRowsByJoinKey = new Dictionary<ObjectArrayKeys, List<Row>>();
+	    private bool leftRegistered = false;
 
 		/// <summary>
 		/// Sets the right part of the join
@@ -35,21 +36,22 @@ namespace Rhino.Etl.Core.Operations
 		public JoinOperation Left(IOperation value)
 		{
 			left.Register(value);
+            leftRegistered = true;
 			return this;
 		}
 
 		/// <summary>
 		/// Executes this operation
 		/// </summary>
-		/// <param name="ignored">Ignored rows</param>
+        /// <param name="rows">Rows in pipeline. These are only used if a left part of the join was not specified.</param>
 		/// <returns></returns>
-		public override IEnumerable<Row> Execute(IEnumerable<Row> ignored)
+		public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
 		{
 			PrepareForJoin();
 
 			IEnumerable<Row> rightEnumerable = GetRightEnumerable();
 
-			IEnumerable<Row> execute = left.Execute(null);
+			IEnumerable<Row> execute = left.Execute(leftRegistered ? null : rows);
 			foreach (Row leftRow in new EventRaisingEnumerator(left, execute))
 			{
 				ObjectArrayKeys key = leftRow.CreateKey(leftColumns);

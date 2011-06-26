@@ -5,13 +5,14 @@ namespace Rhino.Etl.Core.Operations
 	using Enumerables;
 
 	/// <summary>
-	/// Perform a join between two sources
+    /// Perform a join between two sources. The left part of the join is optional and if not specified it will use the current pipeline as input.
 	/// </summary>
 	public abstract class NestedLoopsJoinOperation : AbstractOperation
 	{
 		private readonly PartialProcessOperation left = new PartialProcessOperation();
 		private readonly PartialProcessOperation right = new PartialProcessOperation();
 		private static readonly string IsEmptyRowMarker = Guid.NewGuid().ToString();
+        private bool leftRegistered = false;
 
 		private Row currentRightRow, currentLeftRow;
 		/// <summary>
@@ -31,15 +32,16 @@ namespace Rhino.Etl.Core.Operations
 		public NestedLoopsJoinOperation Left(IOperation value)
 		{
 			left.Register(value);
+            leftRegistered = true;
 			return this;
 		}
 
 		/// <summary>
 		/// Executes this operation
 		/// </summary>
-		/// <param name="ignored">Ignored rows</param>
+		/// <param name="rows">Rows in pipeline. These are only used if a left part of the join was not specified.</param>
 		/// <returns></returns>
-		public override IEnumerable<Row> Execute(IEnumerable<Row> ignored)
+		public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
 		{
 			Initialize();
 
@@ -50,7 +52,7 @@ namespace Rhino.Etl.Core.Operations
 			CachingEnumerable<Row> rightEnumerable = new CachingEnumerable<Row>(
 				new EventRaisingEnumerator(right, right.Execute(null))
 				);
-			IEnumerable<Row> execute = left.Execute(null);
+            IEnumerable<Row> execute = left.Execute(leftRegistered ? null : rows);
 			foreach (Row leftRow in new EventRaisingEnumerator(left, execute))
 			{
 				bool leftNeedOuterJoin = true;

@@ -155,6 +155,7 @@
     <Compile Include="Joins\InnerJoinUsersToPeopleByEmail.cs" />
     <Compile Include="Joins\JoinFixture.cs" />
     <Compile Include="Joins\JoinInProcessFixture.cs" />
+    <Compile Include="Joins\JoinWithPipelineFixture.cs" />
     <Compile Include="Joins\LeftJoinUsersToPeopleByEmail.cs" />
     <Compile Include="Joins\RightJoinUsersToPeopleByEmail.cs" />
     <Compile Include="Joins\TrivialUsersToPeopleJoinProcess.cs" />
