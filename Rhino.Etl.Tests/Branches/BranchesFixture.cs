@@ -28,8 +28,10 @@ namespace Rhino.Etl.Tests.Branches
                 process.Execute();
 
             var finalMemory = GC.GetTotalMemory(true);
-
-            Assert.True(finalMemory - initialMemory < Math.Pow(2, 20), "Consuming too much memory");
+    	    var consumedMemory = finalMemory - initialMemory;
+    	    var tooMuchMemory = Math.Pow(2, 20);
+            
+            Assert.True(consumedMemory < tooMuchMemory, "Consuming too much memory - (" + consumedMemory.ToString() + " >= " + tooMuchMemory + ")");
             AssertFibonacci(iterations, childOperations);
         }
 
