@@ -27,17 +27,17 @@ namespace Rhino.Etl.Dsl.Macros
         protected override Statement DoExpand(MacroStatement macro)
         {
             Block body = (Block)macro.GetAncestor(NodeType.Block);
-           
-            if (macro.Block.Statements.Count < 1)
+
+            if (macro.Body.Statements.Count < 1)
             {
-                Errors.Add(CompilerErrorFactory.CustomError(macro.LexicalInfo, "Join"+name+" section must contain at least a single expression statement"));
+                Errors.Add(CompilerErrorFactory.CustomError(macro.LexicalInfo, "Join" + name + " section must contain at least a single expression statement"));
                 return null;
             }
 
-            foreach (Statement statement in macro.Block.Statements)
+            foreach (Statement statement in macro.Body.Statements)
             {
                 ExpressionStatement exprStmt = statement as ExpressionStatement;
-                if(exprStmt==null)
+                if (exprStmt == null)
                 {
                     Errors.Add(CompilerErrorFactory.CustomError(macro.LexicalInfo, "Join" + name + " section can only contain expressions"));
                     return null;
@@ -47,7 +47,7 @@ namespace Rhino.Etl.Dsl.Macros
                 body.Add(new ExpressionStatement(expression));
             }
             return null;
-            
+
         }
     }
 }

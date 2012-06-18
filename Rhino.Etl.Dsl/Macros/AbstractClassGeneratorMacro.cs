@@ -121,9 +121,9 @@ namespace Rhino.Etl.Dsl.Macros
                 }
                 catch (AmbiguousMatchException)
                 {
-                    string msg = typeof (T).Name + " has more than one overload for method " + blockMethodName;
+                    string msg = typeof(T).Name + " has more than one overload for method " + blockMethodName;
                     Errors.Add(CompilerErrorFactory.CustomError(macro.LexicalInfo, msg));
-                
+
                 }
                 catch (Exception exception)
                 {
@@ -147,7 +147,7 @@ namespace Rhino.Etl.Dsl.Macros
         {
             MethodInfo methodToOverride = GetMethodToOverride(macro);
 
-            if (macro.Body != null && macro.Block.Statements.Count > 0)
+            if (macro.Body != null && macro.Body.Statements.Count > 0)
             {
                 if (methodToOverride == null)
                 {

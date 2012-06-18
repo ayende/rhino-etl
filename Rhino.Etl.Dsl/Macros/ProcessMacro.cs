@@ -15,7 +15,8 @@ namespace Rhino.Etl.Dsl.Macros
         /// <summary>
         /// Initializes a new instance of the <see cref="ProcessMacro"/> class.
         /// </summary>
-        public ProcessMacro() : base("Initialize")
+        public ProcessMacro()
+            : base("Initialize")
         {
         }
 
@@ -28,10 +29,10 @@ namespace Rhino.Etl.Dsl.Macros
         public override Statement Expand(MacroStatement macro)
         {
             Statement expand = base.Expand(macro);
-            foreach (Statement statement in macro.Block.Statements)
+            foreach (Statement statement in macro.Body.Statements)
             {
                 ExpressionStatement expressionStatement = statement as ExpressionStatement;
-                if(expressionStatement==null)
+                if (expressionStatement == null)
                     continue;
                 expressionStatement.Expression =
                     new MethodInvocationExpression(new ReferenceExpression("Register"), expressionStatement.Expression);
