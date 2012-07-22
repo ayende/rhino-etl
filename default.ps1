@@ -4,7 +4,7 @@ properties {
   $build_dir = "$base_dir\build" 
   $buildartifacts_dir = "$build_dir\" 
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.1.0.0"
+  $version = "1.1.1.0"
   $humanReadableversion = "1.1"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
@@ -21,8 +21,16 @@ task Clean {
 
 task Init -depends Clean { 
 	. .\psake_ext.ps1
-	Generate-Assembly-Info `
-		-file "$base_dir\Rhino.Etl.Core\Properties\AssemblyInfo.cs" `
+	
+	$infos = (
+    "$base_dir\Rhino.Etl.Core\Properties\AssemblyInfo.cs",
+    "$base_dir\Rhino.Etl.Dsl\Properties\AssemblyInfo.cs",
+    "$base_dir\Rhino.Etl.Tests\Properties\AssemblyInfo.cs",
+    "$base_dir\Rhino.Etl.Cmd\Properties\AssemblyInfo.cs"
+	);
+	
+	$infos | foreach { Generate-Assembly-Info `
+		-file $_ `
 		-title "Rhino ETL $version" `
 		-description "Developer freindly ETL Library for .NET" `
 		-company "Hibernating Rhinos" `
@@ -30,37 +38,7 @@ task Init -depends Clean {
 		-version $version `
 		-clsCompliant "false" `
 		-copyright "Hibernating Rhinos & Ayende Rahien 2007 - 2009"
-	
-	Generate-Assembly-Info `
-		-file "$base_dir\Rhino.Etl.Dsl\Properties\AssemblyInfo.cs" `
-		-title "Rhino ETL DSL $version" `
-		-description "Developer freindly ETL Library for .NET" `
-		-company "Hibernating Rhinos" `
-		-product "Developer freindly ETL Library for .NET $version" `
-		-version $version `
-		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2007 - 2009"
-	
-	Generate-Assembly-Info `
-		-file "$base_dir\Rhino.Etl.Tests\Properties\AssemblyInfo.cs" `
-		-title "Rhino ETL Tests $version" `
-		-description "Developer freindly ETL Library for .NET" `
-		-company "Hibernating Rhinos" `
-		-product "Developer freindly ETL Library for .NET $version" `
-		-version $version `
-		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2007 - 2009"
-	
-	Generate-Assembly-Info `
-		-file "$base_dir\Rhino.Etl.Cmd\Properties\AssemblyInfo.cs" `
-		-title "Rhino ETL Command Line $version" `
-		-description "Developer freindly ETL Library for .NET" `
-		-company "Hibernating Rhinos" `
-		-product "Developer freindly ETL Library for .NET $version" `
-		-version $version `
-		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2007 - 2009"
-		
+	}		
 		
 	new-item $release_dir -itemType directory 
 	new-item $buildartifacts_dir -itemType directory 
@@ -94,7 +72,7 @@ task Nuget {
   Generate-Nuget-Spec `
     -title "Rhino-Etl" `
     -version $version `
-    -authors "Ayende Rahien" `
+    -authors "Ayende Rahien, Nathan Palmer" `
     -description "Rhino Etl is a developer friendly Extract, transform and load (ETL) library for .NET" `
     -language "en-GB" `
     -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
@@ -123,7 +101,7 @@ task Nuget {
   Generate-Nuget-Spec `
     -title "Rhino-Etl-Cmd" `
     -version $version `
-    -authors "Ayende Rahien" `
+    -authors "Ayende Rahien, Nathan Palmer" `
     -description "Rhino Etl is a developer friendly Extract, transform and load (ETL) library for .NET" `
     -language "en-GB" `
     -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
