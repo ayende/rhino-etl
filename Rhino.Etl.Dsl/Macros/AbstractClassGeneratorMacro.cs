@@ -223,9 +223,14 @@ namespace Rhino.Etl.Dsl.Macros
             {
                 Expression argument = macro.Arguments[i];
                 BinaryExpression assign;
+                MethodInvocationExpression call;
                 if (TryGetAssignment(argument, out assign))
                 {
                     constructor.Body.Add(assign);
+                }
+                else if(TryGetCall(argument, out call))
+                {
+                    constructor.Body.Add(call);
                 }
                 else
                 {
@@ -245,6 +250,31 @@ namespace Rhino.Etl.Dsl.Macros
         {
             assign = expression as BinaryExpression;
             return (assign != null && assign.Operator == BinaryOperatorType.Assign);
+        }
+
+        /// <summary>
+        /// Tries to get a method call from the expression
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <param name="call">The method call.</param>
+        /// <returns></returns>
+        protected static bool TryGetCall(Expression expression, out MethodInvocationExpression call)
+        {
+            call = expression as MethodInvocationExpression;
+            return (call != null && call.Target is ReferenceExpression);
+        }
+
+        /// <summary>
+        /// Add a method definition to the resultant class definition
+        /// </summary>
+        /// <param name="macro"></param>
+        /// <param name="method"></param>
+        protected void AddMethodDefinitionToClassDefinition(MacroStatement macro, Method method)
+        {
+            var members = (IList<Method>)macro["members"];
+            if (members == null)
+                macro["members"] = members = new List<Method>();
+            members.Add(method);
         }
 
         /// <summary>

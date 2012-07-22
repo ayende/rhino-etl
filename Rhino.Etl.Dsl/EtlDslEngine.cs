@@ -18,6 +18,24 @@ namespace Rhino.Etl.Dsl
     {
         private static readonly DslFactory factory = CreateFactory();
         private readonly IDictionary<string, IList<string>> moduleNameToContainedTypes = new Dictionary<string, IList<string>>();
+        private readonly string[] _namespaces;
+
+        /// <summary>
+        /// Create the ETL DSL engine
+        /// </summary>
+        public EtlDslEngine() :  this(new string[0])
+        { }
+
+        /// <summary>
+        /// Create the ETL DSL engine, registering additional namespaces with the compiler pipeline
+        /// </summary>
+        /// <param name="additionalNamespaces">Additional namespaces to register</param>
+        public EtlDslEngine(IEnumerable<string> additionalNamespaces)
+        {
+            var namespaces = new List<string> {"Rhino.Etl.Core", "Rhino.Etl.Dsl", "Rhino.Etl.Dsl.Macros"};
+            namespaces.AddRange(additionalNamespaces);
+            _namespaces = namespaces.ToArray();
+        }
 
         /// <summary>
         /// Compile the DSL and return the resulting context
@@ -79,10 +97,7 @@ namespace Rhino.Etl.Dsl
             compiler.Parameters.References.Add(typeof(EtlProcess).Assembly);
             pipeline.Insert(1, new AutoReferenceFilesCompilerStep());
             pipeline.Insert(2, new UseModuleNameAsNamespaceIfMissing());
-            pipeline.Insert(3, new AutoImportCompilerStep(
-                "Rhino.Etl.Core",
-                "Rhino.Etl.Dsl",
-                "Rhino.Etl.Dsl.Macros"));
+            pipeline.Insert(3, new AutoImportCompilerStep(_namespaces));
 
             pipeline.InsertAfter(typeof(MacroAndAttributeExpansion), 
                 new CorrelateTypesToModuleName(moduleNameToContainedTypes));

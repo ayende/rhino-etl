@@ -111,6 +111,7 @@
     <Compile Include="Branches\SingleThreadedBranchesFixture.cs" />
     <Compile Include="Branches\SingleThreadedFibonacciBranchingProcess.cs" />
     <Compile Include="Dsl\AggregationFixture.cs" />
+    <Compile Include="Dsl\HashJoinFixture.cs" />
     <Compile Include="Dsl\DatabaseToDatabaseWithTransformFixture.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -208,10 +209,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Dsl\InnerJoin.boo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Dsl\UsersToPeopleBulk.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dsl\InnerJoin.boo">
+    <None Include="Dsl\InnerHashJoin.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Dsl\UsersToPeople.boo">
