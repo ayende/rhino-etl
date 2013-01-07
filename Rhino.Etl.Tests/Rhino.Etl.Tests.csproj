@@ -129,6 +129,8 @@
     <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabaseFromConnectionStringSettings.cs" />
     <Compile Include="Fibonacci\Batch\BatchFibonacciToDatabaseBase.cs" />
     <Compile Include="Fibonacci\Batch\BatchFibonacciFromConnectionStringSettings.cs" />
+    <Compile Include="Fibonacci\Batch\SlowBatchFibonacci.cs" />
+    <Compile Include="Fibonacci\Batch\SlowBatchFibonacciToDatabase.cs" />
     <Compile Include="Fibonacci\Bulk\BulkInsertFibonacciToDatabaseFromConnectionStringSettings.cs" />
     <Compile Include="Fibonacci\Bulk\FibonacciBulkInsertBase.cs" />
     <Compile Include="Fibonacci\Bulk\FibonacciBulkInsertFromConnectionStringSettings.cs" />
