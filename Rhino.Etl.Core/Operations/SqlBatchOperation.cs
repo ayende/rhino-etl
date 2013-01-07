@@ -13,6 +13,7 @@ namespace Rhino.Etl.Core.Operations
     public abstract class SqlBatchOperation : AbstractDatabaseOperation
     {
         private int batchSize = 50;
+        private int timeout = 30;
 
         /// <summary>
         /// Gets or sets the size of the batch.
@@ -22,6 +23,15 @@ namespace Rhino.Etl.Core.Operations
         {
             get { return batchSize; }
             set { batchSize = value; }
+        }
+
+        /// <summary>
+        /// The timeout of the command set
+        /// </summary>
+        public int Timeout
+        {
+            get { return timeout; }
+            set { timeout = value; }
         }
 
         /// <summary>
@@ -55,7 +65,7 @@ namespace Rhino.Etl.Core.Operations
             using (SqlTransaction transaction = connection.BeginTransaction())
             {
                 SqlCommandSet commandSet = null;
-                CreateCommandSet(connection, transaction, ref commandSet);
+                CreateCommandSet(connection, transaction, ref commandSet, timeout);
                 foreach (Row row in rows)
                 {
                     SqlCommand command = new SqlCommand();
@@ -70,7 +80,7 @@ namespace Rhino.Etl.Core.Operations
                     {
                         Debug("Executing batch of {0} commands", commandSet.CountOfCommands);
                         commandSet.ExecuteNonQuery();
-                        CreateCommandSet(connection, transaction, ref commandSet);
+                        CreateCommandSet(connection, transaction, ref commandSet, timeout);
                     }
                 }
                 Debug("Executing final batch of {0} commands", commandSet.CountOfCommands);
@@ -99,14 +109,15 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="command">The command.</param>
         protected abstract void PrepareCommand(Row row, SqlCommand command);
 
-        private static void CreateCommandSet(SqlConnection connection, SqlTransaction transaction, ref SqlCommandSet commandSet)
+        private static void CreateCommandSet(SqlConnection connection, SqlTransaction transaction, ref SqlCommandSet commandSet, int timeout)
         {
             if (commandSet != null)
                 commandSet.Dispose();
             commandSet = new SqlCommandSet
             {
                 Connection = connection, 
-                Transaction = transaction
+                Transaction = transaction,
+                CommandTimeout = timeout
             };
         }
     }

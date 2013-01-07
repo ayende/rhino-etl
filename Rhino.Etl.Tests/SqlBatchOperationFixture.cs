@@ -19,6 +19,15 @@ namespace Rhino.Etl.Tests
         }
 
         [Fact]
+        public void CanInsertToDatabaseFromInMemoryCollectionWithSlowOperation()
+        {
+            var fibonaci = new SlowBatchFibonacci(25, Should.WorkFine);
+            fibonaci.Execute();
+
+            Assert25ThFibonacci();
+        }
+
+        [Fact]
         public void CanInsertToDatabaseFromConnectionStringSettingsAndInMemoryCollection()
         {
             BatchFibonacciFromConnectionStringSettings fibonaci = new BatchFibonacciFromConnectionStringSettings(25, Should.WorkFine);

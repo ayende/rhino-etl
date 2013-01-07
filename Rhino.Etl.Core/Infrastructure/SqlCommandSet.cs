@@ -50,6 +50,7 @@ namespace Rhino.Etl.Core.Infrastructure
         private readonly object instance;
         private readonly PropSetter<SqlConnection> connectionSetter;
         private readonly PropSetter<SqlTransaction> transactionSetter;
+        private readonly PropSetter<int> timeoutSetter;
         private readonly PropGetter<SqlConnection> connectionGetter;
         private readonly PropGetter<SqlCommand> commandGetter;
         private readonly AppendCommand doAppend;
@@ -69,7 +70,12 @@ namespace Rhino.Etl.Core.Infrastructure
         /// </summary>
         public SqlCommandSet()
         {
+
             instance = Activator.CreateInstance(sqlCmdSetType, true);
+
+            timeoutSetter = (PropSetter<int>)
+                               Delegate.CreateDelegate(typeof(PropSetter<int>),
+                                                       instance, "set_CommandTimeout");
             connectionSetter = (PropSetter<SqlConnection>)
                                Delegate.CreateDelegate(typeof(PropSetter<SqlConnection>),
                                                        instance, "set_Connection");
@@ -112,8 +118,7 @@ namespace Rhino.Etl.Core.Infrastructure
                 throw new ArgumentException("A command in SqlCommandSet must have parameters. You can't pass hardcoded sql strings.");
             }
         }
-
-
+        
         /// <summary>
         /// Return the batch command to be executed
         /// </summary>
@@ -157,6 +162,13 @@ namespace Rhino.Etl.Core.Infrastructure
             set { connectionSetter(value); }
         }
 
+        /// <summary>
+        /// Set the timeout of the commandSet
+        /// </summary>
+        public int CommandTimeout
+        {
+            set { timeoutSetter(value); }
+        }
 
         /// <summary>
         /// The transaction the batch will run as part of
