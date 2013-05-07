@@ -1,11 +1,9 @@
 properties { 
   $base_dir  = resolve-path .
   $lib_dir = "$base_dir\SharedLibs"
-  $build_dir = "$base_dir\build" 
-  $buildartifacts_dir = "$build_dir\" 
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.1.1.0"
-  $humanReadableversion = "1.1"
+  $version = "1.2.0.0"
+  $humanReadableversion = "1.2"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
@@ -15,7 +13,6 @@ properties {
 task default -depends Release
 
 task Clean { 
-  remove-item -force -recurse $buildartifacts_dir -ErrorAction SilentlyContinue 
   remove-item -force -recurse $release_dir -ErrorAction SilentlyContinue 
 } 
 
@@ -41,12 +38,10 @@ task Init -depends Clean {
 	}		
 		
 	new-item $release_dir -itemType directory 
-	new-item $buildartifacts_dir -itemType directory 
-	cp $tools_dir\XUnit\*.* $build_dir
 } 
 
 task Compile -depends Init { 
-  & msbuild "$sln_file" "/p:OutDir=$build_dir\\" /p:Configuration=Release /v:Minimal
+  & msbuild "$sln_file" /p:Configuration=Release /v:Minimal
   if ($lastExitCode -ne 0) {
         throw "Error: Failed to execute msbuild"
   }
@@ -54,8 +49,8 @@ task Compile -depends Init {
 
 task Test -depends Compile {
   $old = pwd
-  cd $build_dir
-  &.\xunit.console.exe "$build_dir\Rhino.Etl.Tests.dll"
+  cd $tools_dir\XUnit\
+  &.\xunit.console.exe "$base_dir\Rhino.Etl.Tests\bin\Release\Rhino.Etl.Tests.dll"
   if ($lastExitCode -ne 0) {
         throw "Error: Failed to execute tests"
     }
@@ -84,19 +79,29 @@ task Nuget {
       @("FileHelpers", "2.0.0.0") `
      ) `
     -files @( `
-      @("$build_dir\Rhino.Etl.Core.dll","lib"), `
-      @("$build_dir\Rhino.Etl.Core.xml","lib"), `
-      @("$build_dir\Rhino.Etl.Dsl.dll","lib"), `
-      @("$build_dir\Rhino.Etl.Dsl.xml","lib"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Core.dll","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Core.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Dsl.dll","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Dsl.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\**\*.cs","src\Rhino.Etl.Dsl"), `
+      @("$base_dir\Rhino.Etl.Core\**\*.cs","src\Rhino.Etl.Core"), `
       @("license.txt",""), `
       @("acknowledgements.txt","") `
     ) `
     -file "$base_dir\Rhino.Etl.nuspec"
-    .\Tools\NuGet.exe pack .\Rhino.Etl.nuspec
+    .\Tools\NuGet.exe pack .\Rhino.Etl.nuspec -Symbols
+    
+    # Regular
     if (test-path ".\Release\Rhino-Etl.$version.nupkg") {
       del ".\Release\Rhino-Etl.$version.nupkg"
     }
     move "Rhino-Etl.$version.nupkg" .\Release
+    
+    # Symbol
+    if (test-path ".\Release\Rhino-Etl.$version.symbols.nupkg") {
+      del ".\Release\Rhino-Etl.$version.symbols.nupkg"
+    }
+    move "Rhino-Etl.$version.symbols.nupkg" .\Release
 
   Generate-Nuget-Spec `
     -title "Rhino-Etl-Cmd" `
@@ -115,36 +120,46 @@ task Nuget {
       @("FileHelpers", "2.0.0.0") `
      ) `
     -files @( `
-      @("$build_dir\Rhino.Etl.Core.dll","lib"), `
-      @("$build_dir\Rhino.Etl.Core.xml","lib"), `
-      @("$build_dir\Rhino.Etl.Dsl.dll","lib"), `
-      @("$build_dir\Rhino.Etl.Dsl.xml","lib"), `
-      @("$build_dir\Rhino.Etl.Cmd.exe","lib"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.dll","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.dll","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Cmd.exe","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\**\*.cs","src\Rhino.Etl.Dsl"), `
+      @("$base_dir\Rhino.Etl.Core\**\*.cs","src\Rhino.Etl.Core"), `
+      @("$base_dir\Rhino.Etl.Cmd\**\*.cs","src\Rhino.Etl.Cmd"), `
       @("license.txt",""), `
       @("acknowledgements.txt","") `
     ) `
     -file "$base_dir\Rhino-Etl-Cmd.nuspec"
-    .\Tools\NuGet.exe pack .\Rhino-Etl-Cmd.nuspec
+    .\Tools\NuGet.exe pack .\Rhino-Etl-Cmd.nuspec -Symbols
+    
+    # Regular
     if (test-path ".\Release\Rhino-Etl-Cmd.$version.nupkg") {
       del ".\Release\Rhino-Etl-Cmd.$version.nupkg"
     }
     move "Rhino-Etl-Cmd.$version.nupkg" .\Release
-
+    
+    # Symbol
+    if (test-path ".\Release\Rhino-Etl-Cmd.$version.symbols.nupkg") {
+      del ".\Release\Rhino-Etl-Cmd.$version.symbols.nupkg"
+    }
+    move "Rhino-Etl-Cmd.$version.symbols.nupkg" .\Release
 }
 
 task DoRelease -depends Compile,NuGet {
 	& $tools_dir\zip.exe -9 -A -j $release_dir\Rhino.Etl-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
-		$build_dir\Rhino.Etl.Core.dll `
-		$build_dir\Rhino.Etl.Core.xml `
-		$build_dir\Rhino.Etl.Dsl.dll `
-		$build_dir\Rhino.Etl.Dsl.xml `
-		$build_dir\Rhino.Etl.Cmd.exe `
-		$build_dir\Rhino.DSL.dll `
-		$build_dir\log4net.dll `
-		$build_dir\Common.Logging.dll `
-		$build_dir\Common.Logging.Log4Net.dll `
-		$build_dir\Boo.* `
-		$build_dir\FileHelpers.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.xml `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.xml `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Cmd.exe `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.DSL.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\log4net.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.Log4Net.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Boo.* `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\FileHelpers.dll `
 		license.txt `
 		acknowledgements.txt
 	if ($lastExitCode -ne 0) {
