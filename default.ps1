@@ -2,7 +2,7 @@ properties {
   $base_dir  = resolve-path .
   $lib_dir = "$base_dir\SharedLibs"
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.2.0.0"
+  $version = "1.2.1.0"
   $humanReadableversion = "1.2"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
@@ -82,8 +82,10 @@ task Nuget {
     -files @( `
       @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Core.dll","lib\net35"), `
       @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Core.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Core.pdb","lib\net35"), `
       @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Dsl.dll","lib\net35"), `
       @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Dsl.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Dsl\bin\Release\Rhino.Etl.Dsl.pdb","lib\net35"), `
       @("$base_dir\Rhino.Etl.Dsl\**\*.cs","src\Rhino.Etl.Dsl"), `
       @("$base_dir\Rhino.Etl.Core\**\*.cs","src\Rhino.Etl.Core"), `
       @("license.txt",""), `
@@ -124,9 +126,12 @@ task Nuget {
     -files @( `
       @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.dll","lib\net35"), `
       @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Core.pdb","lib\net35"), `
       @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.dll","lib\net35"), `
       @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.xml","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Dsl.pdb","lib\net35"), `
       @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Cmd.exe","lib\net35"), `
+      @("$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.Etl.Cmd.pdb","lib\net35"), `
       @("$base_dir\Rhino.Etl.Dsl\**\*.cs","src\Rhino.Etl.Dsl"), `
       @("$base_dir\Rhino.Etl.Core\**\*.cs","src\Rhino.Etl.Core"), `
       @("$base_dir\Rhino.Etl.Cmd\**\*.cs","src\Rhino.Etl.Cmd"), `
