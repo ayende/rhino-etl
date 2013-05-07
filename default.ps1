@@ -72,6 +72,7 @@ task Nuget {
     -language "en-GB" `
     -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
     -licenceUrl "https://github.com/hibernating-rhinos/rhino-etl/blob/master/license.txt" `
+    -iconUrl "https://raw.github.com/wiki/hibernating-rhinos/rhino-esb/images/rhino-icon.jpg" `
     -dependencies @( `
       @("Boo", "0.9.4"), `
       @("RhinoDSL", "1.0.0"), `
@@ -111,6 +112,7 @@ task Nuget {
     -language "en-GB" `
     -projectURL "https://github.com/hibernating-rhinos/rhino-etl" `
     -licenceUrl "https://github.com/hibernating-rhinos/rhino-etl/blob/master/license.txt" `
+    -iconUrl "https://raw.github.com/wiki/hibernating-rhinos/rhino-esb/images/rhino-icon.jpg" `
     -dependencies @( `
       @("Boo", "0.9.4"), `
       @("RhinoDSL", "1.0.0"), `

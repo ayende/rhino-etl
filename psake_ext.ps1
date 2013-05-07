@@ -55,6 +55,7 @@ param(
   [string]$language,
   [string]$projectUrl,
   [string]$licenceUrl,
+  [string]$iconUrl,
   [array]$dependencies,
   [array]$files,
   [string]$file = $(throw "file is a required parameter.")
@@ -69,6 +70,7 @@ param(
         <language>$language</language>
         <projectUrl>$projectUrl</projectUrl>
         <licenseUrl>$licenceUrl</licenseUrl>
+        <iconUrl>$iconUrl</iconUrl>
 "
   $out = $out + "        <dependencies>
 "
