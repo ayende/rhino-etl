@@ -34,7 +34,7 @@ task Init -depends Clean {
 		-product "Developer freindly ETL Library for .NET $version" `
 		-version $version `
 		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2007 - 2009"
+		-copyright "Hibernating Rhinos, Ayende Rahien & Nathan Palmer 2007 - 2013"
 	}		
 		
 	new-item $release_dir -itemType directory 
