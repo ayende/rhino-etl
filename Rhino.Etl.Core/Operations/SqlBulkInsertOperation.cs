@@ -280,7 +280,7 @@ namespace Rhino.Etl.Core.Operations
             {
                 copy.ColumnMappings.Add(pair.Key, pair.Value);
             }
-            copy.NotifyAfter = notifyBatchSize;
+            copy.NotifyAfter = NotifyBatchSize;
             copy.SqlRowsCopied += onSqlRowsCopied;
             copy.DestinationTableName = TargetTable;
             copy.BulkCopyTimeout = Timeout;
