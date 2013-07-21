@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Data.Common;
 
 namespace Rhino.Etl.Core.Operations
 {
@@ -137,6 +138,19 @@ namespace Rhino.Etl.Core.Operations
             if(value==null)
                 return true;
             return SupportedTypes.ContainsKey(value.GetType());
+        }
+
+        /// <summary>
+        /// Determines if transaction is used
+        /// </summary>
+        /// <param name="connection">The connection.</param>
+        protected DbTransaction BeginTransaction(DbConnection connection)
+        {
+            if (UseTransaction)
+            {
+                return connection.BeginTransaction();
+            }
+            return null;
         }
     }
 }

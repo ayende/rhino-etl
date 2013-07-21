@@ -62,7 +62,7 @@ namespace Rhino.Etl.Core.Operations
         {
             Guard.Against<ArgumentException>(rows == null, "SqlBatchOperation cannot accept a null enumerator");
             using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringSettings))
-            using (SqlTransaction transaction = connection.BeginTransaction())
+            using (SqlTransaction transaction = (SqlTransaction) BeginTransaction(connection))
             {
                 SqlCommandSet commandSet = null;
                 CreateCommandSet(connection, transaction, ref commandSet, timeout);
@@ -89,15 +89,16 @@ namespace Rhino.Etl.Core.Operations
                 if (PipelineExecuter.HasErrors)
                 {
                     Warn(null, "Rolling back transaction in {0}", Name);
-                    transaction.Rollback();
+                    if (transaction != null) transaction.Rollback();
                     Warn(null, "Rolled back transaction in {0}", Name);
                 }
                 else
                 {
                     Debug("Committing {0}", Name);
-                    transaction.Commit();
+                    if (transaction != null) transaction.Commit();
                     Debug("Committed {0}", Name);
-                }
+                }                    
+
             }
             yield break;
         }

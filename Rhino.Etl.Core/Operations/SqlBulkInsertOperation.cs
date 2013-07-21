@@ -1,5 +1,4 @@
 using System.Configuration;
-using System.Data;
 using Rhino.Etl.Core.Infrastructure;
 
 namespace Rhino.Etl.Core.Operations
@@ -225,7 +224,7 @@ namespace Rhino.Etl.Core.Operations
             PrepareMapping();
             CreateInputSchema();
             using (SqlConnection connection = (SqlConnection)Use.Connection(ConnectionStringSettings))
-            using (SqlTransaction transaction = BeginTransaction(connection))
+            using (SqlTransaction transaction = (SqlTransaction) BeginTransaction(connection))
             {
                 sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);
                 DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_inputSchema, rows);
@@ -245,15 +244,6 @@ namespace Rhino.Etl.Core.Operations
                 }
             }
             yield break;
-        }
-
-        SqlTransaction BeginTransaction(SqlConnection connection)
-        {
-            if (UseTransaction)
-            {
-                return connection.BeginTransaction();
-            }
-            return null;
         }
 
         /// <summary>
