@@ -44,19 +44,5 @@ namespace Rhino.Etl.Core.Operations
             AddParameter(currentCommand, name, value);
         }
 
-        /// <summary>
-        /// Begins a transaction conditionally based on the UseTransaction property
-        /// </summary>
-        /// <param name="connection">The IDbConnection object you are working with</param>
-        /// <returns>An open IDbTransaction object or null.</returns>
-        protected IDbTransaction BeginTransaction(IDbConnection connection)
-        {
-            if (UseTransaction)
-            {
-                return connection.BeginTransaction();
-            }
-
-            return null;
-        }
     }
 }
