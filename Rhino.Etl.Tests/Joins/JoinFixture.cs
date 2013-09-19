@@ -83,5 +83,80 @@ namespace Rhino.Etl.Tests.Joins
                 Assert.Equal(5, items[2]["person_id"]);
             }
         }
+
+        [Fact]
+        public void SortMergeInnerJoin()
+        {
+            using (InnerMergeJoinUsersToPeopleByEmail join = new InnerMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(1, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
+            }
+        }
+
+        [Fact]
+        public void SortMergeLeftJoin()
+        {
+            using (LeftMergeJoinUsersToPeopleByEmail join = new LeftMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(2, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
+                Assert.Null(items[1]["person_id"]);
+                Assert.Equal("bar", items[1]["name"]);
+            }
+        }
+
+        [Fact]
+        public void SortMergeRightJoin()
+        {
+            using (RightMergeJoinUsersToPeopleByEmail join = new RightMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(2, items.Count);
+                Assert.Equal(3, items[0]["person_id"]);
+                Assert.Null(items[1]["name"]);
+                Assert.Equal(5, items[1]["person_id"]);
+            }
+        }
+
+        [Fact]
+        public void SortMergeFullJoin()
+        {
+            using (FullMergeJoinUsersToPeopleByEmail join = new FullMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(3, items.Count);
+
+                Assert.Equal(3, items[0]["person_id"]);
+
+                Assert.Null(items[1]["person_id"]);
+                Assert.Equal("bar", items[1]["name"]);
+
+                Assert.Null(items[2]["name"]);
+                Assert.Equal(5, items[2]["person_id"]);
+            }
+        }
     }
 }
