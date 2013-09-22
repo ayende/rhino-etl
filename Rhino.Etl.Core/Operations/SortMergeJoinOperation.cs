@@ -79,17 +79,11 @@
                     else
                         LeftOrphanRow(leftRow);
 
-                    if ((JoinType & JoinType.Right) != 0)
-                        yield return MergeRows(new Row(), rightRow);
-
                     leftRows.MoveNext();
                     leftRow = (Row) leftRows.Current;
                 }
                 else if (match > 0)
                 {
-                    if ((JoinType & JoinType.Left) != 0)
-                        yield return MergeRows(leftRow, new Row());
-
                     if ((JoinType & JoinType.Right) != 0)
                         yield return MergeRows(new Row(), rightRow);
                     else
@@ -99,6 +93,9 @@
                     rightRow = (Row) rightRows.Current;
                 }
             }
+
+            if (leftRow == null && rightRow != null && (JoinType & JoinType.Right) != 0)
+                yield return MergeRows(new Row(), rightRow);
         }
 
         /// <summary>
