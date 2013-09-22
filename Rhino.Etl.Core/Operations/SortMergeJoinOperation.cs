@@ -68,10 +68,12 @@
                 if (match == 0)
                 {
                     mergedRow = MergeRows(leftRow, rightRow);
-                    leftRows.MoveNext();
-                    leftRow = (Row)leftRows.Current;
-                    rightRows.MoveNext();
-                    rightRow = (Row)rightRows.Current;
+                    leftRow = leftRows.MoveNext()
+                        ? (Row) leftRows.Current
+                        : null;
+                    rightRow = rightRows.MoveNext()
+                        ? (Row) rightRows.Current
+                        : null;
                 }
                 else if (match < 0)
                 {
@@ -80,8 +82,9 @@
                     else
                         LeftOrphanRow(leftRow);
 
-                    leftRows.MoveNext();
-                    leftRow = (Row) leftRows.Current;
+                    leftRow = leftRows.MoveNext()
+                        ? (Row)leftRows.Current
+                        : null;
                 }
                 else if (match > 0)
                 {
@@ -90,8 +93,9 @@
                     else
                         RightOrphanRow(rightRow);
 
-                    rightRows.MoveNext();
-                    rightRow = (Row) rightRows.Current;
+                    rightRow = rightRows.MoveNext()
+                        ? (Row)rightRows.Current
+                        : null;
                 }
 
                 if (mergedRow != null)
