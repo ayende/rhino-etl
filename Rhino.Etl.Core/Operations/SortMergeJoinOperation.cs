@@ -63,10 +63,11 @@
             while (leftRow != null && rightRow != null)
             {
                 var match = MatchJoinCondition(leftRow, rightRow);
+                Row mergedRow = null;
 
                 if (match == 0)
                 {
-                    yield return MergeRows(leftRow, rightRow);
+                    mergedRow = MergeRows(leftRow, rightRow);
                     leftRows.MoveNext();
                     leftRow = (Row)leftRows.Current;
                     rightRows.MoveNext();
@@ -75,7 +76,7 @@
                 else if (match < 0)
                 {
                     if ((JoinType & JoinType.Left) != 0)
-                        yield return MergeRows(leftRow, new Row());
+                        mergedRow = MergeRows(leftRow, new Row());
                     else
                         LeftOrphanRow(leftRow);
 
@@ -85,13 +86,16 @@
                 else if (match > 0)
                 {
                     if ((JoinType & JoinType.Right) != 0)
-                        yield return MergeRows(new Row(), rightRow);
+                        mergedRow = MergeRows(new Row(), rightRow);
                     else
                         RightOrphanRow(rightRow);
 
                     rightRows.MoveNext();
                     rightRow = (Row) rightRows.Current;
                 }
+
+                if (mergedRow != null)
+                    yield return mergedRow;
             }
 
             if (leftRow == null && rightRow != null && (JoinType & JoinType.Right) != 0)
