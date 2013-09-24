@@ -98,6 +98,7 @@
     <Compile Include="Aggregation\BaseDslTest.cs" />
     <Compile Include="Aggregation\CostPerProductAggregation.cs" />
     <Compile Include="Aggregation\RowCount.cs" />
+    <Compile Include="Aggregation\SortedCostPerProductAggregation.cs" />
     <Compile Include="BaseFibonacciTest.cs" />
     <None Include="Dsl\Aggregate.boo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
