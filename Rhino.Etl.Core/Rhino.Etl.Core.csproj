@@ -86,6 +86,7 @@
     <Compile Include="Operations\JoinType.cs" />
     <Compile Include="Operations\MultiThreadedBranchingOperation.cs" />
     <Compile Include="Operations\NestedLoopsJoinOperation.cs" />
+    <Compile Include="Operations\SortMergeJoinOperation.cs" />
     <Compile Include="Pipelines\AbstractPipelineExecuter.cs" />
     <Compile Include="ConventionOperations\ConventionInputCommandOperation.cs" />
     <Compile Include="ConventionOperations\ConventionOutputCommandOperation.cs" />
