@@ -60,11 +60,11 @@
             rightRows.MoveNext();
             Row rightRow = (Row) rightRows.Current;
 
-            while (leftRow != null && rightRow != null)
+            while (leftRow != null || rightRow != null)
             {
-                var match = MatchJoinCondition(leftRow, rightRow);
                 Row mergedRow = null;
 
+                var match = CompareRows(leftRow, rightRow);
                 if (match == 0)
                 {
                     mergedRow = MergeRows(leftRow, rightRow);
@@ -101,9 +101,13 @@
                 if (mergedRow != null)
                     yield return mergedRow;
             }
+        }
 
-            if (leftRow == null && rightRow != null && (JoinType & JoinType.Right) != 0)
-                yield return MergeRows(new Row(), rightRow);
+        private int CompareRows(Row leftRow, Row rightRow)
+        {
+            return leftRow == null
+                ? (rightRow == null ? 0 : 1)
+                : (rightRow == null ? -1 : MatchJoinCondition(leftRow, rightRow));
         }
 
         /// <summary>

@@ -19,7 +19,6 @@ namespace Rhino.Etl.Tests.Joins
 
             AddPerson(3, "foo@example.org");
             AddPerson(5, "silver@exaple.org");
-
         }
 
         protected void AddPerson(int id, string email)
