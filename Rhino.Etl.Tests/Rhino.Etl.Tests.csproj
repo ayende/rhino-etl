@@ -145,6 +145,7 @@
     <Compile Include="BaseUserToPeopleTest.cs" />
     <Compile Include="Fibonacci\Output\Should.cs" />
     <Compile Include="InformationFixture.cs" />
+    <Compile Include="Infrastructure\UseFixture.cs" />
     <Compile Include="Integration\UsersToPeopleFromConnectionStringSettings.cs" />
     <Compile Include="Integration\DatabaseToDatabaseWithTransformations.cs" />
     <Compile Include="Integration\ReadUsers.cs" />
