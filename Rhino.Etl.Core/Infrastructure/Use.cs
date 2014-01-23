@@ -231,6 +231,8 @@ namespace Rhino.Etl.Core.Infrastructure
         {
             if (connectionString == null)
                 throw new InvalidOperationException("Null ConnectionStringSettings specified");
+            if (connectionString.ProviderName == null)
+                throw new InvalidOperationException("Null ProviderName specified");
 
             IDbConnection connection = null;
 
@@ -247,7 +249,6 @@ namespace Rhino.Etl.Core.Infrastructure
             if (connection == null)
             {
                 // ADO.NET compatible usage of provider name.
-                if (string.IsNullOrEmpty(providerName)) providerName = "System.Data.SqlClient";
                 connection = DbProviderFactories.GetFactory(providerName).CreateConnection();
             }
 

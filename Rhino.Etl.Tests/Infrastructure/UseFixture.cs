@@ -31,17 +31,5 @@
                 Assert.NotNull(connection);
             }
         }
-
-        [Fact]
-        public void UsesSqlClientAsDefaultProviderInConnectionStringSettings()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["test"].ConnectionString;
-            ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings("test2", connectionString);
-
-            using (IDbConnection connection = Use.Connection(connectionStringSettings))
-            {
-                Assert.NotNull(connection);
-            }
-        }
     }
 }
