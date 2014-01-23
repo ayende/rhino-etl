@@ -158,5 +158,51 @@ namespace Rhino.Etl.Tests.Joins
                 Assert.Equal(5, items[2]["person_id"]);
             }
         }
+
+        [Fact]
+        public void SortMergeFullJoinMergesMultipleNonMatchingLeftRowsAtEnd()
+        {
+            AddUser("toby", "toby@test.org");
+            AddUser("tom", "tom@test.org");
+
+            using (FullMergeJoinUsersToPeopleByEmail join = new FullMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(5, items.Count);
+                Assert.Null(items[3]["person_id"]);
+                Assert.Equal("toby", items[3]["name"]);
+
+                Assert.Null(items[4]["person_id"]);
+                Assert.Equal("tom", items[4]["name"]);
+            }
+        }
+
+        [Fact]
+        public void SortMergeFullJoinMergesMultipleNonMatchingRightRowsAtEnd()
+        {
+            AddPerson(8, "toby@test.org");
+            AddPerson(10, "tom@test.org");
+
+            using (FullMergeJoinUsersToPeopleByEmail join = new FullMergeJoinUsersToPeopleByEmail())
+            {
+                join.Left(new GenericEnumerableOperation(left))
+                    .Right(new GenericEnumerableOperation(right));
+                join.PrepareForExecution(new SingleThreadedPipelineExecuter());
+                IEnumerable<Row> result = join.Execute(null);
+                List<Row> items = new List<Row>(result);
+
+                Assert.Equal(5, items.Count);
+                Assert.Equal(8, items[3]["person_id"]);
+                Assert.Null(items[3]["name"]);
+
+                Assert.Equal(10, items[4]["person_id"]);
+                Assert.Null(items[4]["name"]);
+            }
+        }
     }
 }
