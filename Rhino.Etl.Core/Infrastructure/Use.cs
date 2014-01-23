@@ -4,6 +4,8 @@ using System.Data;
 
 namespace Rhino.Etl.Core.Infrastructure
 {
+    using System.Data.Common;
+
     /// <summary>
     /// Helper class to provide simple data access, when we want to access the ADO.Net
     /// library directly. 
@@ -24,10 +26,6 @@ namespace Rhino.Etl.Core.Infrastructure
         public delegate void Proc(IDbCommand command);
 
         #endregion
-
-        private static readonly object activeConnectionKey = new object();
-        private static readonly object activeTransactionKey = new object();
-        private static readonly object transactionCounterKey = new object();
 
         /// <summary>
         /// Gets or sets the active connection.
@@ -233,14 +231,29 @@ namespace Rhino.Etl.Core.Infrastructure
         {
             if (connectionString == null)
                 throw new InvalidOperationException("Null ConnectionStringSettings specified");
-            Type type = Type.GetType(connectionString.ProviderName);
-            if (type == null)
-                throw new InvalidOperationException("The type name '" + connectionString.ProviderName +
-                                                    "' could not be found for connection string: " + connectionString.Name);
-            IDbConnection connection = (IDbConnection)Activator.CreateInstance(type);
+
+            IDbConnection connection = null;
+
+            string providerName = connectionString.ProviderName;
+            if (providerName != null)
+            {
+                // Backwards compatibility: ProviderName could be an assembly qualified connection type name.
+                Type connectionType = Type.GetType(providerName);
+                if (connectionType != null)
+                {
+                    connection = Activator.CreateInstance(connectionType) as IDbConnection;
+                }
+            }
+            if (connection == null)
+            {
+                // ADO.NET compatible usage of provider name.
+                if (string.IsNullOrEmpty(providerName)) providerName = "System.Data.SqlClient";
+                connection = DbProviderFactories.GetFactory(providerName).CreateConnection();
+            }
+
             connection.ConnectionString = connectionString.ConnectionString;
             connection.Open();
-            return connection;            
+            return connection;
         }
     }
 }
