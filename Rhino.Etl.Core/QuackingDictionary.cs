@@ -15,6 +15,20 @@ namespace Rhino.Etl.Core
     public class QuackingDictionary : IDictionary, IQuackFu
     {
         /// <summary>
+        /// Default value for the Comparer property.
+        /// Defines how keys are compared (case sensitivity, hashing algorithm, etc.)
+        /// </summary>
+        public static StringComparer DefaultComparer { get; set; }
+
+        /// <summary>
+        /// Initialization for static members/properties
+        /// </summary>
+        static QuackingDictionary()
+        {
+            DefaultComparer = StringComparer.InvariantCultureIgnoreCase;
+        }
+
+        /// <summary>
         /// The inner items collection
         /// </summary>
         protected IDictionary items;
@@ -25,6 +39,11 @@ namespace Rhino.Etl.Core
         protected string lastAccess;
 
         private bool throwOnMissing = false;
+
+        /// <summary>
+        /// Defines how keys are compared (case sensitivity, hashing algorithm, etc.)
+        /// </summary>
+        protected StringComparer Comparer { get; set; }
 
         /// <summary>
         /// Set the flag to thorw if key not found.
@@ -38,12 +57,24 @@ namespace Rhino.Etl.Core
         /// Initializes a new instance of the <see cref="QuackingDictionary"/> class.
         /// </summary>
         /// <param name="items">The items.</param>
-        public QuackingDictionary(IDictionary items)
+        /// <param name="comparer">Defines key equality</param>
+        public QuackingDictionary(IDictionary items, StringComparer comparer)
         {
+            Comparer = comparer;
+
             if (items != null)
-                this.items = new Hashtable(items, StringComparer.InvariantCultureIgnoreCase);
+                this.items = new Hashtable(items, Comparer);
             else
-                this.items = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
+                this.items = new Hashtable(Comparer);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuackingDictionary"/> class.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        public QuackingDictionary(IDictionary items)
+            : this(items, DefaultComparer)
+        {
         }
 
 

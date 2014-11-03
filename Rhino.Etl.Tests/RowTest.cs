@@ -45,7 +45,33 @@ namespace Rhino.Etl.Tests
             Row second = new Row();
             second["a"] = 1;
 
+            Row third = second.Clone();
+            
+            Row fourth = new Row();
+            fourth.Copy(third);
+
             Assert.True(first.Equals(second));
+            Assert.True(first.Equals(third));
+            Assert.True(first.Equals(fourth));
+        }
+
+        [Fact]
+        public void Should_respect_stringcomparer_specification()
+        {
+            Row first = new Row(StringComparer.Ordinal);
+            first["A"] = 1;
+
+            Row second = new Row(StringComparer.Ordinal);
+            second["a"] = 1;
+
+            Row third = second.Clone();
+
+            Row fourth = new Row();
+            fourth.Copy(second);
+
+            Assert.False(first.Equals(second));
+            Assert.False(first.Equals(third));
+            Assert.False(first.Equals(fourth));
         }
 
         [Theory]
