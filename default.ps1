@@ -2,7 +2,7 @@ properties {
   $base_dir  = resolve-path .
   $lib_dir = "$base_dir\SharedLibs"
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.2.3.0"
+  $version = "1.2.5.0"
   $humanReadableversion = "1.2"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
@@ -34,7 +34,7 @@ task Init -depends Clean {
 		-product "Developer freindly ETL Library for .NET $version" `
 		-version $version `
 		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos, Ayende Rahien & Nathan Palmer 2007 - 2013"
+		-copyright "Hibernating Rhinos, Ayende Rahien & Nathan Palmer 2007 - 2015"
 	}		
 		
 	new-item $release_dir -itemType directory 
