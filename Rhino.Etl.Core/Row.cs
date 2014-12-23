@@ -25,8 +25,17 @@ namespace Rhino.Etl.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="Row"/> class.
         /// </summary>
+        /// <param name="comparer">Defines key equality</param>
+        public Row(StringComparer comparer)
+            : base(new Hashtable(), comparer)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Row"/> class.
+        /// </summary>
         public Row()
-            : base(new Hashtable(StringComparer.InvariantCultureIgnoreCase))
+            : base(new Hashtable())
         {
         }
 
@@ -34,8 +43,9 @@ namespace Rhino.Etl.Core
         /// Initializes a new instance of the <see cref="Row"/> class.
         /// </summary>
         /// <param name="itemsToClone">The items to clone.</param>
-        protected Row(IDictionary itemsToClone)
-            : base(new Hashtable(itemsToClone, StringComparer.InvariantCultureIgnoreCase))
+        /// <param name="comparer">Defines key equality</param>
+        protected Row(IDictionary itemsToClone, StringComparer comparer)
+            : base(itemsToClone, comparer)
         {
         }
 
@@ -46,7 +56,7 @@ namespace Rhino.Etl.Core
         /// <param name="source">The source row.</param>
         public void Copy(IDictionary source)
         {
-            items = new Hashtable(source, StringComparer.InvariantCultureIgnoreCase);
+            items = new Hashtable(source, Comparer);
         }
 
         /// <summary>
@@ -72,7 +82,7 @@ namespace Rhino.Etl.Core
         /// <returns></returns>
         public Row Clone()
         {
-            Row row = new Row(this);
+            Row row = new Row(this, Comparer);
             return row;
         }
 
@@ -85,7 +95,10 @@ namespace Rhino.Etl.Core
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Row other)
         {
-            if(Columns.SequenceEqual(other.Columns, StringComparer.InvariantCultureIgnoreCase) == false)
+            if (!Comparer.Equals(other.Comparer))
+                return false;
+
+            if(Columns.SequenceEqual(other.Columns, Comparer) == false)
                 return false;
 
             foreach (var key in items.Keys)
