@@ -42,5 +42,5 @@ Running the tests requires access to a database called 'test' on the default ins
   
   * _Released_: September 24th 2013
   * [Sort merge join](https://github.com/hibernating-rhinos/rhino-etl/pull/11)
-  * [Added an aggregation operation that assumes a sorted rowset)(https://github.com/hibernating-rhinos/rhino-etl/pull/10)
+  * [Added an aggregation operation that assumes a sorted rowset](https://github.com/hibernating-rhinos/rhino-etl/pull/10)
 
