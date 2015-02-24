@@ -1,22 +1,19 @@
 namespace Rhino.Etl.Core.Operations
 {
+    using Enumerables;
     using System;
     using System.Collections.Generic;
-    using Enumerables;
 
     /// <summary>
     /// Perform a join between two sources. The left part of the join is optional and if not specified it will use the current pipeline as input.
     /// </summary>
-    public abstract class JoinOperation : AbstractOperation
+    public abstract class JoinOperation : AbstractJoinOperation
     {
-        private readonly PartialProcessOperation left = new PartialProcessOperation();
-        private readonly PartialProcessOperation right = new PartialProcessOperation();
         private JoinType jointype;
         private string[] leftColumns;
         private string[] rightColumns;
         private Dictionary<Row, object> rightRowsWereMatched = new Dictionary<Row, object>();
         private Dictionary<ObjectArrayKeys, List<Row>> rightRowsByJoinKey = new Dictionary<ObjectArrayKeys, List<Row>>();
-        private bool leftRegistered = false;
 
         /// <summary>
         /// Sets the right part of the join
@@ -27,7 +24,6 @@ namespace Rhino.Etl.Core.Operations
             right.Register(value);
             return this;
         }
-
 
         /// <summary>
         /// Sets the left part of the join
@@ -48,6 +44,10 @@ namespace Rhino.Etl.Core.Operations
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
             PrepareForJoin();
+
+            SetupJoinConditions();
+            Guard.Against(leftColumns == null, "You must setup the left columns");
+            Guard.Against(rightColumns == null, "You must setup the right columns");
 
             IEnumerable<Row> rightEnumerable = GetRightEnumerable();
 
@@ -86,19 +86,6 @@ namespace Rhino.Etl.Core.Operations
             }
         }
 
-        private void PrepareForJoin()
-        {
-            Initialize();
-
-            Guard.Against(left == null, "Left branch of a join cannot be null");
-            Guard.Against(right == null, "Right branch of a join cannot be null");
-
-            SetupJoinConditions();
-
-            Guard.Against(leftColumns == null, "You must setup the left columns");
-            Guard.Against(rightColumns == null, "You must setup the right columns");
-        }
-
         private IEnumerable<Row> GetRightEnumerable()
         {
             IEnumerable<Row> rightEnumerable = new CachingEnumerable<Row>(
@@ -115,42 +102,6 @@ namespace Rhino.Etl.Core.Operations
                 rowsForKey.Add(row);
             }
             return rightEnumerable;
-        }
-
-        /// <summary>
-        /// Called when a row on the right side was filtered by
-        /// the join condition, allow a derived class to perform 
-        /// logic associated to that, such as logging
-        /// </summary>
-        protected virtual void RightOrphanRow(Row row)
-        {
-
-        }
-
-        /// <summary>
-        /// Called when a row on the left side was filtered by
-        /// the join condition, allow a derived class to perform 
-        /// logic associated to that, such as logging
-        /// </summary>
-        /// <param name="row">The row.</param>
-        protected virtual void LeftOrphanRow(Row row)
-        {
-
-        }
-
-        /// <summary>
-        /// Merges the two rows into a single row
-        /// </summary>
-        /// <param name="leftRow">The left row.</param>
-        /// <param name="rightRow">The right row.</param>
-        /// <returns></returns>
-        protected abstract Row MergeRows(Row leftRow, Row rightRow);
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        protected virtual void Initialize()
-        {
         }
 
         /// <summary>
@@ -176,7 +127,6 @@ namespace Rhino.Etl.Core.Operations
             get { return new JoinBuilder(this, JoinType.Left); }
         }
 
-
         /// <summary>
         /// Create a right outer join
         /// </summary>
@@ -186,7 +136,6 @@ namespace Rhino.Etl.Core.Operations
             get { return new JoinBuilder(this, JoinType.Right); }
         }
 
-
         /// <summary>
         /// Create a full outer join
         /// </summary>
@@ -194,43 +143,6 @@ namespace Rhino.Etl.Core.Operations
         protected JoinBuilder FullOuterJoin
         {
             get { return new JoinBuilder(this, JoinType.Full); }
-        }
-
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public override void Dispose()
-        {
-            left.Dispose();
-            right.Dispose();
-        }
-
-
-        /// <summary>
-        /// Initializes this instance
-        /// </summary>
-        /// <param name="pipelineExecuter">The current pipeline executer.</param>
-        public override void PrepareForExecution(IPipelineExecuter pipelineExecuter)
-        {
-            left.PrepareForExecution(pipelineExecuter);
-            right.PrepareForExecution(pipelineExecuter);
-        }
-
-        /// <summary>
-        /// Gets all errors that occured when running this operation
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<Exception> GetAllErrors()
-        {
-            foreach (Exception error in left.GetAllErrors())
-            {
-                yield return error;
-            }
-            foreach (Exception error in right.GetAllErrors())
-            {
-                yield return error;
-            }
         }
 
         /// <summary>
@@ -277,36 +189,36 @@ namespace Rhino.Etl.Core.Operations
         ///    <summary>
         ///    Occurs when    a row is processed.
         ///    </summary>
-        public override    event Action<IOperation, Row> OnRowProcessed
+        public override event Action<IOperation, Row> OnRowProcessed
         {
             add
             {
-                foreach    (IOperation    operation in new[] { left, right })
-                    operation.OnRowProcessed +=    value;
-                base.OnRowProcessed    += value;
+                foreach (IOperation operation in new[] { left, right })
+                    operation.OnRowProcessed += value;
+                base.OnRowProcessed += value;
             }
             remove
             {
-                foreach    (IOperation    operation in new[] { left, right })
-                    operation.OnRowProcessed -=    value;
-                base.OnRowProcessed    -= value;
+                foreach (IOperation operation in new[] { left, right })
+                    operation.OnRowProcessed -= value;
+                base.OnRowProcessed -= value;
             }
         }
 
         ///    <summary>
         ///    Occurs when    all    the    rows has finished processing.
         ///    </summary>
-        public override    event Action<IOperation> OnFinishedProcessing
+        public override event Action<IOperation> OnFinishedProcessing
         {
             add
             {
-                foreach    (IOperation    operation in new[] { left, right })
+                foreach (IOperation operation in new[] { left, right })
                     operation.OnFinishedProcessing += value;
                 base.OnFinishedProcessing += value;
             }
             remove
             {
-                foreach    (IOperation    operation in new[] { left, right })
+                foreach (IOperation operation in new[] { left, right })
                     operation.OnFinishedProcessing -= value;
                 base.OnFinishedProcessing -= value;
             }
