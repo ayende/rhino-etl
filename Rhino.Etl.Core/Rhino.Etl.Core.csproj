@@ -60,6 +60,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\SharedLibs\Common.Logging\Common.Logging.Core.dll</HintPath>
+    </Reference>
     <Reference Include="FileHelpers">
       <HintPath>..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
     </Reference>

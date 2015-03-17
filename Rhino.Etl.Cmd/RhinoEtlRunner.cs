@@ -1,10 +1,9 @@
-using System.Collections.Specialized;
-using Common.Logging.Log4Net;
-
 namespace Rhino.Etl.Cmd
 {
     using System;
     using System.IO;
+    using Common.Logging.Configuration;
+    using Common.Logging.Log4Net;
     using Core;
     using log4net;
     using log4net.Config;

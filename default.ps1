@@ -76,7 +76,8 @@ task Nuget {
     -dependencies @( `
       @("Boo", "0.9.4"), `
       @("RhinoDSL", "1.0.0"), `
-      @("Common.Logging", "2.0.0"), `
+      @("Common.Logging", "3.0.0"), `
+      @("Common.Logging.Core", "3.0.0"), `
       @("FileHelpers", "2.0.0.0") `
      ) `
     -files @( `
@@ -118,8 +119,9 @@ task Nuget {
     -dependencies @( `
       @("Boo", "0.9.4"), `
       @("RhinoDSL", "1.0.0"), `
-      @("Common.Logging", "2.0.0"), `
-      @("Common.Logging.Log4Net", "2.0.0"), `
+      @("Common.Logging", "3.0.0"), `
+      @("Common.Logging.Core", "3.0.0"), `
+      @("Common.Logging.Log4Net1210", "3.0.0"), `
       @("log4net", "1.2.10"), `
       @("FileHelpers", "2.0.0.0") `
      ) `
@@ -164,7 +166,8 @@ task DoRelease -depends Compile,NuGet {
 		$base_dir\Rhino.Etl.Cmd\bin\Release\Rhino.DSL.dll `
 		$base_dir\Rhino.Etl.Cmd\bin\Release\log4net.dll `
 		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.dll `
-		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.Log4Net.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.Core.dll `
+		$base_dir\Rhino.Etl.Cmd\bin\Release\Common.Logging.Log4Net1210.dll `
 		$base_dir\Rhino.Etl.Cmd\bin\Release\Boo.* `
 		$base_dir\Rhino.Etl.Cmd\bin\Release\FileHelpers.dll `
 		license.txt `
