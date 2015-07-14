@@ -52,7 +52,7 @@ namespace Rhino.Etl.Core.Operations
                 if (PipelineExecuter.HasErrors)
                 {
                     Warn("Rolling back transaction in {0}", Name);
-                    transaction.Rollback();
+                    if (transaction != null) transaction.Rollback();
                     Warn("Rolled back transaction in {0}", Name);
                 }
                 else
