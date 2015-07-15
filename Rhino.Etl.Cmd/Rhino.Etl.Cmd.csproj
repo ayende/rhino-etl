@@ -64,8 +64,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Log4Net">
-      <HintPath>..\SharedLibs\Common.Logging\Common.Logging.Log4Net.dll</HintPath>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\SharedLibs\Common.Logging\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net1210">
+      <HintPath>..\SharedLibs\Common.Logging\Common.Logging.Log4Net1210.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
