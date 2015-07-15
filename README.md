@@ -27,6 +27,18 @@ Running the tests requires access to a database called 'test' on the default ins
   
 # Releases
 
+## 1.3.1
+
+  * _Released_: July 15th 2015
+  * *BREAKING CHANGE*
+  * [Updated Common.Logging to version 3.0.0](https://github.com/hibernating-rhinos/rhino-etl/pull/21)
+
+## 1.2.6
+
+  * _Released_: July 15th 2015
+  * [Bug Fix for issue: JoinOperation errors are not propagated to the main EtlProcess](https://github.com/hibernating-rhinos/rhino-etl/pull/19)
+  * [Update OutputCommandOperation.cs](https://github.com/hibernating-rhinos/rhino-etl/pull/22)
+
 ## 1.2.5
 
   * _Released_: December 23rd 2014

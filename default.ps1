@@ -2,8 +2,8 @@ properties {
   $base_dir  = resolve-path .
   $lib_dir = "$base_dir\SharedLibs"
   $sln_file = "$base_dir\Rhino.Etl.sln" 
-  $version = "1.2.5.0"
-  $humanReadableversion = "1.2"
+  $version = "1.3.1.0"
+  $humanReadableversion = "1.3"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
   $uploadCategory = "Rhino-ETL"
