@@ -1,20 +1,18 @@
 namespace Rhino.Etl.Core.Operations
 {
+    using Enumerables;
     using System;
     using System.Collections.Generic;
-    using Enumerables;
 
     /// <summary>
     /// Perform a join between two sources. The left part of the join is optional and if not specified it will use the current pipeline as input.
     /// </summary>
-    public abstract class NestedLoopsJoinOperation : AbstractOperation
+    public abstract class NestedLoopsJoinOperation : AbstractJoinOperation
     {
-        private readonly PartialProcessOperation left = new PartialProcessOperation();
-        private readonly PartialProcessOperation right = new PartialProcessOperation();
         private static readonly string IsEmptyRowMarker = Guid.NewGuid().ToString();
-        private bool leftRegistered = false;
 
         private Row currentRightRow, currentLeftRow;
+
         /// <summary>
         /// Sets the right part of the join
         /// </summary>
@@ -43,10 +41,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         public override IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
-            Initialize();
-
-            Guard.Against(left == null, "Left branch of a join cannot be null");
-            Guard.Against(right == null, "Right branch of a join cannot be null");
+            PrepareForJoin();
 
             Dictionary<Row, object> matchedRightRows = new Dictionary<Row, object>();
             CachingEnumerable<Row> rightEnumerable = new CachingEnumerable<Row>(
@@ -94,84 +89,12 @@ namespace Rhino.Etl.Core.Operations
         }
 
         /// <summary>
-        /// Called when a row on the right side was filtered by
-        /// the join condition, allow a derived class to perform 
-        /// logic associated to that, such as logging
-        /// </summary>
-        protected virtual void RightOrphanRow(Row row)
-        {
-            
-        }
-
-        /// <summary>
-        /// Called when a row on the left side was filtered by
-        /// the join condition, allow a derived class to perform 
-        /// logic associated to that, such as logging
-        /// </summary>
-        /// <param name="row">The row.</param>
-        protected virtual void LeftOrphanRow(Row row)
-        {
-            
-        }
-
-        /// <summary>
-        /// Merges the two rows into a single row
-        /// </summary>
-        /// <param name="leftRow">The left row.</param>
-        /// <param name="rightRow">The right row.</param>
-        /// <returns></returns>
-        protected abstract Row MergeRows(Row leftRow, Row rightRow);
-
-        /// <summary>
         /// Check if the two rows match to the join condition.
         /// </summary>
         /// <param name="leftRow">The left row.</param>
         /// <param name="rightRow">The right row.</param>
         /// <returns></returns>
         protected abstract bool MatchJoinCondition(Row leftRow, Row rightRow);
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        protected virtual void Initialize()
-        {
-        }
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public override void Dispose()
-        {
-            left.Dispose();
-            right.Dispose();
-        }
-
-
-        /// <summary>
-        /// Initializes this instance
-        /// </summary>
-        /// <param name="pipelineExecuter">The current pipeline executer.</param>
-        public override void PrepareForExecution(IPipelineExecuter pipelineExecuter)
-        {
-            left.PrepareForExecution(pipelineExecuter);
-            right.PrepareForExecution(pipelineExecuter);
-        }
-
-        /// <summary>
-        /// Gets all errors that occured when running this operation
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<Exception> GetAllErrors()
-        {
-            foreach (Exception error in left.GetAllErrors())
-            {
-                yield return error;
-            }
-            foreach (Exception error in right.GetAllErrors())
-            {
-                yield return error;
-            }
-        }
 
         /// <summary>
         /// Perform an inner join equality on the two objects.
@@ -182,7 +105,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         protected virtual bool InnerJoin(object left, object right)
         {
-            if(IsEmptyRow(currentLeftRow) || IsEmptyRow(currentRightRow))
+            if (IsEmptyRow(currentLeftRow) || IsEmptyRow(currentRightRow))
                 return false;
             if (left == null || right == null)
                 return false;
@@ -205,7 +128,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         protected virtual bool LeftJoin(object left, object right)
         {
-            if(IsEmptyRow(currentRightRow))
+            if (IsEmptyRow(currentRightRow))
                 return true;
             if (left == null || right == null)
                 return false;
@@ -223,7 +146,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         protected virtual bool RightJoin(object left, object right)
         {
-            if(IsEmptyRow(currentLeftRow))
+            if (IsEmptyRow(currentLeftRow))
                 return true;
             if (left == null || right == null)
                 return false;
@@ -240,7 +163,7 @@ namespace Rhino.Etl.Core.Operations
         /// <returns></returns>
         protected virtual bool FullJoin(object left, object right)
         {
-            if(IsEmptyRow(currentLeftRow) || IsEmptyRow(currentRightRow))
+            if (IsEmptyRow(currentLeftRow) || IsEmptyRow(currentRightRow))
                 return true;
             if (left == null || right == null)
                 return false;

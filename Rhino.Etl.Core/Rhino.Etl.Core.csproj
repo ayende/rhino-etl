@@ -81,6 +81,7 @@
     <Compile Include="Infrastructure\SqlCommandSet.cs" />
     <Compile Include="Infrastructure\Use.cs" />
     <Compile Include="Operations\AbstractBranchingOperation.cs" />
+    <Compile Include="Operations\AbstractJoinOperation.cs" />
     <Compile Include="Operations\AbstractSortedAggregationOperation.cs" />
     <Compile Include="Operations\BranchingOperation.cs" />
     <Compile Include="Operations\JoinType.cs" />
