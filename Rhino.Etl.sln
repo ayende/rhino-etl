@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Core", "Rhino.Etl.Core\Rhino.Etl.Core.csproj", "{DC42946E-5972-411C-A061-F2932E49C31F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rhino.Etl.Tests", "Rhino.Etl.Tests\Rhino.Etl.Tests.csproj", "{A1519C4F-3C25-4484-B3D2-2266C133754E}"

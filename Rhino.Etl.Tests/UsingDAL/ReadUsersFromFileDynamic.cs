@@ -1,6 +1,6 @@
 using System;
 using FileHelpers;
-using FileHelpers.RunTime;
+using FileHelpers.Dynamic;
 
 namespace Rhino.Etl.Tests.UsingDAL
 {
@@ -15,7 +15,7 @@ namespace Rhino.Etl.Tests.UsingDAL
         private Type _tblClass;
         public ReadUsersFromFileDynamic()
         {
-            var userRecordClassBuilder = new DelimitedClassBuilder("UserRecord","\t");
+            var userRecordClassBuilder = new DelimitedClassBuilder("UserRecord", "\t");
             userRecordClassBuilder.IgnoreFirstLines = 1;
             userRecordClassBuilder.AddField("Id", typeof(Int32));
             userRecordClassBuilder.AddField("Name", typeof(String));
