@@ -38,7 +38,7 @@ namespace Rhino.Etl.Core.Operations
         /// Initializes a new instance of the <see cref="SqlBatchOperation"/> class.
         /// </summary>
         /// <param name="connectionStringName">Name of the connection string.</param>
-        public SqlBatchOperation(string connectionStringName)
+        protected SqlBatchOperation(string connectionStringName)
             : this(ConfigurationManager.ConnectionStrings[connectionStringName])
         {            
         }
@@ -47,7 +47,7 @@ namespace Rhino.Etl.Core.Operations
         /// Initializes a new instance of the <see cref="SqlBatchOperation"/> class.
         /// </summary>
         /// <param name="connectionStringSettings">The connection string settings to use.</param>
-        public SqlBatchOperation(ConnectionStringSettings connectionStringSettings)
+        protected SqlBatchOperation(ConnectionStringSettings connectionStringSettings)
             : base(connectionStringSettings)
         {
             base.paramPrefix = "@";
@@ -66,11 +66,12 @@ namespace Rhino.Etl.Core.Operations
             {
                 SqlCommandSet commandSet = null;
                 CreateCommandSet(connection, transaction, ref commandSet, timeout);
+
                 foreach (Row row in rows)
                 {
                     SqlCommand command = new SqlCommand();
                     PrepareCommand(row, command);
-                    if (command.Parameters.Count == 0) //workaround around a framework bug
+                    if (command.Parameters.Count == 0 && (RuntimeInfo.Version.Contains("2.0") || RuntimeInfo.Version.Contains("1.1"))) //workaround around a framework bug
                     {
                         Guid guid = Guid.NewGuid();
                         command.Parameters.AddWithValue(guid.ToString(), guid);
