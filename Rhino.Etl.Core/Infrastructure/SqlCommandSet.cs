@@ -113,9 +113,11 @@ namespace Rhino.Etl.Core.Infrastructure
         /// <param name="command"></param>
         private static void AssertHasParameters(SqlCommand command)
         {
-            if(command.Parameters.Count==0)
+            if (command.Parameters.Count == 0 &&
+                (RuntimeInfo.Version.Contains("2.0") || RuntimeInfo.Version.Contains("1.1")))
             {
-                throw new ArgumentException("A command in SqlCommandSet must have parameters. You can't pass hardcoded sql strings.");
+                throw new ArgumentException(
+                    "A command in SqlCommandSet must have parameters. You can't pass hardcoded sql strings.");
             }
         }
         
