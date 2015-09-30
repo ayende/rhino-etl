@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Rhino.Etl.Core.ConventionOperations.ConventionInputCommandOperation" Collapsed="true">
+    <Position X="13.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAACAAAAAAAAAAAAABAAAAAQAAAIAAAACAAAAAAA=</HashCode>
+      <FileName>ConventionOperations\ConventionInputCommandOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.ConventionOperations.ConventionOutputCommandOperation" Collapsed="true">
+    <Position X="11" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAACAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ConventionOperations\ConventionOutputCommandOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.ConventionOperations.ConventionSqlBatchOperation" Collapsed="true">
+    <Position X="15.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ConventionOperations\ConventionSqlBatchOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.ConventionOperations.ConventionSqlBulkInsertOperation" Collapsed="true">
+    <Position X="8.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAABAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>ConventionOperations\ConventionSqlBulkInsertOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Descriptor" Collapsed="true">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>DataReaders\Descriptor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.EtlProcess" Collapsed="true">
+    <Position X="33.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICgAAQQAAAAQAAAAAAAAAAABAAAEBKABAAA=</HashCode>
+      <FileName>EtlProcess.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.EtlProcessBase&lt;TDerived&gt;" Collapsed="true">
+    <Position X="34.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAIAAAAEAAgAAAJAAAAQAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EtlProcessBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.RhinoEtlException" Collapsed="true">
+    <Position X="40" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\RhinoEtlException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Guard" Collapsed="true">
+    <Position X="43.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Guard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.ObjectArrayKeys" Collapsed="true">
+    <Position X="40" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAIAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>ObjectArrayKeys.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.QuackingDictionary" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIABEAgAADAABAUCAgAFAQgAAQIAAAAAAAgEABQIQA=</HashCode>
+      <FileName>QuackingDictionary.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Row" Collapsed="true">
+    <Position X="0.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAkAAAAAIAghBAAAAAAgAAAAAAAQAAAAwAABA=</HashCode>
+      <FileName>Row.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.RuntimeInfo" Collapsed="true">
+    <Position X="41.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RuntimeInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.WithLoggingMixin" Collapsed="true">
+    <Position X="19" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYAAAAEACAAAAAAAABEAAAAAAEAAAAA=</HashCode>
+      <FileName>WithLoggingMixin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.DataReaders.DictionaryDescriptorAdapter" Collapsed="true">
+    <Position X="6.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataReaders\DictionaryDescriptorAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.DataReaders.DictionaryEnumeratorDataReader" Collapsed="true">
+    <Position X="3.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAIAAAAAAAAAAAAACAAAIAAAAAAAA=</HashCode>
+      <FileName>DataReaders\DictionaryEnumeratorDataReader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.DataReaders.EnumerableDataReader" Collapsed="true">
+    <Position X="3.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQCQAAAgMCgAAIIBCAAABCYgQAJEAESwIBQAAACAJEA=</HashCode>
+      <FileName>DataReaders\EnumerableDataReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Enumerables.CachingEnumerable&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAACAABBABAACAAAAAAAAAAAAIIAAAAAAAAQg=</HashCode>
+      <FileName>Enumerables\CachingEnumerable.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Enumerables.EventRaisingEnumerator" Collapsed="true">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Enumerables\EventRaisingEnumerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Enumerables.GatedThreadSafeEnumerator&lt;T&gt;" Collapsed="true">
+    <Position X="31.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAKAADBAAAACAAIAAgQAgAAAEoAAAIAAAAQA=</HashCode>
+      <FileName>Enumerables\GatedThreadSafeEnumerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Enumerables.SingleRowEventRaisingEnumerator" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACBADBAAAAKAAAAAAAAAAAAAoAAAAAAJAAA=</HashCode>
+      <FileName>Enumerables\SingleRowEventRaisingEnumerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Enumerables.ThreadSafeEnumerator&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="38.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAACAABBEAAACAAAAAgAAAAAAEoAAAIAAAAAA=</HashCode>
+      <FileName>Enumerables\ThreadSafeEnumerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Exceptions.MissingKeyException" Collapsed="true">
+    <Position X="38.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\MissingKeyException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Exceptions.ParameterCountException" Collapsed="true">
+    <Position X="43.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Exceptions\ParameterCountException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Files.FileEngine" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="40" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACCAABAAAAAAAAAAAAAAAgAIAAAAAAUAAAA=</HashCode>
+      <FileName>Files\FileEngine.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Files.FluentFile" Collapsed="true">
+    <Position X="41.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAoACJAAAAAACAAAQAAAA=</HashCode>
+      <FileName>Files\FluentFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Infrastructure.SqlCommandSet" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="43.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>goCAIACAICAAAAEAAAAgCEAAAARIAQECgAAAAAAAAAA=</HashCode>
+      <FileName>Infrastructure\SqlCommandSet.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Infrastructure.Use" Collapsed="true">
+    <Position X="40" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAABAIAAAAAEEAAAAAKAAAAAAAAQAAAAAAAAAIAA=</HashCode>
+      <FileName>Infrastructure\Use.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractAggregationOperation" Collapsed="true">
+    <Position X="22.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAQAAAAAAAAAAABAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Operations\AbstractAggregationOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractBranchingOperation" Collapsed="true">
+    <Position X="25.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACIAAAAAAAAAAAAAAAAAAAAAABAAAAAAABAAA=</HashCode>
+      <FileName>Operations\AbstractBranchingOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractCommandOperation" Collapsed="true">
+    <Position X="12.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAACAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\AbstractCommandOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractDatabaseOperation" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAQgAAQAoAAAiAAAIAAAAAACAAAAAgAA=</HashCode>
+      <FileName>Operations\AbstractDatabaseOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractJoinOperation" Collapsed="true">
+    <Position X="19" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAClCAQAAAAAAAAAAAAAIAAgBAAAAAAgAgAA=</HashCode>
+      <FileName>Operations\AbstractJoinOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractOperation" Collapsed="true">
+    <Position X="19" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAIAAICgBAAQEAAAQBAQAAAAAAAABAAAAACABAAA=</HashCode>
+      <FileName>Operations\AbstractOperation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.AbstractSortedAggregationOperation" Collapsed="true">
+    <Position X="22.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\AbstractSortedAggregationOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.BranchingOperation" Collapsed="true">
+    <Position X="26.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\BranchingOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.InputCommandOperation" Collapsed="true">
+    <Position X="13.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAACAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\InputCommandOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.JoinOperation" Collapsed="true">
+    <Position X="20" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAgAIBKAAAAQQAAgQAAAABAAAAAAAACAGAACABAAA=</HashCode>
+      <FileName>Operations\JoinOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.MultiThreadedBranchingOperation" Collapsed="true">
+    <Position X="24.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\MultiThreadedBranchingOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.NestedLoopsJoinOperation" Collapsed="true">
+    <Position X="17.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgABAADAAAAAAQAAAQIAAAAAAAAAAAACACAACAIAAA=</HashCode>
+      <FileName>Operations\NestedLoopsJoinOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.OperationStatistics" Collapsed="true">
+    <Position X="41.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAKAAADAAAkAAAAAAAAAARAABAAQAAAAAAAAAA=</HashCode>
+      <FileName>Operations\OperationStatistics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.OutputCommandOperation" Collapsed="true">
+    <Position X="11" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operations\OutputCommandOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.PartialProcessOperation" Collapsed="true">
+    <Position X="35.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAICgBAAQEAAAQBAAAAAAAAAABAAgAAAABAAA=</HashCode>
+      <FileName>Operations\PartialProcessOperation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.SortMergeJoinOperation" Collapsed="true">
+    <Position X="29" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAEAClAAQQAAAAAAAAAAAAIAAgBCACAAAgAgAA=</HashCode>
+      <FileName>Operations\SortMergeJoinOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.SqlBatchOperation" Collapsed="true">
+    <Position X="15.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAgAAQAIAAAAAAAAgAAAAIAAAACAAAAAAA=</HashCode>
+      <FileName>Operations\SqlBatchOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Operations.SqlBulkInsertOperation" Collapsed="true">
+    <Position X="8.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAACBAAAFgAA4QJAAKBCAEAAIBAEJAgQgCAAACAAo=</HashCode>
+      <FileName>Operations\SqlBulkInsertOperation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Pipelines.AbstractPipelineExecuter" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAEAgCAAAgAAAQAAAAAAACAAgACAAAIBAAAAAAAAAA=</HashCode>
+      <FileName>Pipelines\AbstractPipelineExecuter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Rhino.Etl.Core.Pipelines.PipelineExecutionException" Collapsed="true">
+    <Position X="38.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pipelines\PipelineExecutionException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Pipelines.SingleThreadedNonCachedPipelineExecuter" Collapsed="true">
+    <Position X="2" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pipelines\SingleThreadedNonCachedPipelineExecuter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Pipelines.SingleThreadedPipelineExecuter" Collapsed="true">
+    <Position X="4.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pipelines\SingleThreadedPipelineExecuter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter" Collapsed="true">
+    <Position X="6.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Pipelines\ThreadPoolPipelineExecuter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Rhino.Etl.Core.IPipelineExecuter" Collapsed="true">
+    <Position X="40" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAgAAAQAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>IPipelineExecuter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Rhino.Etl.Core.Operations.IOperation" Collapsed="true">
+    <Position X="38.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAIAIAgAAAQEAAAAAQQAAAAAAAABAAAAAAABAAA=</HashCode>
+      <FileName>Operations\IOperation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Rhino.Etl.Core.Operations.JoinType" Collapsed="true">
+    <Position X="38.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAACgCAAAAAAAA=</HashCode>
+      <FileName>Operations\JoinType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

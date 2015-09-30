@@ -67,8 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="FileHelpers">
-      <HintPath>..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
+    <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.1.5\lib\net40\FileHelpers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Rhino.DSL">
       <HintPath>..\SharedLibs\Rhino.Dsl\Rhino.DSL.dll</HintPath>
@@ -206,6 +207,7 @@
     <Compile Include="UsingDAL\UsingDALFixture.cs" />
     <Compile Include="UsingDAL\WriteUsersToFile.cs" />
     <Compile Include="Util\DictionaryEnumeratorDataReaderFixture.cs" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhino.Etl.Core\Rhino.Etl.Core.csproj">
