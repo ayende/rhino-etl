@@ -1,6 +1,6 @@
 using System;
 using FileHelpers;
-using FileHelpers.RunTime;
+using FileHelpers.Dynamic;
 
 namespace Rhino.Etl.Tests.UsingDAL
 {

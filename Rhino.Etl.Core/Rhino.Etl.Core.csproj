@@ -30,7 +30,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,8 +64,9 @@
     <Reference Include="Common.Logging.Core">
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="FileHelpers">
-      <HintPath>..\SharedLibs\FileHelpers\FileHelpers.dll</HintPath>
+    <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.1.5\lib\net35\FileHelpers.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -151,7 +153,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
