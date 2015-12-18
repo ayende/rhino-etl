@@ -1,0 +1,210 @@
+2015-12-18 17:58:37.4441|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 17:58:37.5672|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 17:58:37.6182|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 17:58:38.5785|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:03:29.7935|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:03:29.8595|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:03:29.8985|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:03:30.5578|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:06:05.5363|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:06:05.6193|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:06:05.6494|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:06:06.2966|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:06:07.0107|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:08:23.1602|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:08:23.2263|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:08:23.2563|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:08:23.8825|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:08:24.6057|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:08:24.6057|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:12:19.7568|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:12:19.8319|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:12:19.8679|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:12:20.5181|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:12:21.2503|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:12:21.2503|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:19:06.0607|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:19:06.1287|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:19:06.1597|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:19:06.7990|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:19:07.5502|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:19:07.5502|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:21:21.7981|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:21:21.8941|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:21:21.9251|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:21:22.6953|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:21:23.3966|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:21:23.4016|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:21:54.3475|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:21:54.4115|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:21:54.4405|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:21:55.3118|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:21:56.0220|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:21:56.0240|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:24:35.4622|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:24:35.5292|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:24:35.5592|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:24:36.2164|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:24:36.9846|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:27:41.8281|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:27:41.8941|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:27:41.9241|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:27:42.6154|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:27:43.3526|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+2015-12-18 18:27:43.3526|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 36
+   at System.Threading.QueueUserWorkItemCallback.WaitCallback_Context(Object state)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading._ThreadPoolWaitCallback.PerformWaitCallback()
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:29:48.2115|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:29:48.2945|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:29:48.3234|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:29:49.0937|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:29:49.8210|WARN|Schlep.Cmd.Runner|ETL completed with the following errors. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Schlep.ETLMock.GenerateNumbers.<Execute>d__0.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.ETLMock\ETLMock.cs:line 55
+   at Rhino.Etl.Core.Enumerables.SingleRowEventRaisingEnumerator.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Enumerables\SingleRowEventRaisingEnumerator.cs:line 64
+   at Rhino.Etl.Core.Enumerables.EventRaisingEnumerator.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Enumerables\EventRaisingEnumerator.cs:line 30
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 27
+   --- End of inner exception stack trace ---
+2015-12-18 18:29:49.8580|ERROR|Schlep.Cmd.Runner|Failed to run ETL. Rhino.Etl.Core.RhinoEtlException: Failed to execute operation Schlep.ETLMock.GenerateNumbers: Throwing at 25 ---> System.ApplicationException: Throwing at 25
+   at Schlep.ETLMock.GenerateNumbers.<Execute>d__0.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.ETLMock\ETLMock.cs:line 55
+   at Rhino.Etl.Core.Enumerables.SingleRowEventRaisingEnumerator.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Enumerables\SingleRowEventRaisingEnumerator.cs:line 64
+   at Rhino.Etl.Core.Enumerables.EventRaisingEnumerator.MoveNext() in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Enumerables\EventRaisingEnumerator.cs:line 30
+   at Rhino.Etl.Core.Pipelines.ThreadPoolPipelineExecuter.<>c__DisplayClass0_0.<DecorateEnumerableForExecution>b__0(Object <state>) in D:\Users\Teo\Documents\EA\src\sherlock\dev\rhino-etl\Rhino.Etl.Core\Pipelines\ThreadPoolPipelineExecuter.cs:line 27
+   --- End of inner exception stack trace ---
+   at Schlep.Cmd.Runner.Start(String typeName, String pathToAssembly) in D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\Runner.cs:line 36
+2015-12-18 18:33:13.3562|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:33:13.4242|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:33:13.4653|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:33:14.2375|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:33:15.0578|INFO|Schlep.Cmd.Runner|Ending ETL. 
+2015-12-18 18:33:15.0758|DEBUG|Schlep.Cmd.Isolated`1|Disposing of Isolated AppDomain.. 
+2015-12-18 18:33:15.1448|DEBUG|Schlep.Cmd.Program|Exiting main application 
+2015-12-18 18:34:03.8004|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:34:03.8644|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:34:03.8944|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:34:04.5576|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:34:05.3319|INFO|Schlep.Cmd.Runner|Ending ETL. 
+2015-12-18 18:34:05.3368|DEBUG|Schlep.Cmd.Isolated`1|Disposing of Isolated AppDomain.. 
+2015-12-18 18:34:05.3979|DEBUG|Schlep.Cmd.Program|Exiting main application 
+2015-12-18 18:36:51.4240|DEBUG|Schlep.Cmd.Program|Starting main application 
+2015-12-18 18:36:51.5090|DEBUG|Schlep.Cmd.Program|AppDomain.BaseDirectory: D:\Users\Teo\Documents\EA\src\sherlock\dev\Schlep\Schlep.Cmd\bin\Debug\ 
+2015-12-18 18:36:51.5390|DEBUG|Schlep.Cmd.Isolated`1|Isolating Schlep.Cmd.Runner class in new AppDomain.. 
+2015-12-18 18:36:52.2442|INFO|Schlep.Cmd.Runner|Starting ETL. 
+2015-12-18 18:36:53.0855|INFO|Schlep.Cmd.Runner|Ending ETL. 
+2015-12-18 18:36:53.0884|DEBUG|Schlep.Cmd.Isolated`1|Disposing of Isolated AppDomain.. 
+2015-12-18 18:36:53.1375|DEBUG|Schlep.Cmd.Program|Exiting main application 

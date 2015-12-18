@@ -1,4 +1,4 @@
-using Boo.Lang;
+//using Boo.Lang;
 
 namespace Rhino.Etl.Core
 {
@@ -12,7 +12,8 @@ namespace Rhino.Etl.Core
     /// A dictionary that can be access with a natural syntax from Boo
     /// </summary>
     [Serializable]
-    public class QuackingDictionary : IDictionary, IQuackFu
+    public class QuackingDictionary : IDictionary
+        //, IQuackFu
     {
         /// <summary>
         /// Default value for the Comparer property.
