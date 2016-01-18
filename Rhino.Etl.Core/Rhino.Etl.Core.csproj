@@ -55,9 +55,6 @@
     <DocumentationFile>Rhino.Etl.Core.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Boo.Lang">
-      <HintPath>..\SharedLibs\Boo\Boo.Lang.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging">
       <HintPath>..\SharedLibs\Common.Logging\Common.Logging.dll</HintPath>
     </Reference>
