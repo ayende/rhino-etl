@@ -256,5 +256,34 @@ namespace Rhino.Etl.Core.Infrastructure
             connection.Open();
             return connection;
         }
+
+        /// <summary>
+        /// Executes the command and return a scalar
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionName">Name of the connection.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns></returns>
+        public static T ExecuteScalar<T>(string connectionName, string commandText)
+        {
+            return ExecuteScalar<T>(ConfigurationManager.ConnectionStrings[connectionName], commandText);
+        }
+
+        /// <summary>
+        /// Executes the command and return a scalar
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="connectionStringSettings">The connection string settings node to use</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns></returns>
+        public static T ExecuteScalar<T>(ConnectionStringSettings connectionStringSettings, string commandText)
+        {
+            return Transaction<T>(connectionStringSettings, delegate (IDbCommand cmd)
+            {
+                cmd.CommandText = commandText;
+                object scalar = cmd.ExecuteScalar();
+                return (T)(scalar ?? default(T));
+            });
+        }
     }
 }

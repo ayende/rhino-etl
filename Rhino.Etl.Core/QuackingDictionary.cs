@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 //using Boo.Lang;
+=======
+>>>>>>> aa8608777e596f83abc91953e2bae7b743920b75
 
 namespace Rhino.Etl.Core
 {
