@@ -4,7 +4,9 @@ using Rhino.Etl.Core.Infrastructure;
 namespace Rhino.Etl.Core.Operations
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.SqlClient;
     using DataReaders;
 
@@ -228,7 +230,15 @@ namespace Rhino.Etl.Core.Operations
             {
                 sqlBulkCopy = CreateSqlBulkCopy(connection, transaction);
                 DictionaryEnumeratorDataReader adapter = new DictionaryEnumeratorDataReader(_inputSchema, rows);
-                sqlBulkCopy.WriteToServer(adapter);
+                try
+                {
+                    sqlBulkCopy.WriteToServer(adapter);
+                }
+                catch (InvalidOperationException)
+                {
+                    CompareSqlColumns(connection, transaction);
+                    throw;
+                }
 
                 if (PipelineExecuter.HasErrors)
                 {
@@ -275,6 +285,62 @@ namespace Rhino.Etl.Core.Operations
             copy.DestinationTableName = TargetTable;
             copy.BulkCopyTimeout = Timeout;
             return copy;
+        }
+
+        private void CompareSqlColumns(SqlConnection connection, SqlTransaction transaction)
+        {
+            var command = connection.CreateCommand();
+            command.CommandText = $"select * from {TargetTable} where 1=0";
+            command.CommandType = CommandType.Text;
+            command.Transaction = transaction;
+
+            using (var reader = command.ExecuteReader())
+            {
+                var databaseColumns = Enumerable
+                    .Range(0, reader.FieldCount)
+                    .Select(n => new { Name = reader.GetName(n), Type = reader.GetFieldType(n) })
+                    .ToArray();
+
+                var missingColumns = _schema.Keys.Except(
+                    databaseColumns.Select(c => c.Name));
+                if (missingColumns.Any())
+                    throw new InvalidOperationException(
+                        "The following columns are not in the target table: " +
+                        string.Join(", ", missingColumns.ToArray()));
+                var differentColumns = _schema
+                    .Select(s => new
+                    {
+                        Name = s.Key,
+                        SchemaType = s.Value,
+                        DatabaseType = databaseColumns.Single(c => c.Name == s.Key).Type
+                    })
+                    .Where(c => c.SchemaType != c.DatabaseType);
+                if (differentColumns.Any())
+                    throw new InvalidOperationException(
+                        "The following columns have different types in the target table: " +
+                        string.Join(", ", differentColumns
+                            .Select(c => $"{c.Name}: is {GetFriendlyName(c.SchemaType)}, but should be {GetFriendlyName(c.DatabaseType)}.")
+                            .ToArray()
+                        ));
+            }
+        }
+
+        private static string GetFriendlyName(Type type)
+        {
+            var friendlyName = type.Name;
+            if (!type.IsGenericType)
+                return friendlyName;
+
+            var iBacktick = friendlyName.IndexOf('`');
+            if (iBacktick > 0)
+                friendlyName = friendlyName.Remove(iBacktick);
+
+            var genericParameters = type.GetGenericArguments()
+                .Select(x => GetFriendlyName(x))
+                .ToArray();
+            friendlyName += "<" + string.Join(", ", genericParameters) + ">";
+
+            return friendlyName;
         }
     }
 }
