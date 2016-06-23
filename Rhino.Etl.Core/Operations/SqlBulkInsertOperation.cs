@@ -236,7 +236,7 @@ namespace Rhino.Etl.Core.Operations
                 }
                 catch (InvalidOperationException)
                 {
-                    CompareSqlColumns(connection, transaction);
+                    CompareSqlColumns(connection, transaction, rows);
                     throw;
                 }
 
@@ -287,18 +287,25 @@ namespace Rhino.Etl.Core.Operations
             return copy;
         }
 
-        private void CompareSqlColumns(SqlConnection connection, SqlTransaction transaction)
+        private void CompareSqlColumns(SqlConnection connection, SqlTransaction transaction, IEnumerable<Row> rows)
         {
             var command = connection.CreateCommand();
             command.CommandText = $"select * from {TargetTable} where 1=0";
             command.CommandType = CommandType.Text;
             command.Transaction = transaction;
 
-            using (var reader = command.ExecuteReader())
+            using (var reader = command.ExecuteReader(CommandBehavior.KeyInfo))
             {
-                var databaseColumns = Enumerable
-                    .Range(0, reader.FieldCount)
-                    .Select(n => new { Name = reader.GetName(n), Type = reader.GetFieldType(n) })
+                var schemaTable = reader.GetSchemaTable();
+                var databaseColumns = schemaTable.Rows
+                    .OfType<DataRow>()
+                    .Select(r => new
+                    {
+                        Name = (string)r["ColumnName"],
+                        Type = (Type)r["DataType"],
+                        IsNullable = (bool)r["AllowDBNull"],
+                        MaxLength = (int)r["ColumnSize"]
+                    })
                     .ToArray();
 
                 var missingColumns = _schema.Keys.Except(
@@ -312,16 +319,33 @@ namespace Rhino.Etl.Core.Operations
                     {
                         Name = s.Key,
                         SchemaType = s.Value,
-                        DatabaseType = databaseColumns.Single(c => c.Name == s.Key).Type
+                        DatabaseType = databaseColumns.Single(c => c.Name == s.Key)
                     })
-                    .Where(c => c.SchemaType != c.DatabaseType);
+                    .Where(c => !TypesMatch(c.SchemaType, c.DatabaseType.Type, c.DatabaseType.IsNullable));
                 if (differentColumns.Any())
                     throw new InvalidOperationException(
                         "The following columns have different types in the target table: " +
                         string.Join(", ", differentColumns
-                            .Select(c => $"{c.Name}: is {GetFriendlyName(c.SchemaType)}, but should be {GetFriendlyName(c.DatabaseType)}.")
+                            .Select(c => $"{c.Name}: is {GetFriendlyName(c.SchemaType)}, but should be {GetFriendlyName(c.DatabaseType.Type)}{(c.DatabaseType.IsNullable ? "?" : "")}.")
                             .ToArray()
                         ));
+                var stringsTooLong =
+                    (from column in databaseColumns
+                     where column.Type == typeof(string)
+                     from mapping in Mappings
+                     where mapping.Value == column.Name
+                     let name = mapping.Key
+                     from row in rows
+                     let value = (string)row[name]
+                     where value != null && value.Length > column.MaxLength
+                     select new { column.Name, column.MaxLength, Value = value })
+                    .ToArray();
+                if (stringsTooLong.Any())
+                    throw new InvalidOperationException(
+                        "The folowing columns have values too long for the target table: " +
+                        string.Join(", ", stringsTooLong
+                            .Select(s => $"{s.Name}: max length is {s.MaxLength}, value is {s.Value}.")
+                            .ToArray()));
             }
         }
 
@@ -341,6 +365,15 @@ namespace Rhino.Etl.Core.Operations
             friendlyName += "<" + string.Join(", ", genericParameters) + ">";
 
             return friendlyName;
+        }
+
+        private bool TypesMatch(Type schemaType, Type databaseType, bool isNullable)
+        {
+            if (schemaType == databaseType)
+                return true;
+            if (isNullable && schemaType == typeof(Nullable<>).MakeGenericType(databaseType))
+                return true;
+            return false;
         }
     }
 }
