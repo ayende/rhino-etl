@@ -290,7 +290,7 @@ namespace Rhino.Etl.Core.Operations
         private void CompareSqlColumns(SqlConnection connection, SqlTransaction transaction, IEnumerable<Row> rows)
         {
             var command = connection.CreateCommand();
-            command.CommandText = $"select * from {TargetTable} where 1=0";
+            command.CommandText = "select * from {TargetTable} where 1=0".Replace("{TargetTable}", TargetTable);
             command.CommandType = CommandType.Text;
             command.Transaction = transaction;
 
@@ -326,9 +326,13 @@ namespace Rhino.Etl.Core.Operations
                     throw new InvalidOperationException(
                         "The following columns have different types in the target table: " +
                         string.Join(", ", differentColumns
-                            .Select(c => $"{c.Name}: is {GetFriendlyName(c.SchemaType)}, but should be {GetFriendlyName(c.DatabaseType.Type)}{(c.DatabaseType.IsNullable ? "?" : "")}.")
+                            //.Select(c => $"{c.Name}: is {GetFriendlyName(c.SchemaType)}, but should be {GetFriendlyName(c.DatabaseType.Type)}{(c.DatabaseType.IsNullable ? "?" : "")}.")
+                            // c.Name, GetFriendlyName(c.SchemaType), GetFriendlyName(c.DatabaseType.Type), (c.DatabaseType.IsNullable ? \"?\" : \"\")
+                            .Select(c => string.Format("{0}: is {1}, but should be {2}{3}.", c.Name,
+                                GetFriendlyName(c.SchemaType), GetFriendlyName(c.DatabaseType.Type),
+                                (c.DatabaseType.IsNullable ? "?" : "")))
                             .ToArray()
-                        ));
+                            ));
                 var stringsTooLong =
                     (from column in databaseColumns
                      where column.Type == typeof(string)
@@ -344,7 +348,11 @@ namespace Rhino.Etl.Core.Operations
                     throw new InvalidOperationException(
                         "The folowing columns have values too long for the target table: " +
                         string.Join(", ", stringsTooLong
-                            .Select(s => $"{s.Name}: max length is {s.MaxLength}, value is {s.Value}.")
+                            .Select(s => "{s.Name}: max length is {s.MaxLength}, value is {s.Value}."
+                                .Replace("{s.Name}", s.Name)
+                                .Replace("{s.MaxLength}", s.MaxLength.ToString())
+                                .Replace("{s.Value}", s.Value)
+                            )
                             .ToArray()));
             }
         }
