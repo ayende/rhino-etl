@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Linq;
 
 namespace Rhino.Etl.Core.Operations
 {
@@ -49,6 +50,8 @@ namespace Rhino.Etl.Core.Operations
                                              "Cannot resolve connection strings with name: " + connectionStringName);
 
             connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings != null && connectionStringSettings.ProviderName.Contains("Oracle"))
+                paramPrefix = ":";
         }
 
         /// <summary>
@@ -61,6 +64,8 @@ namespace Rhino.Etl.Core.Operations
                                              "connectionStringSettings must resolve to a value");
                         
             this.connectionStringSettings = connectionStringSettings;
+            if (connectionStringSettings != null && connectionStringSettings.ProviderName.Contains("Oracle"))
+                paramPrefix = ":";
         }
 
          private static void InitializeSupportedTypes()
@@ -108,7 +113,7 @@ namespace Rhino.Etl.Core.Operations
             foreach (string column in row.Columns)
             {
                 object value = row[column];
-                if (CanUseAsParameter(value))
+                if (CanUseAsParameter(command, column, value))
                     AddParameter(command, column, value);
             }
         }
@@ -121,22 +126,25 @@ namespace Rhino.Etl.Core.Operations
         /// <param name="val">The val.</param>
         protected void AddParameter(IDbCommand command, string name, object val)
         {
-            IDbDataParameter parameter = command.CreateParameter();
+            var parameter = command.CreateParameter();
             parameter.ParameterName = paramPrefix + name;
             parameter.Value = val ?? DBNull.Value;
             command.Parameters.Add(parameter);
+            Console.WriteLine(name);
         }
 
         /// <summary>
         /// Determines whether this value can be use as a parameter to ADO.Net provider.
         /// This perform a simple heuristic 
         /// </summary>
-        /// <param name="value">The value.</param>
-        private static bool CanUseAsParameter(object value)
+        /// <param name="command">The command.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="val">The val.</param>
+        protected virtual bool CanUseAsParameter(IDbCommand command, string name, object val)
         {
-            if(value==null)
-                return true;
-            return SupportedTypes.ContainsKey(value.GetType());
+            var result = val == null || SupportedTypes.ContainsKey(val.GetType());
+            if (!result) return false;
+            return command.CommandText.Contains(name);
         }
 
         /// <summary>
