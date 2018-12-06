@@ -48,7 +48,7 @@ namespace Rhino.Etl.Core
         /// <summary>
         /// Set the flag to thorw if key not found.
         /// </summary>
-        public void ShouldThorwIfKeyNotFound()
+        public void ShouldThrowIfKeyNotFound()
         {
             throwOnMissing = true;
         }
