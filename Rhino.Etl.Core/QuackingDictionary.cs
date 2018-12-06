@@ -46,9 +46,9 @@ namespace Rhino.Etl.Core
         protected StringComparer Comparer { get; set; }
 
         /// <summary>
-        /// Set the flag to thorw if key not found.
+        /// Set the flag to throw if key not found.
         /// </summary>
-        public void ShouldThorwIfKeyNotFound()
+        public void ShouldThrowIfKeyNotFound()
         {
             throwOnMissing = true;
         }
